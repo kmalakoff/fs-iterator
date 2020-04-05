@@ -1,0 +1,21 @@
+{
+  "name": "fs-iterator-performance-tests",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Tests",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kmalakoff/fs-iterator.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "benchmark": "node --expose-gc benchmark/index.js",
+    "memory": "node --expose-gc memory/index.js",
+    "test": "npm run benchmark && npm run memory"
+  },
+  "dependencies": {
+    "benchmark": "^2.1.4",
+    "fs-extra": "^9.0.0",
+    "graceful-fs": "^4.2.3"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "fs-iterator",
+  "version": "1.0.0",
+  "description": "A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above",
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha . test/spec/**/*.test.js",
+    "lint": "eslint .",
+    "format": "prettier --write '**/*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kmalakoff/fs-iterator.git"
+  },
+  "keywords": [
+    "recursive",
+    "readdir",
+    "fs",
+    "filesystem",
+    "filter",
+    "iterator",
+    "asyncIterator",
+    "Symbol.asyncIterator"
+  ],
+  "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
+  "license": "MIT",
+  "homepage": "https://github.com/kmalakoff/fs-iterator",
+  "dependencies": {
+    "fifo": "^2.3.0",
+    "join-deep": "^1.2.0",
+    "stack-lifo": "^0.1.6"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "fs-generate": "^1.4.0",
+    "maximize-iterator": "^1.0.0",
+    "mocha": "^7.1.1",
+    "prettier": "^2.0.2",
+    "rimraf": "^3.0.2",
+    "sinon": "^9.0.1",
+    "sinon-chai": "^3.5.0"
+  }
+}
