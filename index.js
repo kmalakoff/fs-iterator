@@ -15,37 +15,7 @@ function processError(err, callback) {
   callback();
 }
 
-function Iterator(cwd, options) {
-  options = options || {};
-  this.options = {
-    filter: options.filter,
-    async: options.async,
-    fs: options.fs || fs,
-    stat: options.stat || DEFAULT_STAT,
-  };
-
-  this.cwd = cwd;
-  this.stack = new Stack();
-  this.stack.push(this._processPath.bind(this, []));
-  this.processingCount = 0;
-  this.queued = fifo();
-}
-
-Iterator.prototype.next = function (callback) {
-  if (typeof callback === 'function') {
-    this.queued.push(callback);
-    this._processNext();
-  } else {
-    var self = this;
-    return new Promise(function (resolve, reject) {
-      self.next(function (err, result) {
-        err ? reject(err) : resolve(result);
-      });
-    });
-  }
-};
-
-Iterator.prototype._processNext = function (callback) {
+function processNext() {
   var self = this;
 
   if (!this.queued.length) return;
@@ -67,13 +37,13 @@ Iterator.prototype._processNext = function (callback) {
     if (!result) self.queued.unshift(callback);
     else callback(null, result); // return result
 
-    self._processNext(); // keep emptying queue
+    processNext.call(self); // keep emptying queue
   });
 
-  self._processNext(); // keep emptying queue
+  processNext.call(this); // keep emptying queue
 };
 
-Iterator.prototype._processFilter = function (relativePath, stat, callback) {
+function processFilter(relativePath, stat, callback) {
   if (!this.options.filter) return callback(null, true);
   var self = this;
 
@@ -88,42 +58,53 @@ Iterator.prototype._processFilter = function (relativePath, stat, callback) {
   }
 };
 
-Iterator.prototype._processPath = function (paths, callback) {
+function processPath(paths, callback) {
   var self = this;
-  var relativePath = joinDeep(paths, path.sep);
-  var fullPath = path.join(this.cwd, relativePath);
+  var entry = { relativePath: joinDeep(paths, path.sep) };
+  entry.fullPath = path.join(this.cwd, entry.relativePath);
 
-  fs[this.options.stat](fullPath, function (err1, stat) {
+  fs[this.options.stat](entry.fullPath, function (err1, stat) {
     if (err1) return processError(err1, callback);
+    entry.stat = stat;
 
-    self._processFilter(relativePath, stat, function (err2, keep) {
+    processFilter.call(self, entry.relativePath, stat, function (err2, keep) {
       if (err2) return callback(err2);
       if (!keep) return callback();
-      if (!stat.isDirectory()) return callback(null, { done: false, value: { path: fullPath, stat: stat } });
 
-      self.options.fs.realpath(fullPath, function (err3, realPath) {
-        if (err3) return processError(err3, callback);
-
-        fs.readdir(realPath, function (err4, names) {
-          if (err4) return processError(err4, callback);
-
-          var nextPaths = fullPath === realPath ? paths : [realPath];
-          if (names.length) self.stack.push(self._processNextDirectoryEntry.bind(self, nextPaths, names.reverse()));
-          return callback(null, { done: false, value: { path: fullPath, stat: stat } });
-        });
-      });
+      if (stat.isDirectory()) processDirectory.call(self, paths, entry, callback);
+      else processFile.call(self, paths, entry, callback);
     });
   });
 };
 
-Iterator.prototype._processNextDirectoryEntry = function (paths, names, callback) {
+function processFile(paths, entry, callback) {
+  return callback(null, { done: false, value: entry });
+}
+
+function processDirectory(paths, entry, callback) {
+  var self = this;
+
+  self.options.fs.realpath(entry.fullPath, function (err1, realPath) {
+    if (err1) return processError(err1, callback);
+
+    fs.readdir(realPath, function (err2, names) {
+      if (err2) return processError(err2, callback);
+
+      var nextPaths = entry.fullPath === realPath ? paths : [realPath];
+      if (names.length) self.stack.push(processNextDirectoryEntry.bind(self, nextPaths, names.reverse()));
+      return callback(null, { done: false, value: entry });
+    });
+  });
+}
+
+function processNextDirectoryEntry(paths, names, callback) {
   if (!names.length) return callback();
   var name = names.pop(); // TODO: compare memory with reduction and inplace
-  if (names.length) this.stack.push(this._processNextDirectoryEntry.bind(this, paths, names));
-  this._processPath([paths, name], callback);
+  if (names.length) this.stack.push(processNextDirectoryEntry.bind(this, paths, names));
+  processPath.call(this, [paths, name], callback);
 };
 
-Iterator.prototype._getRealCWD = function (callback) {
+function getRealCWD(callback) {
   if (this.realCWD) return callback(null, this.realCWD);
   var self = this;
 
@@ -133,6 +114,36 @@ Iterator.prototype._getRealCWD = function (callback) {
     self.realCWD = realCWD;
     callback(null, realCWD);
   });
+};
+
+function Iterator(cwd, options) {
+  options = options || {};
+  this.options = {
+    filter: options.filter,
+    async: options.async,
+    fs: options.fs || fs,
+    stat: options.stat || DEFAULT_STAT,
+  };
+
+  this.cwd = cwd;
+  this.stack = new Stack();
+  this.stack.push(processPath.bind(this, []));
+  this.processingCount = 0;
+  this.queued = fifo();
+}
+
+Iterator.prototype.next = function (callback) {
+  if (typeof callback === 'function') {
+    this.queued.push(callback);
+    processNext.call(this);
+  } else {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+      self.next(function (err, result) {
+        err ? reject(err) : resolve(result);
+      });
+    });
+  }
 };
 
 module.exports = Iterator;
