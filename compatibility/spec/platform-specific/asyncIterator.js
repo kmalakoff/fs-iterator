@@ -9,8 +9,8 @@ var sysPath = require('path');
 var fs = require('fs');
 var maximize = require('maximize-iterator');
 
-var Iterator = require('../..');
-var statsSpys = require('../utils').statsSpys;
+var Iterator = require('../../..');
+var statsSpys = require('../../utils').statsSpys;
 
 var DIR = sysPath.resolve(sysPath.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -31,9 +31,7 @@ function sleep(timeout) {
   });
 }
 
-describe('promise', function () {
-  if (typeof Promise === 'undefined') return; // no promise support
-
+describe('asyncIterator', function () {
   beforeEach(function (callback) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, callback);
@@ -43,7 +41,7 @@ describe('promise', function () {
     rimraf(DIR, callback);
   });
 
-  it('should be default false', function (callback) {
+  it('should be default false', async function () {
     var statsSpy = sinon.spy();
 
     var iterator = new Iterator(DIR, {
@@ -52,21 +50,19 @@ describe('promise', function () {
       },
     });
 
-    function consume() {
-      iterator.next().then(function (value) {
-        if (value === null) {
-          assert.ok(statsSpy.callCount, 13);
-          statsSpy.args.forEach(function (args) {
-            assert.isUndefined(args[0]);
-          });
-          callback();
-        } else consume();
-      });
+    for await (const value of iterator) {
+      assert.ok(typeof value.path === 'string');
+      assert.ok(typeof value.fullPath === 'string');
+      assert.ok(typeof value.stat === 'object');
     }
-    consume();
+
+    assert.ok(statsSpy.callCount, 13);
+    statsSpy.args.forEach(function (args) {
+      assert.isUndefined(args[0]);
+    });
   });
 
-  it('Should find everything with no return', function (callback) {
+  it('Should find everything with no return', async function () {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -76,20 +72,18 @@ describe('promise', function () {
       },
     });
 
-    function consume() {
-      iterator.next().then(function (value) {
-        if (value === null) {
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          callback();
-        } else consume();
-      });
+    for await (const value of iterator) {
+      assert.ok(typeof value.path === 'string');
+      assert.ok(typeof value.fullPath === 'string');
+      assert.ok(typeof value.stat === 'object');
     }
-    consume();
+
+    assert.equal(spys.dir.callCount, 6);
+    assert.equal(spys.file.callCount, 5);
+    assert.equal(spys.link.callCount, 2);
   });
 
-  it('Should find everything with return true', function (callback) {
+  it('Should find everything with return true', async function () {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -100,20 +94,18 @@ describe('promise', function () {
       },
     });
 
-    function consume() {
-      iterator.next().then(function (value) {
-        if (value === null) {
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          callback();
-        } else consume();
-      });
+    for await (const value of iterator) {
+      assert.ok(typeof value.path === 'string');
+      assert.ok(typeof value.fullPath === 'string');
+      assert.ok(typeof value.stat === 'object');
     }
-    consume();
+
+    assert.equal(spys.dir.callCount, 6);
+    assert.equal(spys.file.callCount, 5);
+    assert.equal(spys.link.callCount, 2);
   });
 
-  it('should propagate errors', function (callback) {
+  it('should propagate errors', async function () {
     var iterator = new Iterator(DIR, {
       filter: function () {
         return sleep(100).then(function () {
@@ -122,12 +114,14 @@ describe('promise', function () {
       },
     });
 
-    function consume() {
-      iterator.next().catch(function (err) {
-        assert.ok(!!err);
-        callback();
-      });
+    try {
+      for await (const value of iterator) {
+        assert.ok(typeof value.path === 'string');
+        assert.ok(typeof value.fullPath === 'string');
+        assert.ok(typeof value.stat === 'object');
+      }
+    } catch (err) {
+      assert.ok(!!err);
     }
-    consume();
   });
 });
