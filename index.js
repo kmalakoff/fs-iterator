@@ -152,7 +152,7 @@ Iterator.prototype.destroy = function (callback) {
   callback();
 };
 
-if (typeof Symbol !== undefined && Symbol.asyncIterator) {
+if ((typeof Symbol !== 'undefined') && Symbol.asyncIterator) {
   Iterator.prototype[Symbol.asyncIterator] = function () {
     var self = this;
     return { next: nextPromise, return: returnPromise };
