@@ -3,4 +3,4 @@ module.exports = function updateMemory(highest) {
   for (const key in highest) {
     if (highest[key] < memory[key]) highest[key] = memory[key];
   }
-}
+};
