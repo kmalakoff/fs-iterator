@@ -32,8 +32,6 @@ function sleep(timeout) {
 }
 
 describe('promise', function () {
-  if (typeof Promise === 'undefined') return; // no promise support
-
   beforeEach(function (callback) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, callback);
@@ -53,8 +51,8 @@ describe('promise', function () {
     });
 
     function consume() {
-      iterator.next().then(function (result) {
-        if (result.done) {
+      iterator.next().then(function (value) {
+        if (value === null) {
           assert.ok(statsSpy.callCount, 13);
           statsSpy.args.forEach(function (args) {
             assert.isUndefined(args[0]);
@@ -77,8 +75,8 @@ describe('promise', function () {
     });
 
     function consume() {
-      iterator.next().then(function (result) {
-        if (result.done) {
+      iterator.next().then(function (value) {
+        if (value === null) {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -101,8 +99,8 @@ describe('promise', function () {
     });
 
     function consume() {
-      iterator.next().then(function (result) {
-        if (result.done) {
+      iterator.next().then(function (value) {
+        if (value === null) {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);

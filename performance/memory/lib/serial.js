@@ -12,11 +12,11 @@ module.exports = async function run({ Iterator, version }, dir) {
   const iterator = new Iterator(dir);
 
   let result = await iterator.next();
-  while (!result.done) {
+  while (result !== null) {
     updateMemory(highest);
     result = await iterator.next();
   }
-  
+
   const end = process.memoryUsage();
   for (const key in highest) {
     writeMemory(`Highest ${key}`, highest[key] - start[key]);
