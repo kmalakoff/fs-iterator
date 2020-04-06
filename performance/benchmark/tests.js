@@ -29,7 +29,7 @@ module.exports = async function run({ Iterator, version }, dir) {
         test.name,
         async function (deferred) {
           const iterator = new Iterator(dir, test.options);
-          await maximize(iterator, test.options)
+          await maximize(iterator, test.options);
           deferred.resolve();
         },
         { defer: true }

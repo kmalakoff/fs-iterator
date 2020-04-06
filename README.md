@@ -9,7 +9,7 @@ const Iterator = require('fs-iterator');
 
 const iterator = new Iterator(/* directory */);
 let result = await iterator.next();
-while(!result.done) result = await iterator.next();
+while(result) result = await iterator.next();
 ```
 
 **Callback**

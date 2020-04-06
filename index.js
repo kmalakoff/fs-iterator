@@ -22,7 +22,7 @@ function processNext() {
 
   if (this.stack.isEmpty()) {
     if (this.processingCount <= 0) {
-      while (this.queued.length) this.queued.shift()(null, { done: true });
+      while (this.queued.length) this.queued.shift()(null, null);
     }
     return;
   }
@@ -41,7 +41,7 @@ function processNext() {
   });
 
   processNext.call(this); // keep emptying queue
-};
+}
 
 function processFilter(relativePath, stat, callback) {
   if (!this.options.filter) return callback(null, true);
@@ -56,18 +56,18 @@ function processFilter(relativePath, stat, callback) {
   } catch (err) {
     callback(err);
   }
-};
+}
 
 function processPath(paths, callback) {
   var self = this;
-  var entry = { relativePath: joinDeep(paths, path.sep) };
-  entry.fullPath = path.join(this.cwd, entry.relativePath);
+  var entry = { path: joinDeep(paths, path.sep) };
+  entry.fullPath = path.join(this.cwd, entry.path);
 
   fs[this.options.stat](entry.fullPath, function (err1, stat) {
     if (err1) return processError(err1, callback);
     entry.stat = stat;
 
-    processFilter.call(self, entry.relativePath, stat, function (err2, keep) {
+    processFilter.call(self, entry.path, stat, function (err2, keep) {
       if (err2) return callback(err2);
       if (!keep) return callback();
 
@@ -75,10 +75,10 @@ function processPath(paths, callback) {
       else processFile.call(self, paths, entry, callback);
     });
   });
-};
+}
 
 function processFile(paths, entry, callback) {
-  return callback(null, { done: false, value: entry });
+  return callback(null, entry);
 }
 
 function processDirectory(paths, entry, callback) {
@@ -92,7 +92,7 @@ function processDirectory(paths, entry, callback) {
 
       var nextPaths = entry.fullPath === realPath ? paths : [realPath];
       if (names.length) self.stack.push(processNextDirectoryEntry.bind(self, nextPaths, names.reverse()));
-      return callback(null, { done: false, value: entry });
+      return callback(null, entry);
     });
   });
 }
@@ -102,7 +102,7 @@ function processNextDirectoryEntry(paths, names, callback) {
   var name = names.pop(); // TODO: compare memory with reduction and inplace
   if (names.length) this.stack.push(processNextDirectoryEntry.bind(this, paths, names));
   processPath.call(this, [paths, name], callback);
-};
+}
 
 function getRealCWD(callback) {
   if (this.realCWD) return callback(null, this.realCWD);
@@ -114,7 +114,7 @@ function getRealCWD(callback) {
     self.realCWD = realCWD;
     callback(null, realCWD);
   });
-};
+}
 
 function Iterator(cwd, options) {
   options = options || {};
@@ -145,5 +145,34 @@ Iterator.prototype.next = function (callback) {
     });
   }
 };
+
+Iterator.prototype.destroy = function (callback) {
+  // TODO: destroy inflight
+  this.destroyed = true;
+  callback();
+};
+
+if (typeof Symbol !== undefined && Symbol.asyncIterator) {
+  Iterator.prototype[Symbol.asyncIterator] = function () {
+    var self = this;
+    return { next: nextPromise, return: returnPromise };
+
+    function nextPromise() {
+      return new Promise(function (resolve, reject) {
+        self.next(function (err, value) {
+          err ? reject(err) : resolve({ value: value, done: value === null });
+        });
+      });
+    }
+
+    function returnPromise() {
+      return new Promise(function (resolve, reject) {
+        self.destroy(function (err) {
+          err ? reject(err) : resolve();
+        });
+      });
+    }
+  };
+}
 
 module.exports = Iterator;
