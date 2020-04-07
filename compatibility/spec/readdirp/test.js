@@ -169,7 +169,7 @@ describe('type', () => {
   });
 });
 
-describe.skip('depth', () => {
+describe('depth', () => {
   const depth0 = ['a.js', 'b.js', 'c.js'];
   const subdirs = ['subdir', 'deep'];
   const depth1 = ['subdir/d.js', 'deep/e.js'];
@@ -338,12 +338,12 @@ describe('various', () => {
       warning.code.should.equals('ENOENT');
       isWarningCalled = true;
     });
-    await delay(1000);
+    await delay(500);
     await pRimraf(sysPath.join(currPath, 'a'));
     stream.resume();
     await Promise.race([waitForEnd(stream), delay(2000)]);
     isWarningCalled.should.equals(true);
-  });
+  }); // }).timeout(4000);
   it('should emit warning for file with strict permission', async () => {
     // Windows doesn't throw permission error if you access permitted directory
     if (isWindows) {
