@@ -343,7 +343,7 @@ describe('various', () => {
     stream.resume();
     await Promise.race([waitForEnd(stream), delay(2000)]);
     isWarningCalled.should.equals(true);
-  }).timeout(4000);
+  }); // }).timeout(4000);
   it('should emit warning for file with strict permission', async () => {
     // Windows doesn't throw permission error if you access permitted directory
     if (isWindows) {
