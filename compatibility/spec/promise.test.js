@@ -7,7 +7,6 @@ var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var sysPath = require('path');
 var fs = require('fs');
-var maximize = require('maximize-iterator');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;

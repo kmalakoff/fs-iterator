@@ -55,6 +55,7 @@ describe('filtering', function () {
         },
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 1);
         callback();
       });
@@ -70,6 +71,7 @@ describe('filtering', function () {
         },
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13 - 2);
         callback();
       });
@@ -85,6 +87,7 @@ describe('filtering', function () {
         },
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13 - 1);
         callback();
       });
@@ -111,6 +114,7 @@ describe('filtering', function () {
         async: true,
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 1);
         callback();
       });
@@ -129,6 +133,7 @@ describe('filtering', function () {
         async: true,
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13 - 2);
         callback();
       });
@@ -148,6 +153,7 @@ describe('filtering', function () {
         async: true,
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13 - 1);
         callback();
       });
@@ -175,6 +181,7 @@ describe('filtering', function () {
         },
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 1);
         callback();
       });
@@ -184,7 +191,7 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function () {
+        filter: function (path) {
           filterSpy();
           return sleep(100).then(function () {
             return path !== 'dir2';
@@ -192,6 +199,7 @@ describe('filtering', function () {
         },
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13 - 2);
         callback();
       });
@@ -201,7 +209,7 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function () {
+        filter: function (path, stats) {
           filterSpy();
           return sleep(100).then(function () {
             return !stats.isDirectory() || startsWith(path, 'dir3/dir4');
@@ -209,6 +217,7 @@ describe('filtering', function () {
         },
       });
       maximize(iterator, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13 - 1);
         callback();
       });

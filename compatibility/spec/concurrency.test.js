@@ -50,8 +50,9 @@ describe('concurrency', function () {
         },
       });
       maximize(iterator, { concurrency: 1 }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
 
@@ -64,8 +65,9 @@ describe('concurrency', function () {
         },
       });
       maximize(iterator, { concurrency: 5 }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
 
@@ -78,8 +80,9 @@ describe('concurrency', function () {
         },
       });
       maximize(iterator, { concurrency: Infinity }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
   });
@@ -102,8 +105,9 @@ describe('concurrency', function () {
         async: true,
       });
       maximize(iterator, { concurrency: 1 }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
 
@@ -118,8 +122,9 @@ describe('concurrency', function () {
         async: true,
       });
       maximize(iterator, { concurrency: 5 }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
 
@@ -134,8 +139,9 @@ describe('concurrency', function () {
         async: true,
       });
       maximize(iterator, { concurrency: Infinity }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
   });
@@ -159,8 +165,9 @@ describe('concurrency', function () {
         },
       });
       maximize(iterator, { concurrency: 1 }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
 
@@ -174,8 +181,9 @@ describe('concurrency', function () {
         },
       });
       maximize(iterator, { concurrency: 5 }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
 
@@ -189,8 +197,9 @@ describe('concurrency', function () {
         },
       });
       maximize(iterator, { concurrency: Infinity }, function (err) {
+        assert.ok(!err);
         assert.ok(filterSpy.callCount, 13);
-        callback(err);
+        callback();
       });
     });
   });

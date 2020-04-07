@@ -7,10 +7,9 @@ var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var sysPath = require('path');
 var fs = require('fs');
-var maximize = require('maximize-iterator');
 
-var Iterator = require('../../..');
-var statsSpys = require('../../utils').statsSpys;
+var Iterator = require('../..');
+var statsSpys = require('../utils').statsSpys;
 
 var DIR = sysPath.resolve(sysPath.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -31,7 +30,7 @@ function sleep(timeout) {
   });
 }
 
-describe('async await', function () {
+describe('asyncIterator', function () {
   beforeEach(function (callback) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, callback);
@@ -50,13 +49,11 @@ describe('async await', function () {
       },
     });
 
-    let value = await iterator.next();
-    while (value) {
-      // assert.ok(typeof value.basename === 'string');
+    for await (const value of iterator) {
+      assert.ok(typeof value.basename === 'string');
       assert.ok(typeof value.path === 'string');
       assert.ok(typeof value.fullPath === 'string');
-      assert.ok(typeof value.stat === 'object');
-      value = await iterator.next();
+      assert.ok(typeof value.stats === 'object');
     }
 
     assert.ok(statsSpy.callCount, 13);
@@ -75,12 +72,11 @@ describe('async await', function () {
       },
     });
 
-    let value = await iterator.next();
-    while (value) {
+    for await (const value of iterator) {
+      assert.ok(typeof value.basename === 'string');
       assert.ok(typeof value.path === 'string');
       assert.ok(typeof value.fullPath === 'string');
-      assert.ok(typeof value.stat === 'object');
-      value = await iterator.next();
+      assert.ok(typeof value.stats === 'object');
     }
 
     assert.equal(spys.dir.callCount, 6);
@@ -99,12 +95,11 @@ describe('async await', function () {
       },
     });
 
-    let value = await iterator.next();
-    while (value) {
+    for await (const value of iterator) {
+      assert.ok(typeof value.basename === 'string');
       assert.ok(typeof value.path === 'string');
       assert.ok(typeof value.fullPath === 'string');
-      assert.ok(typeof value.stat === 'object');
-      value = await iterator.next();
+      assert.ok(typeof value.stats === 'object');
     }
 
     assert.equal(spys.dir.callCount, 6);
@@ -122,12 +117,11 @@ describe('async await', function () {
     });
 
     try {
-      let value = await iterator.next();
-      while (value) {
+      for await (const value of iterator) {
+        assert.ok(typeof value.basename === 'string');
         assert.ok(typeof value.path === 'string');
         assert.ok(typeof value.fullPath === 'string');
-        assert.ok(typeof value.stat === 'object');
-        value = await iterator.next();
+        assert.ok(typeof value.stats === 'object');
       }
     } catch (err) {
       assert.ok(!!err);

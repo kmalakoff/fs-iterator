@@ -46,10 +46,19 @@ describe('errors', function () {
           throw new Error('Failed');
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!!err);
-        callback();
-      });
+      maximize(
+        iterator,
+        {
+          each: function (err) {
+            assert.ok(!!err);
+            throw err;
+          },
+        },
+        function (err) {
+          assert.ok(!!err);
+          callback();
+        }
+      );
     });
   });
 
@@ -69,10 +78,19 @@ describe('errors', function () {
         },
         async: true,
       });
-      maximize(iterator, function (err) {
-        assert.ok(!!err);
-        callback();
-      });
+      maximize(
+        iterator,
+        {
+          each: function (err) {
+            assert.ok(!!err);
+            throw err;
+          },
+        },
+        function (err) {
+          assert.ok(!!err);
+          callback();
+        }
+      );
     });
   });
 
@@ -93,10 +111,19 @@ describe('errors', function () {
           });
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!!err);
-        callback();
-      });
+      maximize(
+        iterator,
+        {
+          each: function (err) {
+            assert.ok(!!err);
+            throw err;
+          },
+        },
+        function (err) {
+          assert.ok(!!err);
+          callback();
+        }
+      );
     });
   });
 });
