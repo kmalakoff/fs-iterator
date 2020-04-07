@@ -31,13 +31,13 @@ function sleep(timeout) {
 }
 
 describe('asyncIterator', function () {
-  beforeEach(function (callback) {
+  beforeEach(function (done) {
     rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, callback);
+      generate(DIR, STRUCTURE, done);
     });
   });
-  after(function (callback) {
-    rimraf(DIR, callback);
+  after(function (done) {
+    rimraf(DIR, done);
   });
 
   it('should be default false', async function () {
@@ -110,7 +110,7 @@ describe('asyncIterator', function () {
   it('should propagate errors', async function () {
     var iterator = new Iterator(DIR, {
       filter: function () {
-        return sleep(100).then(function () {
+        return sleep(50).then(function () {
           throw new Error('Failed');
         });
       },

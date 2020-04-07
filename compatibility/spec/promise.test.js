@@ -33,16 +33,16 @@ function sleep(timeout) {
 describe('promise', function () {
   if (typeof Promise === 'undefined') return; // no promise support
 
-  beforeEach(function (callback) {
+  beforeEach(function (done) {
     rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, callback);
+      generate(DIR, STRUCTURE, done);
     });
   });
-  after(function (callback) {
-    rimraf(DIR, callback);
+  after(function (done) {
+    rimraf(DIR, done);
   });
 
-  it('should be default false', function (callback) {
+  it('should be default false', function (done) {
     var statsSpy = sinon.spy();
 
     var iterator = new Iterator(DIR, {
@@ -58,14 +58,14 @@ describe('promise', function () {
           statsSpy.args.forEach(function (args) {
             assert.isUndefined(args[0]);
           });
-          callback();
+          done();
         } else consume();
       });
     }
     consume();
   });
 
-  it('Should find everything with no return', function (callback) {
+  it('Should find everything with no return', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -81,14 +81,14 @@ describe('promise', function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
-          callback();
+          done();
         } else consume();
       });
     }
     consume();
   });
 
-  it('Should find everything with return true', function (callback) {
+  it('Should find everything with return true', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -105,17 +105,17 @@ describe('promise', function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
-          callback();
+          done();
         } else consume();
       });
     }
     consume();
   });
 
-  it('should propagate errors', function (callback) {
+  it('should propagate errors', function (done) {
     var iterator = new Iterator(DIR, {
       filter: function () {
-        return sleep(100).then(function () {
+        return sleep(50).then(function () {
           throw new Error('Failed');
         });
       },
@@ -124,7 +124,7 @@ describe('promise', function () {
     function consume() {
       iterator.next().catch(function (err) {
         assert.ok(!!err);
-        callback();
+        done();
       });
     }
     consume();

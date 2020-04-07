@@ -25,16 +25,16 @@ var STRUCTURE = {
 };
 
 describe('iterate over everything', function () {
-  beforeEach(function (callback) {
+  beforeEach(function (done) {
     rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, callback);
+      generate(DIR, STRUCTURE, done);
     });
   });
-  after(function (callback) {
-    rimraf(DIR, callback);
+  after(function (done) {
+    rimraf(DIR, done);
   });
 
-  it('Should find everything with no return', function (callback) {
+  it('Should find everything with no return', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -48,11 +48,11 @@ describe('iterate over everything', function () {
       assert.equal(spys.dir.callCount, 6);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
-      callback();
+      done();
     });
   });
 
-  it('Should find everything with return true', function (callback) {
+  it('Should find everything with return true', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -67,10 +67,10 @@ describe('iterate over everything', function () {
       assert.equal(spys.dir.callCount, 6);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
-      callback();
+      done();
     });
   });
-  it('Should handle a delete', function (callback) {
+  it('Should handle a delete', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -87,7 +87,7 @@ describe('iterate over everything', function () {
       assert.equal(spys.dir.callCount, 6);
       assert.equal(spys.file.callCount, 4);
       assert.equal(spys.link.callCount, 2);
-      callback();
+      done();
     });
   });
 });

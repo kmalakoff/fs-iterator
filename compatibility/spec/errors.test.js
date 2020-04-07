@@ -29,18 +29,18 @@ function sleep(timeout) {
 }
 
 describe('errors', function () {
-  after(function (callback) {
-    rimraf(DIR, callback);
+  after(function (done) {
+    rimraf(DIR, done);
   });
 
   describe('sync', function () {
-    beforeEach(function (callback) {
+    beforeEach(function (done) {
       rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, callback);
+        generate(DIR, STRUCTURE, done);
       });
     });
 
-    it('should propagate errors', function (callback) {
+    it('should propagate errors', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
           throw new Error('Failed');
@@ -56,25 +56,25 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!!err);
-          callback();
+          done();
         }
       );
     });
   });
 
   describe('async', function () {
-    beforeEach(function (callback) {
+    beforeEach(function (done) {
       rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, callback);
+        generate(DIR, STRUCTURE, done);
       });
     });
 
-    it('should propagate errors', function (callback) {
+    it('should propagate errors', function (done) {
       var iterator = new Iterator(DIR, {
-        filter: function (path, stat, callback2) {
+        filter: function (path, stat, callback) {
           setTimeout(function () {
-            callback2(new Error('Failed'));
-          }, 100);
+            callback(new Error('Failed'));
+          }, 50);
         },
         async: true,
       });
@@ -88,7 +88,7 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!!err);
-          callback();
+          done();
         }
       );
     });
@@ -97,16 +97,16 @@ describe('errors', function () {
   describe('promise', function () {
     if (typeof Promise === 'undefined') return; // no promise support
 
-    beforeEach(function (callback) {
+    beforeEach(function (done) {
       rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, callback);
+        generate(DIR, STRUCTURE, done);
       });
     });
 
-    it('should propagate errors', function (callback) {
+    it('should propagate errors', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(100).then(function () {
+          return sleep(50).then(function () {
             throw new Error('Failed');
           });
         },
@@ -121,7 +121,7 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!!err);
-          callback();
+          done();
         }
       );
     });
