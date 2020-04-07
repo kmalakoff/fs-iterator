@@ -2,83 +2,10 @@ var fs = require('fs');
 var path = require('path');
 var Stack = require('stack-lifo');
 var fifo = require('fifo');
-var joinDeep = require('join-deep');
 
-var getResult = require('./lib/getResult');
-var getKeep = require('./lib/getKeep');
+var depthFirst = require('./lib/depthFirst');
 
 var DEFAULT_STAT = 'lstat';
-
-function processRoot(iterator, root, callback) {
-  iterator.options.fs.realpath(root, function (err1, realRoot) {
-    if (err1) return callback(err1);
-    processPath(iterator, [realRoot], function (err) {
-      callback(err);
-    });
-  });
-}
-
-function processFilter(iterator, relativePath, stats, callback) {
-  if (!iterator.options.filter) return callback(null, true);
-
-  var callbackWrapper = function (err, result) {
-    err ? callback(err) : callback(null, getResult(result));
-  };
-
-  try {
-    var filter = iterator.options.filter;
-    iterator.options.async ? filter(relativePath, stats, callbackWrapper) : getKeep(filter(relativePath, stats), callbackWrapper);
-  } catch (err) {
-    callback(err);
-  }
-}
-
-function processPath(iterator, paths, callback) {
-  // TODO: optimize paths
-  var entry = { fullPath: joinDeep(paths, path.sep) };
-  entry.path = path.relative(iterator.root, entry.fullPath);
-  entry.basename = path.basename(entry.fullPath);
-
-  iterator.options.stat(entry.fullPath, function (err1, stats) {
-    if (err1) return callback(err1);
-    entry.stats = stats;
-
-    processFilter(iterator, entry.path, stats, function (err2, keep) {
-      if (err2) return callback(err2);
-      if (!keep) return callback();
-
-      if (stats.isDirectory()) processDirectory(iterator, paths, entry, callback);
-      else processFile(iterator, paths, entry, callback);
-    });
-  });
-}
-
-function processFile(iterator, paths, entry, callback) {
-  return callback(null, entry);
-}
-
-function processDirectory(iterator, paths, entry, callback) {
-  iterator.options.fs.realpath(entry.fullPath, function (err1, realPath) {
-    if (err1) return callback(err1);
-
-    fs.readdir(realPath, function (err2, names) {
-      if (err2) return callback(err2);
-
-      var nextPaths = entry.fullPath === realPath ? paths : [realPath];
-      if (names.length) {
-        iterator.stack.push(processNextDirectoryEntry.bind(null, iterator, nextPaths, names.reverse()));
-      }
-      return callback(null, entry);
-    });
-  });
-}
-
-function processNextDirectoryEntry(iterator, paths, names, callback) {
-  if (!names.length) return callback();
-  var name = names.pop(); // TODO: compare memory with reduction and inplace
-  if (names.length) iterator.stack.push(processNextDirectoryEntry.bind(null, iterator, paths, names));
-  processPath(iterator, [paths, name], callback);
-}
 
 function Iterator(root, options) {
   options = options || {};
@@ -86,6 +13,7 @@ function Iterator(root, options) {
     filter: options.filter,
     async: options.async,
     fs: options.fs || fs,
+    depth: options.depth === undefined ? Infinity : options.depth,
   };
 
   this.options.stat = this.options.fs[options.stat || DEFAULT_STAT];
@@ -98,7 +26,7 @@ function Iterator(root, options) {
 
   this.root = path.resolve(root);
   this.stack = new Stack();
-  this.stack.push(processRoot.bind(null, this, root));
+  this.stack.push(depthFirst.bind(null, this, root));
   this.processingCount = 0;
   this.queued = fifo();
 }

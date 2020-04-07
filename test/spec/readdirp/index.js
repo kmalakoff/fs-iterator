@@ -95,7 +95,7 @@ class ReaddirpStream extends Readable {
     this._isDirent = 'Dirent' in fs && !opts.alwaysStat;
     this._statsProp = this._isDirent ? 'dirent' : 'stats';
 
-    const iteratorOptions = { stat: opts.lstat ? 'lstat' : 'stat', alwaysStat: opts.alwaysStat };
+    const iteratorOptions = { stat: opts.lstat ? 'lstat' : 'stat', alwaysStat: opts.alwaysStat, depth: opts.depth };
     this.iterator = new Iterator(root, iteratorOptions);
   }
 

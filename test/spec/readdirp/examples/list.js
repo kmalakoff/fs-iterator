@@ -5,7 +5,7 @@
 const readdirp = require('..');
 
 const read = async (directory) => {
-  const stream = readdirp(directory, {type: 'all'});
+  const stream = readdirp(directory, { type: 'all' });
   let i = 0;
   const start = Date.now();
   for await (const chunk of stream) {
@@ -13,8 +13,8 @@ const read = async (directory) => {
     // Check memory usage with this line. It should be 10MB or so.
     // Comment it out if you simply want to list files.
     // await new Promise(resolve => setTimeout(resolve, 500));
-    // if (i % 100000 === 0)
-      // console.log(`${i}`, chunk);
+    // if (i % 50000 === 0)
+    // console.log(`${i}`, chunk);
   }
   console.log('finished', i, 'files in', Date.now() - start, 'ms');
 
