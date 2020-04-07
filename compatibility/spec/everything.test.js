@@ -24,7 +24,7 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-describe('walk everything', function () {
+describe('iterate over everything', function () {
   beforeEach(function (callback) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, callback);
@@ -44,6 +44,7 @@ describe('walk everything', function () {
       },
     });
     maximize(iterator, function (err) {
+      assert.ok(!err);
       assert.equal(spys.dir.callCount, 6);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
@@ -62,6 +63,7 @@ describe('walk everything', function () {
       },
     });
     maximize(iterator, function (err) {
+      assert.ok(!err);
       assert.equal(spys.dir.callCount, 6);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
@@ -81,6 +83,7 @@ describe('walk everything', function () {
       },
     });
     maximize(iterator, { concurrency: 1 }, function (err) {
+      assert.ok(!err);
       assert.equal(spys.dir.callCount, 6);
       assert.equal(spys.file.callCount, 4);
       assert.equal(spys.link.callCount, 2);
