@@ -3,7 +3,7 @@
 'use strict';
 
 const fs = require('fs');
-const sysPath = require('path');
+const path = require('path');
 const { Readable } = require('stream');
 const { promisify } = require('util');
 const chai = require('chai');
@@ -23,7 +23,7 @@ const writeFile = promisify(fs.writeFile);
 
 const supportsDirent = 'Dirent' in fs;
 const isWindows = process.platform === 'win32';
-const root = sysPath.join(__dirname, 'test-fixtures');
+const root = path.join(__dirname, 'test-fixtures');
 
 let testCount = 0;
 let currPath;
@@ -32,18 +32,18 @@ const read = async (options) => readdirp.promise(currPath, options);
 
 const touch = async (files = [], dirs = []) => {
   for (const name of files) {
-    await writeFile(sysPath.join(currPath, name), `${Date.now()}`);
+    await writeFile(path.join(currPath, name), `${Date.now()}`);
   }
   for (const dir of dirs) {
-    await mkdir(sysPath.join(currPath, dir));
+    await mkdir(path.join(currPath, dir));
   }
 };
 
 const formatEntry = (file, dir = root) => {
   return {
-    basename: sysPath.basename(file),
-    path: sysPath.normalize(file),
-    fullPath: sysPath.join(dir, file),
+    basename: path.basename(file),
+    path: path.normalize(file),
+    fullPath: path.join(dir, file),
   };
 };
 
@@ -53,7 +53,7 @@ const waitForEnd = (stream) => new Promise((resolve) => stream.on('end', resolve
 
 beforeEach(async () => {
   testCount++;
-  currPath = sysPath.join(root, testCount.toString());
+  currPath = path.join(root, testCount.toString());
   await pRimraf(currPath);
   await mkdir(currPath);
 });
@@ -88,8 +88,8 @@ describe('symlinks', () => {
   });
 
   it('handles symlinks', async () => {
-    const newPath = sysPath.join(currPath, 'test-symlinked.js');
-    await symlink(sysPath.join(__dirname, 'test.js'), newPath);
+    const newPath = path.join(currPath, 'test-symlinked.js');
+    await symlink(path.join(__dirname, 'test.js'), newPath);
     const res = await read();
     const first = res[0];
     first.should.containSubset(formatEntry('test-symlinked.js', currPath));
@@ -98,9 +98,9 @@ describe('symlinks', () => {
   });
 
   it('handles symlinked directories', async () => {
-    const originalPath = sysPath.join(__dirname, 'examples');
+    const originalPath = path.join(__dirname, 'examples');
     const originalFiles = await readdir(originalPath);
-    const newPath = sysPath.join(currPath, 'examples');
+    const newPath = path.join(currPath, 'examples');
     await symlink(originalPath, newPath);
     const res = await read();
     const symlinkedFiles = res.map((entry) => entry.basename);
@@ -110,8 +110,8 @@ describe('symlinks', () => {
   it('should use lstat instead of stat', async () => {
     const files = ['a.txt', 'b.txt', 'c.txt'];
     const symlinkName = 'test-symlinked.js';
-    const newPath = sysPath.join(currPath, symlinkName);
-    await symlink(sysPath.join(__dirname, 'test.js'), newPath);
+    const newPath = path.join(currPath, symlinkName);
+    await symlink(path.join(__dirname, 'test.js'), newPath);
     await touch(files);
     const expect = [...files, symlinkName];
     const res = await read({ lstat: true, alwaysStat: true });
@@ -261,7 +261,7 @@ describe('filtering', () => {
   });
   it('function', async () => {
     const expect = ['a.js', 'c.js', 'd.js'];
-    const res = await read({ fileFilter: (entry) => sysPath.extname(entry.fullPath) === '.js' });
+    const res = await read({ fileFilter: (entry) => path.extname(entry.fullPath) === '.js' });
     res.should.have.lengthOf(expect.length);
     res.forEach((entry, index) => entry.should.containSubset(formatEntry(expect[index], currPath)));
 
@@ -274,7 +274,7 @@ describe('filtering', () => {
   });
   it('function with stats', async () => {
     const expect = ['a.js', 'c.js', 'd.js'];
-    const res = await read({ alwaysStat: true, fileFilter: (entry) => sysPath.extname(entry.fullPath) === '.js' });
+    const res = await read({ alwaysStat: true, fileFilter: (entry) => path.extname(entry.fullPath) === '.js' });
     res.should.have.lengthOf(expect.length);
     res.forEach((entry, index) => {
       entry.should.containSubset(formatEntry(expect[index], currPath));
@@ -328,9 +328,9 @@ describe('various', () => {
     // a/b gets deleted, so stat()-ting a/b/c would now emit enoent
     // We should emit warnings for this case.
     // this.timeout(4000);
-    fs.mkdirSync(sysPath.join(currPath, 'a'));
-    fs.mkdirSync(sysPath.join(currPath, 'b'));
-    fs.mkdirSync(sysPath.join(currPath, 'c'));
+    fs.mkdirSync(path.join(currPath, 'a'));
+    fs.mkdirSync(path.join(currPath, 'b'));
+    fs.mkdirSync(path.join(currPath, 'c'));
     let isWarningCalled = false;
     const stream = readdirp(currPath, { type: 'all', highWaterMark: 1 });
     stream.on('warn', (warning) => {
@@ -339,7 +339,7 @@ describe('various', () => {
       isWarningCalled = true;
     });
     await delay(500);
-    await pRimraf(sysPath.join(currPath, 'a'));
+    await pRimraf(path.join(currPath, 'a'));
     stream.resume();
     await Promise.race([waitForEnd(stream), delay(2000)]);
     isWarningCalled.should.equals(true);
@@ -349,7 +349,7 @@ describe('various', () => {
     if (isWindows) {
       return true;
     }
-    const permitedDir = sysPath.join(currPath, 'permited');
+    const permitedDir = path.join(currPath, 'permited');
     fs.mkdirSync(permitedDir, 0o0);
     let isWarningCalled = false;
     const stream = readdirp(currPath, { type: 'all' })
@@ -367,8 +367,8 @@ describe('various', () => {
     if (isWindows) {
       return true;
     }
-    const subdir = sysPath.join(currPath, 'subdir');
-    const permitedDir = sysPath.join(subdir, 'permited');
+    const subdir = path.join(currPath, 'subdir');
+    const permitedDir = path.join(subdir, 'permited');
     fs.mkdirSync(subdir);
     fs.mkdirSync(permitedDir, 0o0);
     let isWarningCalled = false;

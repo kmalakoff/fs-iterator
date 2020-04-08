@@ -5,13 +5,13 @@ var sinon = require('sinon');
 var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
-var sysPath = require('path');
+var path = require('path');
 var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
 
-var DIR = sysPath.resolve(sysPath.join(__dirname, '..', 'data'));
+var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -69,7 +69,7 @@ describe('async await', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+        var stats = fs.lstatSync(path.join(DIR, entry.path));
         spys(stats, entry.path);
       },
     });
@@ -93,7 +93,7 @@ describe('async await', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+        var stats = fs.lstatSync(path.join(DIR, entry.path));
         spys(stats, entry.path);
         return true;
       },

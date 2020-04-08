@@ -5,12 +5,12 @@ var assert = chai.assert;
 var sinon = require('sinon');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
-var sysPath = require('path');
+var path = require('path');
 var maximize = require('maximize-iterator');
 
 var Iterator = require('../..');
 
-var DIR = sysPath.resolve(sysPath.join(__dirname, '..', 'data'));
+var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
