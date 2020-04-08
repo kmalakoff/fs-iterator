@@ -69,9 +69,9 @@ describe('promise', function () {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
-      filter: function (path) {
-        var stats = fs.lstatSync(sysPath.join(DIR, path));
-        spys(stats, path);
+      filter: function (entry) {
+        var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+        spys(stats, entry.path);
       },
     });
 
@@ -92,9 +92,9 @@ describe('promise', function () {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
-      filter: function (path) {
-        var stats = fs.lstatSync(sysPath.join(DIR, path));
-        spys(stats, path);
+      filter: function (entry) {
+        var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+        spys(stats, entry.path);
         return true;
       },
     });

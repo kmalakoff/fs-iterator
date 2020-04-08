@@ -98,7 +98,7 @@ class ReaddirpStream extends Readable {
       stat: opts.lstat ? 'lstat' : 'stat',
       alwaysStat: opts.alwaysStat,
       depth: opts.depth,
-      // filter: async (relativePath, stats) => {
+      // filter: async (relativeentrys) => {
       //   var entry = { fullPath: sysPath.join(this._root, relativePath) };
       //   entry[this._statsProp] = stats;
 
