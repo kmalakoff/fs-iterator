@@ -16,6 +16,8 @@
   "dependencies": {
     "benchmark": "^2.1.4",
     "fs-extra": "^9.0.0",
-    "graceful-fs": "^4.2.3"
+    "graceful-fs": "^4.2.3",
+    "fs-iterator-1.1.0": "npm:fs-iterator@^1.1.0",
+    "fs-iterator-1.2.0": "npm:fs-iterator@^1.2.0"
   }
 }

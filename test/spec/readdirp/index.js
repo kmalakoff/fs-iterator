@@ -119,12 +119,13 @@ class ReaddirpStream extends Readable {
 
     try {
       while (!this.destroyed && batch > 0) {
-        var entry;
+        var entry = null;
 
         try {
           entry = await this.iterator.next();
         } catch (error) {
           this._onError(error);
+          continue;
         }
 
         if (this.destroyed) break;
