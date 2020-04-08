@@ -5,7 +5,7 @@ const { Readable } = require('stream');
 const path = require('path');
 const { promisify } = require('util');
 const picomatch = require('picomatch');
-const Iterator = require('../../..');
+const Iterator = require('fs-iterator');
 
 const lstat = promisify(fs.lstat);
 const realpath = promisify(fs.realpath);
@@ -103,7 +103,8 @@ class ReaddirpStream extends Readable {
         entry.entryType = await this._getEntryType(entry);
         if (entry.entryType === 'directory') {
           return this._directoryFilter(entry);
-        } else if (entry.entryType === 'file' || this._includeAsFile(entry)) {
+        }
+        if (entry.entryType === 'file' || this._includeAsFile(entry)) {
           return this._fileFilter(entry);
         }
       },
@@ -118,7 +119,7 @@ class ReaddirpStream extends Readable {
     try {
       while (!this.destroyed && batch > 0) {
         try {
-          var entry = await this.iterator.next();
+          const entry = await this.iterator.next();
           if (this.destroyed) break;
           if (!entry) {
             this.push(null);

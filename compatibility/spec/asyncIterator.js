@@ -67,7 +67,7 @@ describe('asyncIterator', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(path.join(DIR, entry.path));
+        var stats = fs.lstatSync(entry.fullPath);
         spys(stats, entry.path);
       },
     });
@@ -89,7 +89,7 @@ describe('asyncIterator', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(path.join(DIR, entry.path));
+        var stats = fs.lstatSync(entry.fullPath);
         spys(stats, entry.path);
         return true;
       },
