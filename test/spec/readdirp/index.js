@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const { Readable } = require('stream');
-const sysPath = require('path');
+const path = require('path');
 const { promisify } = require('util');
 const picomatch = require('picomatch');
 const Iterator = require('../../..');
@@ -90,7 +90,7 @@ class ReaddirpStream extends Readable {
     this._wantsDir = [DIR_TYPE, FILE_DIR_TYPE, EVERYTHING_TYPE].includes(type);
     this._wantsFile = [FILE_TYPE, FILE_DIR_TYPE, EVERYTHING_TYPE].includes(type);
     this._wantsEverything = type === EVERYTHING_TYPE;
-    this._root = sysPath.resolve(root);
+    this._root = path.resolve(root);
     this._isDirent = 'Dirent' in fs && !opts.alwaysStat;
     this._statsProp = this._isDirent ? 'dirent' : 'stats';
 
