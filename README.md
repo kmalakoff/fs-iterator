@@ -2,6 +2,8 @@
 
 A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above
 
+_Note:_ This API is very robust for a variety of use cases as it passes the [chokidar](https://github.com/paulmillr/chokidar) and [readdirp](https://github.com/paulmillr/readdirp) test suites plus it does not accumulate results in memory.
+
 Entries are of the format:
 
 - string: basename - file or directory name

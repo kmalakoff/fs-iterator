@@ -146,7 +146,7 @@ describe('filtering', function () {
         filter: function (entry, callback) {
           filterSpy();
           setTimeout(function () {
-            var stats = fs.lstatSync(path.join(DIR, entry.path));
+            var stats = fs.lstatSync(entry.fullPath);
             done(null, !stats.isDirectory() || startsWith(entry.path, 'dir3/dir4'));
           }, 50);
         },

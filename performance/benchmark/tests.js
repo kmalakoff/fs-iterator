@@ -1,8 +1,7 @@
 var Benchmark = require('benchmark');
 var maximize = require('maximize-iterator');
 
-// const CONCURRENCIES = [1, 25, 100, 400, 1600, 6400, Infinity];
-const CONCURRENCIES = [1600];
+const CONCURRENCIES = [1, 25, 100, 400, 1600, 6400, Infinity];
 const FILE_SYSTEMS = [
   { name: 'fs', fs: require('fs') },
   // { name: 'gfs', fs: require('graceful-fs') },

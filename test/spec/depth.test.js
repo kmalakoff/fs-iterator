@@ -48,7 +48,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
         },
       });
@@ -67,7 +67,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
         },
       });
@@ -86,7 +86,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
         },
       });
@@ -105,7 +105,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 3,
         filter: function (entry) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
         },
       });
@@ -132,7 +132,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
           setTimeout(callback, 50);
         },
@@ -153,7 +153,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
           setTimeout(callback, 50);
         },
@@ -174,7 +174,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
           setTimeout(callback, 50);
         },
@@ -195,7 +195,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
           setTimeout(callback, 50);
         },
@@ -226,7 +226,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
           return sleep(50);
         },
@@ -246,7 +246,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
           return sleep(50);
         },
@@ -266,7 +266,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
           return sleep(50);
         },
@@ -286,7 +286,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(path.join(DIR, entry.path));
+          var stats = fs.lstatSync(entry.fullPath);
           spys(stats, entry.path);
           return sleep(50);
         },
