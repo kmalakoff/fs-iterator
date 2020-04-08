@@ -4,14 +4,14 @@ chai.use(require('sinon-chai'));
 var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
-var sysPath = require('path');
+var path = require('path');
 var fs = require('fs');
 var maximize = require('maximize-iterator');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
 
-var DIR = sysPath.resolve(sysPath.join(__dirname, '..', 'data'));
+var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -39,7 +39,7 @@ describe('iterate over everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+        var stats = fs.lstatSync(path.join(DIR, entry.path));
         spys(stats, entry.path);
       },
     });
@@ -57,7 +57,7 @@ describe('iterate over everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+        var stats = fs.lstatSync(path.join(DIR, entry.path));
         spys(stats, entry.path);
         return true;
       },
@@ -75,10 +75,10 @@ describe('iterate over everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+        var stats = fs.lstatSync(path.join(DIR, entry.path));
         spys(stats, entry.path);
 
-        if (entry.path === 'dir2/file1') rimraf.sync(sysPath.join(DIR, 'dir2'));
+        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
     });
