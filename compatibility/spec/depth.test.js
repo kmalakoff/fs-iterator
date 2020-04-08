@@ -47,9 +47,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 0,
-        filter: function (path) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
         },
       });
       maximize(iterator, function (err) {
@@ -66,9 +66,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 1,
-        filter: function (path) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
         },
       });
       maximize(iterator, function (err) {
@@ -85,9 +85,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 2,
-        filter: function (path) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
         },
       });
       maximize(iterator, function (err) {
@@ -104,9 +104,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 3,
-        filter: function (path) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
         },
       });
       maximize(iterator, function (err) {
@@ -131,9 +131,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 0,
-        filter: function (path, stat, callback) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry, callback) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
           setTimeout(callback, 50);
         },
         async: true,
@@ -152,9 +152,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 1,
-        filter: function (path, stat, callback) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry, callback) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
           setTimeout(callback, 50);
         },
         async: true,
@@ -173,9 +173,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 2,
-        filter: function (path, stat, callback) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry, callback) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
           setTimeout(callback, 50);
         },
         async: true,
@@ -194,9 +194,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: Infinity,
-        filter: function (path, stat, callback) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry, callback) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
           setTimeout(callback, 50);
         },
         async: true,
@@ -225,9 +225,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 0,
-        filter: function (path, stat, callback) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry, callback) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
           return sleep(50);
         },
       });
@@ -245,9 +245,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 1,
-        filter: function (path, stat, callback) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry, callback) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
           return sleep(50);
         },
       });
@@ -265,9 +265,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: 2,
-        filter: function (path, stat, callback) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry, callback) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
           return sleep(50);
         },
       });
@@ -285,9 +285,9 @@ describe('depth', function () {
 
       var iterator = new Iterator(DIR, {
         depth: Infinity,
-        filter: function (path, stat, callback) {
-          var stats = fs.lstatSync(sysPath.join(DIR, path));
-          spys(stats, path);
+        filter: function (entry, callback) {
+          var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
+          spys(stats, entry.path);
           return sleep(50);
         },
       });

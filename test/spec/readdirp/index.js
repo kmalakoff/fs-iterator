@@ -98,17 +98,16 @@ class ReaddirpStream extends Readable {
       stat: opts.lstat ? 'lstat' : 'stat',
       alwaysStat: opts.alwaysStat,
       depth: opts.depth,
-      // filter: async (relativePath, stats) => {
-      //   var entry = { fullPath: sysPath.join(this._root, relativePath) };
-      //   entry[this._statsProp] = stats;
+      filter: async (entry) => {
+        entry[this._statsProp] = entry.stats;
 
-      //   const entryType = await this._getEntryType(entry);
-      //   if (entryType === 'directory') {
-      //     return this._directoryFilter(entry);
-      //   } else if ((entryType === 'file' || this._includeAsFile(entry)) && this._fileFilter(entry)) {
-      //     return this._wantsFile;
-      //   }
-      // },
+        const entryType = await this._getEntryType(entry);
+        if (entryType === 'directory') {
+          return this._directoryFilter(entry);
+        } else if (entryType === 'file' || this._includeAsFile(entry)) {
+          return this._fileFilter(entry);
+        }
+      },
     };
     this.iterator = new Iterator(root, iteratorOptions);
   }

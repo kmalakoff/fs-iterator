@@ -71,7 +71,7 @@ describe('errors', function () {
 
     it('should propagate errors', function (done) {
       var iterator = new Iterator(DIR, {
-        filter: function (path, stat, callback) {
+        filter: function (entry, callback) {
           setTimeout(function () {
             callback(new Error('Failed'));
           }, 50);

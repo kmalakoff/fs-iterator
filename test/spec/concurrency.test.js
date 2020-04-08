@@ -98,7 +98,7 @@ describe('concurrency', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path, stat, callback) {
+        filter: function (entry, callback) {
           filterSpy();
           setTimeout(callback, 50);
         },
@@ -115,7 +115,7 @@ describe('concurrency', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path, stat, callback) {
+        filter: function (entry, callback) {
           filterSpy();
           setTimeout(callback, 50);
         },
@@ -132,7 +132,7 @@ describe('concurrency', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path, stat, callback) {
+        filter: function (entry, callback) {
           filterSpy();
           setTimeout(callback, 50);
         },

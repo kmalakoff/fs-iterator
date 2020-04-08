@@ -81,9 +81,9 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path, stats) {
+        filter: function (entry) {
           filterSpy();
-          return !stats.isDirectory() || startsWith(path, 'dir3/dir4');
+          return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
         },
       });
       maximize(iterator, function (err) {
@@ -105,7 +105,7 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path, stat, callback) {
+        filter: function (entry, callback) {
           filterSpy();
           setTimeout(function () {
             callback(null, false);
@@ -124,10 +124,10 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path, stat, callback) {
+        filter: function (entry, callback) {
           filterSpy();
           setTimeout(function () {
-            callback(null, path !== 'dir2');
+            callback(null, entry.path !== 'dir2');
           }, 50);
         },
         async: true,
@@ -143,10 +143,10 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path, stat, callback) {
+        filter: function (entry, callback) {
           filterSpy();
           setTimeout(function () {
-            var stats = fs.lstatSync(sysPath.join(DIR, path));
+            var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
             done(null, !stats.isDirectory() || startsWith(path, 'dir3/dir4'));
           }, 50);
         },
@@ -191,7 +191,7 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path) {
+        filter: function (entry) {
           filterSpy();
           return sleep(50).then(function () {
             return path !== 'dir2';
@@ -209,7 +209,7 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (path, stats) {
+        filter: function (entrys) {
           filterSpy();
           return sleep(50).then(function () {
             return !stats.isDirectory() || startsWith(path, 'dir3/dir4');
