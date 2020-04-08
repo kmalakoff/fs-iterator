@@ -98,17 +98,15 @@ class ReaddirpStream extends Readable {
       stat: opts.lstat ? 'lstat' : 'stat',
       alwaysStat: opts.alwaysStat,
       depth: opts.depth,
-      // filter: async (relativeentrys) => {
-      //   var entry = { fullPath: sysPath.join(this._root, relativePath) };
-      //   entry[this._statsProp] = stats;
-
-      //   const entryType = await this._getEntryType(entry);
-      //   if (entryType === 'directory') {
-      //     return this._directoryFilter(entry);
-      //   } else if ((entryType === 'file' || this._includeAsFile(entry)) && this._fileFilter(entry)) {
-      //     return this._wantsFile;
-      //   }
-      // },
+      filter: async (entry) => {
+        entry[this._statsProp] = entry.stats;
+        entry.entryType = await this._getEntryType(entry);
+        if (entry.entryType === 'directory') {
+          return this._directoryFilter(entry);
+        } else if (entry.entryType === 'file' || this._includeAsFile(entry)) {
+          return this._fileFilter(entry);
+        }
+      },
     };
     this.iterator = new Iterator(root, iteratorOptions);
   }
@@ -119,34 +117,22 @@ class ReaddirpStream extends Readable {
 
     try {
       while (!this.destroyed && batch > 0) {
-        var entry;
-
         try {
-          entry = await this.iterator.next();
+          var entry = await this.iterator.next();
+          if (this.destroyed) break;
+          if (!entry) {
+            this.push(null);
+            break;
+          }
+
+          if (entry.entryType === 'directory' && !this._wantsDir) continue;
+          else if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) continue;
+
+          this.push(entry);
+          batch--;
         } catch (error) {
           this._onError(error);
-        }
-
-        if (this.destroyed) break;
-        if (!entry) {
-          this.push(null);
-          break;
-        }
-        if (this._statsProp !== 'stats') {
-          entry[this._statsProp] = entry.stats;
-        }
-
-        const entryType = await this._getEntryType(entry);
-        if (entryType === 'directory' && this._directoryFilter(entry)) {
-          if (this._wantsDir) {
-            this.push(entry);
-            batch--;
-          }
-        } else if ((entryType === 'file' || this._includeAsFile(entry)) && this._fileFilter(entry)) {
-          if (this._wantsFile) {
-            this.push(entry);
-            batch--;
-          }
+          continue;
         }
       }
     } catch (error) {

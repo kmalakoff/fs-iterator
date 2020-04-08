@@ -78,7 +78,7 @@ describe('iterate over everything', function () {
         var stats = fs.lstatSync(sysPath.join(DIR, entry.path));
         spys(stats, entry.path);
 
-        if (path === 'dir2/file1') rimraf.sync(sysPath.join(DIR, 'dir2'));
+        if (entry.path === 'dir2/file1') rimraf.sync(sysPath.join(DIR, 'dir2'));
         return true;
       },
     });
