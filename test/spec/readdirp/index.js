@@ -5,7 +5,7 @@ const { Readable } = require('stream');
 const path = require('path');
 const { promisify } = require('util');
 const picomatch = require('picomatch');
-const Iterator = require('fs-iterator');
+const Iterator = require('../../..');
 
 const lstat = promisify(fs.lstat);
 const realpath = promisify(fs.realpath);
