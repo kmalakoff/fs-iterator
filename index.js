@@ -14,6 +14,7 @@ function Iterator(root, options) {
     filter: options.filter,
     async: options.async,
     fs: options.fs || fs,
+    push: this._push.bind(this),
   };
 
   this.options.stat = this.options.fs[options.stat || DEFAULT_STAT];
@@ -26,7 +27,7 @@ function Iterator(root, options) {
 
   this.root = path.resolve(root);
   this.stack = new Stack();
-  this.stack.push(depthFirst.bind(null, this, root));
+  this.stack.push(depthFirst.bind(null, this.options, root));
   this.processingCount = 0;
   this.queued = fifo();
 }
@@ -43,6 +44,10 @@ Iterator.prototype.next = function (callback) {
       });
     });
   }
+};
+
+Iterator.prototype._push = function (item) {
+  this.stack.push(item);
 };
 
 Iterator.prototype._processNext = function () {
