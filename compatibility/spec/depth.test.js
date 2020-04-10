@@ -47,8 +47,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
       iterator.each(
@@ -69,8 +68,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
       iterator.each(
@@ -91,8 +89,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
       iterator.each(
@@ -113,8 +110,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 3,
         filter: function (entry) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
       iterator.each(
@@ -143,8 +139,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 50);
         },
         async: true,
@@ -167,8 +162,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 50);
         },
         async: true,
@@ -191,8 +185,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 50);
         },
         async: true,
@@ -215,8 +208,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 50);
         },
         async: true,
@@ -249,8 +241,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(50);
         },
       });
@@ -272,8 +263,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(50);
         },
       });
@@ -295,8 +285,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(50);
         },
       });
@@ -318,8 +307,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry, callback) {
-          var stats = fs.lstatSync(entry.fullPath);
-          spys(stats, entry.path);
+          spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(50);
         },
       });

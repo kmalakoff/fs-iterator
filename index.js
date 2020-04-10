@@ -10,7 +10,7 @@ var next = require('./lib/next');
 var push = require('./lib/push');
 
 var DEFAULT_STAT = 'lstat';
-var DEFAULT_CONCURRENCY = 1;
+var DEFAULT_CONCURRENCY = Infinity;
 var DEFAULT_LIMIT = Infinity;
 
 function Iterator(root, options) {
