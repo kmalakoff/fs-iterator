@@ -12,7 +12,7 @@ const DATA_COPIES = 200;
   if (!(await fs.exists(DATA_DIR))) {
     await fs.ensureDir(DATA_DIR);
     for (let i = 0; i < DATA_COPIES; i++) {
-      await fs.copy(MODULES_DIR, entry.path.join(DATA_DIR, `${i}`));
+      await fs.copy(MODULES_DIR, path.join(DATA_DIR, `${i}`));
     }
   }
 

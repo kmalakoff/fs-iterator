@@ -12,12 +12,15 @@ module.exports = async function run({ Iterator, version }, dir) {
   const highest = { heapUsed: start.heapUsed };
 
   const iterator = new Iterator(dir);
-  await maximize(iterator, {
-    concurrency: 100,
-    each: () => {
+  var each = iterator.each ? iterator.each.bind(iterator) : maximize.bind(null, iterator);
+  await each(
+    function () {
       updateMemory(highest);
     },
-  });
+    {
+      concurrency: 100,
+    }
+  );
 
   const end = process.memoryUsage();
   for (const key in highest) {
