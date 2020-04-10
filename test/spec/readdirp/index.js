@@ -103,8 +103,7 @@ class ReaddirpStream extends Readable {
         entry.entryType = await this._getEntryType(entry);
         if (entry.entryType === 'directory') {
           return this._directoryFilter(entry);
-        }
-        if (entry.entryType === 'file' || this._includeAsFile(entry)) {
+        } else if (entry.entryType === 'file' || this._includeAsFile(entry)) {
           return this._fileFilter(entry);
         }
       },
@@ -119,7 +118,7 @@ class ReaddirpStream extends Readable {
     try {
       while (!this.destroyed && batch > 0) {
         try {
-          const entry = await this.iterator.next();
+          var entry = await this.iterator.next();
           if (this.destroyed) break;
           if (!entry) {
             this.push(null);
