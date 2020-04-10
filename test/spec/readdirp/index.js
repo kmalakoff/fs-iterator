@@ -102,11 +102,9 @@ class ReaddirpStream extends Readable {
       filter: async (entry) => {
         entry[this._statsProp] = entry.stats;
         entry.entryType = await this._getEntryType(entry);
-        if (entry.entryType === 'directory') {
-          return this._directoryFilter(entry);
-        } else if (entry.entryType === 'file' || this._includeAsFile(entry)) {
-          return this._fileFilter(entry);
-        }
+        if (entry.entryType === 'directory') return this._directoryFilter(entry);
+        if (entry.entryType === 'file' || this._includeAsFile(entry)) return this._fileFilter(entry);
+        return true;
       },
     };
     this.iterator = new Iterator(root, iteratorOptions);
@@ -122,8 +120,9 @@ class ReaddirpStream extends Readable {
           if (this.destroyed) return false;
           if (error) return this._onError(error);
           if (entry.entryType === 'directory' && !this._wantsDir) return true;
-          else if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) return true;
+          if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) return true;
           this.push(entry);
+          return true;
         },
         { limit: batch, concurrency: this.highWaterMark }
       );
@@ -139,10 +138,9 @@ class ReaddirpStream extends Readable {
     if (isNormalFlowError(err) && !this.destroyed) {
       this.emit('warn', err);
       return false;
-    } else {
-      this.destroy(err);
-      return true;
     }
+    this.destroy(err);
+    return true;
   }
 
   async _getEntryType(entry) {
