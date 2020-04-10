@@ -36,6 +36,7 @@ function Iterator(root, options) {
   this.stack.push(depthFirst.bind(null, this.options, root));
   this.processingCount = 0;
   this.queued = fifo();
+  this.waiters = [];
 }
 
 Iterator.prototype.next = function (callback) {
@@ -65,17 +66,21 @@ Iterator.prototype.each = function (fn, options, callback) {
       concurrency: options.concurrency || DEFAULT_CONCURRENCY,
       limit: options.limit || DEFAULT_LIMIT,
       each: fn,
+      total: 0,
       counter: 0,
     };
 
-    // return each(this, options, callOnce(callback));
     return each(this, options, callback);
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
-      self.each(fn, options, function (err) {
-        err ? reject(err) : resolve();
-      });
+      self.each(
+        fn,
+        options,
+        callOnce(function (err) {
+          err ? reject(err) : resolve();
+        })
+      );
     });
   }
 };
