@@ -6,7 +6,6 @@ var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 var fs = require('fs');
-var maximize = require('maximize-iterator');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -43,13 +42,16 @@ describe('iterate over everything', function () {
         spys(stats, entry.path);
       },
     });
-    maximize(iterator, function (err) {
-      assert.ok(!err);
-      assert.equal(spys.dir.callCount, 6);
-      assert.equal(spys.file.callCount, 5);
-      assert.equal(spys.link.callCount, 2);
-      done();
-    });
+    iterator.each(
+      function () {},
+      function (err) {
+        assert.ok(!err);
+        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.file.callCount, 5);
+        assert.equal(spys.link.callCount, 2);
+        done();
+      }
+    );
   });
 
   it('Should find everything with return true', function (done) {
@@ -62,13 +64,16 @@ describe('iterate over everything', function () {
         return true;
       },
     });
-    maximize(iterator, function (err) {
-      assert.ok(!err);
-      assert.equal(spys.dir.callCount, 6);
-      assert.equal(spys.file.callCount, 5);
-      assert.equal(spys.link.callCount, 2);
-      done();
-    });
+    iterator.each(
+      function () {},
+      function (err) {
+        assert.ok(!err);
+        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.file.callCount, 5);
+        assert.equal(spys.link.callCount, 2);
+        done();
+      }
+    );
   });
   it('Should handle a delete', function (done) {
     var spys = statsSpys();
@@ -82,12 +87,16 @@ describe('iterate over everything', function () {
         return true;
       },
     });
-    maximize(iterator, { concurrency: 1 }, function (err) {
-      assert.ok(!err);
-      assert.equal(spys.dir.callCount, 6);
-      assert.equal(spys.file.callCount, 4);
-      assert.equal(spys.link.callCount, 2);
-      done();
-    });
+    iterator.each(
+      function () {},
+      { concurrency: 1 },
+      function (err) {
+        assert.ok(!err);
+        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.file.callCount, 4);
+        assert.equal(spys.link.callCount, 2);
+        done();
+      }
+    );
   });
 });

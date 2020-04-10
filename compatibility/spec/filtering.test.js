@@ -7,7 +7,6 @@ var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 var fs = require('fs');
-var maximize = require('maximize-iterator');
 
 var Iterator = require('../..');
 
@@ -54,11 +53,14 @@ describe('filtering', function () {
           return false;
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 1);
+          done();
+        }
+      );
     });
 
     it('Should filter everything under specific directories by relative path', function (done) {
@@ -70,11 +72,14 @@ describe('filtering', function () {
           return path !== 'dir2';
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13 - 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13 - 2);
+          done();
+        }
+      );
     });
 
     it('Should filter everything under specific directories by stats and relative path', function (done) {
@@ -86,11 +91,14 @@ describe('filtering', function () {
           return !stats.isDirectory() || startsWith(path, 'dir3/dir4');
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13 - 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13 - 1);
+          done();
+        }
+      );
     });
   });
 
@@ -113,11 +121,14 @@ describe('filtering', function () {
         },
         async: true,
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 1);
+          done();
+        }
+      );
     });
 
     it('Should filter everything under specific directories by relative path', function (done) {
@@ -132,11 +143,14 @@ describe('filtering', function () {
         },
         async: true,
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13 - 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13 - 2);
+          done();
+        }
+      );
     });
 
     it('Should filter everything under specific directories by stats and relative path', function (done) {
@@ -152,11 +166,14 @@ describe('filtering', function () {
         },
         async: true,
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13 - 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13 - 1);
+          done();
+        }
+      );
     });
   });
 
@@ -180,11 +197,14 @@ describe('filtering', function () {
           });
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 1);
+          done();
+        }
+      );
     });
 
     it('Should filter everything under specific directories by relative path', function (done) {
@@ -198,11 +218,14 @@ describe('filtering', function () {
           });
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13 - 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13 - 2);
+          done();
+        }
+      );
     });
 
     it('Should filter everything under specific directories by stats and relative path', function (done) {
@@ -216,11 +239,14 @@ describe('filtering', function () {
           });
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13 - 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13 - 1);
+          done();
+        }
+      );
     });
   });
 });
