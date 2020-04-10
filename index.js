@@ -46,9 +46,11 @@ Iterator.prototype.next = function (callback) {
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
-      self.next(function (err, result) {
-        err ? reject(err) : resolve(result);
-      });
+      self.next(
+        callOnce(function (err, result) {
+          err ? reject(err) : resolve(result);
+        })
+      );
     });
   }
 };
@@ -74,13 +76,9 @@ Iterator.prototype.each = function (fn, options, callback) {
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
-      self.each(
-        fn,
-        options,
-        callOnce(function (err) {
-          err ? reject(err) : resolve();
-        })
-      );
+      self.each(fn, options, function (err) {
+        err ? reject(err) : resolve();
+      });
     });
   }
 };
