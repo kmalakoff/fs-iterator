@@ -38,8 +38,7 @@ describe('iterate over everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(entry.fullPath);
-        spys(stats, entry.path);
+        spys(fs.lstatSync(entry.fullPath), entry.path);
       },
     });
     iterator.each(
@@ -59,8 +58,7 @@ describe('iterate over everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(entry.fullPath);
-        spys(stats, entry.path);
+        spys(fs.lstatSync(entry.fullPath), entry.path);
         return true;
       },
     });
@@ -80,8 +78,7 @@ describe('iterate over everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(entry.fullPath);
-        spys(stats, entry.path);
+        spys(fs.lstatSync(entry.fullPath), entry.path);
 
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;

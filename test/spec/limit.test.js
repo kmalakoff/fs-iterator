@@ -29,7 +29,7 @@ function sleep(timeout) {
   });
 }
 
-describe('depth', function () {
+describe.skip('limit', function () {
   after(function (done) {
     rimraf(DIR, done);
   });
@@ -41,17 +41,18 @@ describe('depth', function () {
       });
     });
 
-    it('depth 0', function (done) {
+    it('should run with concurrency 1', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 0,
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
+
       iterator.each(
         function () {},
+        { limit: 3, concurrency: 1 },
         function (err) {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 1);
@@ -62,64 +63,43 @@ describe('depth', function () {
       );
     });
 
-    it('depth 1', function (done) {
+    it('should run with concurrency 5', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 1,
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
       iterator.each(
         function () {},
+        { limit: 3, concurrency: 5 },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 4);
-          assert.equal(spys.file.callCount, 4);
-          assert.equal(spys.link.callCount, 2);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
           done();
         }
       );
     });
 
-    it('depth 2', function (done) {
+    it('should run with concurrency Infinity', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 2,
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
       iterator.each(
         function () {},
+        { limit: 3, concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          done();
-        }
-      );
-    });
-
-    it('depth Infinity', function (done) {
-      var spys = statsSpys();
-
-      var iterator = new Iterator(DIR, {
-        depth: 3,
-        filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-        },
-      });
-      iterator.each(
-        function () {},
-        function (err) {
-          assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
           done();
         }
       );
@@ -133,11 +113,10 @@ describe('depth', function () {
       });
     });
 
-    it('depth 0', function (done) {
+    it('should run with concurrency 1', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 0,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 50);
@@ -146,6 +125,7 @@ describe('depth', function () {
       });
       iterator.each(
         function () {},
+        { limit: 3, concurrency: 1 },
         function (err) {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 1);
@@ -156,11 +136,10 @@ describe('depth', function () {
       );
     });
 
-    it('depth 1', function (done) {
+    it('should run with concurrency 5', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 1,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 50);
@@ -169,21 +148,21 @@ describe('depth', function () {
       });
       iterator.each(
         function () {},
+        { limit: 3, concurrency: 5 },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 4);
-          assert.equal(spys.file.callCount, 4);
-          assert.equal(spys.link.callCount, 2);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
           done();
         }
       );
     });
 
-    it('depth 2', function (done) {
+    it('should run with concurrency Infinity', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 2,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 50);
@@ -192,34 +171,12 @@ describe('depth', function () {
       });
       iterator.each(
         function () {},
+        { limit: 3, concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          done();
-        }
-      );
-    });
-
-    it('depth Infinity', function (done) {
-      var spys = statsSpys();
-
-      var iterator = new Iterator(DIR, {
-        depth: Infinity,
-        filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-          setTimeout(callback, 50);
-        },
-        async: true,
-      });
-      iterator.each(
-        function () {},
-        function (err) {
-          assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
           done();
         }
       );
@@ -235,18 +192,18 @@ describe('depth', function () {
       });
     });
 
-    it('depth 0', function (done) {
+    it('should run with concurrency 1', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 0,
-        filter: function (entry, callback) {
+        filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(50);
         },
       });
       iterator.each(
         function () {},
+        { limit: 3, concurrency: 1 },
         function (err) {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 1);
@@ -257,67 +214,45 @@ describe('depth', function () {
       );
     });
 
-    it('depth 1', function (done) {
+    it('should run with concurrency 5', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 1,
-        filter: function (entry, callback) {
+        filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(50);
         },
       });
       iterator.each(
         function () {},
+        { limit: 3, concurrency: 5 },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 4);
-          assert.equal(spys.file.callCount, 4);
-          assert.equal(spys.link.callCount, 2);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
           done();
         }
       );
     });
 
-    it('depth 2', function (done) {
+    it('should run with concurrency Infinity', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 2,
-        filter: function (entry, callback) {
+        filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(50);
         },
       });
       iterator.each(
         function () {},
+        { limit: 3, concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          done();
-        }
-      );
-    });
-
-    it('depth Infinity', function (done) {
-      var spys = statsSpys();
-
-      var iterator = new Iterator(DIR, {
-        depth: Infinity,
-        filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-          return sleep(50);
-        },
-      });
-      iterator.each(
-        function () {},
-        function (err) {
-          assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
           done();
         }
       );

@@ -70,8 +70,7 @@ describe('promise', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(entry.fullPath);
-        spys(stats, entry.path);
+        spys(fs.lstatSync(entry.fullPath), entry.path);
       },
     });
 
@@ -93,8 +92,7 @@ describe('promise', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        var stats = fs.lstatSync(entry.fullPath);
-        spys(stats, entry.path);
+        spys(fs.lstatSync(entry.fullPath), entry.path);
         return true;
       },
     });

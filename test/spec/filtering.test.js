@@ -86,9 +86,9 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (entrys) {
+        filter: function (entry) {
           filterSpy();
-          return !stats.isDirectory() || startsWith(path, 'dir3/dir4');
+          return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
         },
       });
       iterator.each(
@@ -157,11 +157,10 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (entry, callback) {
+        filter: function (entry) {
           filterSpy();
           setTimeout(function () {
-            var stats = fs.lstatSync(entry.fullPath);
-            done(null, !stats.isDirectory() || startsWith(entry.path, 'dir3/dir4'));
+            done(null, !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4'));
           }, 50);
         },
         async: true,
