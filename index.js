@@ -4,6 +4,9 @@ var Stack = require('stack-lifo');
 var fifo = require('fifo');
 
 var depthFirst = require('./lib/depthFirst');
+var each = require('./lib/each');
+var next = require('./lib/next');
+var push = require('./lib/push');
 
 var DEFAULT_STAT = 'lstat';
 
@@ -14,7 +17,7 @@ function Iterator(root, options) {
     filter: options.filter,
     async: options.async,
     fs: options.fs || fs,
-    push: this._push.bind(this),
+    push: push.bind(null, this),
   };
 
   this.options.stat = this.options.fs[options.stat || DEFAULT_STAT];
@@ -35,7 +38,7 @@ function Iterator(root, options) {
 Iterator.prototype.next = function (callback) {
   if (typeof callback === 'function') {
     this.queued.push(callback);
-    this._processNext();
+    next(this);
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
@@ -46,37 +49,8 @@ Iterator.prototype.next = function (callback) {
   }
 };
 
-Iterator.prototype._push = function (item) {
-  this.stack.push(item);
-};
-
-Iterator.prototype._processNext = function () {
-  if (!this.queued.length) return;
-
-  if (this.stack.isEmpty()) {
-    if (this.processingCount <= 0) {
-      while (this.queued.length) this.queued.shift()(null, null);
-    }
-    return;
-  }
-
-  var self = this;
-  var callback = this.queued.shift();
-  this.processingCount++;
-  this.stack.pop()(function (err, result) {
-    self.processingCount--;
-
-    // process error and then continue
-    if (err) callback(err);
-    // didn't get a result, try again
-    else if (!result) self.queued.unshift(callback);
-    // return result
-    else callback(null, result);
-
-    self._processNext(); // keep emptying queue
-  });
-
-  this._processNext(); // keep emptying queue
+Iterator.prototype.each = function (options, callback) {
+  each(this, options, callback);
 };
 
 Iterator.prototype.destroy = function (callback) {
