@@ -1,6 +1,5 @@
 var chai = require('chai');
 chai.use(require('sinon-chai'));
-var sinon = require('sinon');
 
 var assert = chai.assert;
 var generate = require('fs-generate');
@@ -9,6 +8,7 @@ var path = require('path');
 var fs = require('fs');
 
 var Iterator = require('../..');
+var isPromise = require('../../lib/isPromise');
 var statsSpys = require('../utils').statsSpys;
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
@@ -30,7 +30,7 @@ function sleep(timeout) {
   });
 }
 
-describe.skip('each', function () {
+describe('each', function () {
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);
@@ -42,6 +42,8 @@ describe.skip('each', function () {
 
   describe('callback interface', function () {
     it('each function is mandatory', function (done) {
+      if (typeof Promise === 'undefined') return done(); // no promise support
+
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -51,14 +53,31 @@ describe.skip('each', function () {
         },
       });
 
-      try {
-        iterator.each(function (err) {
-          assert.ok(false);
+      var promise = iterator.each(function (err) {
+        assert.ok(!err);
+      });
+      assert.ok(isPromise(promise));
+      promise
+        .then(function () {
+          var iterator2 = new Iterator(DIR, {
+            filter: function (entry) {
+              var stats = fs.lstatSync(entry.fullPath);
+              spys(stats, entry.path);
+            },
+          });
+
+          var nothing = iterator2.each(
+            function () {},
+            function (err) {
+              assert.ok(!err);
+              done();
+            }
+          );
+          assert.ok(nothing === undefined);
+        })
+        .catch(function (err) {
+          assert.ok(!err);
         });
-      } catch (err) {
-        assert.ok(!!err);
-        done();
-      }
     });
 
     it('simple each (default)', function (done) {

@@ -53,8 +53,7 @@ Iterator.prototype.next = function (callback) {
 };
 
 Iterator.prototype.each = function (fn, options, callback) {
-  if (arguments.length === 0 || typeof fn !== 'function') throw new Error('Missing each function');
-
+  if (typeof fn !== 'function') throw new Error('Missing each function');
   if (typeof options === 'function') {
     callback = options;
     options = {};
@@ -74,7 +73,7 @@ Iterator.prototype.each = function (fn, options, callback) {
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
-      self.each(options, function (err) {
+      self.each(fn, options, function (err) {
         err ? reject(err) : resolve();
       });
     });
