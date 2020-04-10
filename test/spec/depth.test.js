@@ -6,7 +6,6 @@ var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 var fs = require('fs');
-var maximize = require('maximize-iterator');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -52,13 +51,16 @@ describe('depth', function () {
           spys(stats, entry.path);
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 1);
-        assert.equal(spys.file.callCount, 2);
-        assert.equal(spys.link.callCount, 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
+          done();
+        }
+      );
     });
 
     it('depth 1', function (done) {
@@ -71,13 +73,16 @@ describe('depth', function () {
           spys(stats, entry.path);
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 4);
-        assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 4);
+          assert.equal(spys.file.callCount, 4);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
 
     it('depth 2', function (done) {
@@ -90,13 +95,16 @@ describe('depth', function () {
           spys(stats, entry.path);
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 5);
-        assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
 
     it('depth Infinity', function (done) {
@@ -109,13 +117,16 @@ describe('depth', function () {
           spys(stats, entry.path);
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 6);
-        assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
   });
 
@@ -138,13 +149,16 @@ describe('depth', function () {
         },
         async: true,
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 1);
-        assert.equal(spys.file.callCount, 2);
-        assert.equal(spys.link.callCount, 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
+          done();
+        }
+      );
     });
 
     it('depth 1', function (done) {
@@ -159,13 +173,16 @@ describe('depth', function () {
         },
         async: true,
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 4);
-        assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 4);
+          assert.equal(spys.file.callCount, 4);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
 
     it('depth 2', function (done) {
@@ -180,13 +197,16 @@ describe('depth', function () {
         },
         async: true,
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 5);
-        assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
 
     it('depth Infinity', function (done) {
@@ -201,13 +221,16 @@ describe('depth', function () {
         },
         async: true,
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 6);
-        assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
   });
 
@@ -231,13 +254,16 @@ describe('depth', function () {
           return sleep(50);
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 1);
-        assert.equal(spys.file.callCount, 2);
-        assert.equal(spys.link.callCount, 1);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
+          done();
+        }
+      );
     });
 
     it('depth 1', function (done) {
@@ -251,13 +277,16 @@ describe('depth', function () {
           return sleep(50);
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 4);
-        assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 4);
+          assert.equal(spys.file.callCount, 4);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
 
     it('depth 2', function (done) {
@@ -271,13 +300,16 @@ describe('depth', function () {
           return sleep(50);
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 5);
-        assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
 
     it('depth Infinity', function (done) {
@@ -291,13 +323,16 @@ describe('depth', function () {
           return sleep(50);
         },
       });
-      maximize(iterator, function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 6);
-        assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 2);
-        done();
-      });
+      iterator.each(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
     });
   });
 });
