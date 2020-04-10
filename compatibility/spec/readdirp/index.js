@@ -94,6 +94,7 @@ class ReaddirpStream extends Readable {
     this._isDirent = 'Dirent' in fs && !opts.alwaysStat;
     this._statsProp = this._isDirent ? 'dirent' : 'stats';
 
+    this.highWaterMark = options.highWaterMark || 4096;
     const iteratorOptions = {
       stat: opts.lstat ? 'lstat' : 'stat',
       alwaysStat: opts.alwaysStat,
@@ -116,25 +117,17 @@ class ReaddirpStream extends Readable {
     this.reading = true;
 
     try {
-      while (!this.destroyed && batch > 0) {
-        try {
-          var entry = await this.iterator.next();
-          if (this.destroyed) break;
-          if (!entry) {
-            this.push(null);
-            break;
-          }
-
-          if (entry.entryType === 'directory' && !this._wantsDir) continue;
-          else if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) continue;
-
+      const done = await this.iterator.each(
+        (error, entry) => {
+          if (this.destroyed) return false;
+          if (error) return this._onError(error);
+          if (entry.entryType === 'directory' && !this._wantsDir) return true;
+          else if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) return true;
           this.push(entry);
-          batch--;
-        } catch (error) {
-          this._onError(error);
-          continue;
-        }
-      }
+        },
+        { limit: batch, concurrency: this.highWaterMark }
+      );
+      if (done) this.push(null);
     } catch (error) {
       this.destroy(error);
     } finally {
@@ -145,8 +138,10 @@ class ReaddirpStream extends Readable {
   _onError(err) {
     if (isNormalFlowError(err) && !this.destroyed) {
       this.emit('warn', err);
+      return false;
     } else {
       this.destroy(err);
+      return true;
     }
   }
 
