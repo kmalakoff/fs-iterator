@@ -10,7 +10,6 @@ module.exports = async function run({ Iterator, version }, dir) {
   const highest = { heapUsed: start.heapUsed };
 
   const iterator = new Iterator(dir);
-
   let result = await iterator.next();
   while (result !== null) {
     updateMemory(highest);

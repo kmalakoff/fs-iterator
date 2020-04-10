@@ -1,5 +1,3 @@
-var maximize = require('maximize-iterator');
-
 var serial = require('./lib/serial');
 var parallel = require('./lib/parallel');
 
