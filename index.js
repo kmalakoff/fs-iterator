@@ -76,8 +76,8 @@ Iterator.prototype.each = function (fn, options, callback) {
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
-      self.each(fn, options, function (err) {
-        err ? reject(err) : resolve();
+      self.each(fn, options, function (err, done) {
+        err ? reject(err) : resolve(done);
       });
     });
   }

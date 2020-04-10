@@ -42,6 +42,27 @@ describe('each', function () {
         });
       });
 
+      it('infinite limit to get all', function (done) {
+        var spys = statsSpys();
+
+        var iterator = new Iterator(DIR);
+
+        iterator.each(
+          function (err, entry) {
+            spys(fs.lstatSync(entry.fullPath), entry.path);
+          },
+          { limit: Infinity, concurrency: 1 },
+          function (err, empty) {
+            assert.ok(!err);
+            assert.ok(empty);
+            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.file.callCount, 5);
+            assert.equal(spys.link.callCount, 2);
+            done();
+          }
+        );
+      });
+
       it('should run with concurrency 1', function (done) {
         var spys = statsSpys();
 
@@ -52,8 +73,9 @@ describe('each', function () {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 1 },
-          function (err) {
+          function (err, empty) {
             assert.ok(!err);
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
             assert.equal(spys.file.callCount, 1);
@@ -72,8 +94,9 @@ describe('each', function () {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 5 },
-          function (err) {
+          function (err, empty) {
             assert.ok(!err);
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             done();
           }
@@ -89,8 +112,9 @@ describe('each', function () {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: Infinity },
-          function (err) {
+          function (err, empty) {
             assert.ok(!err);
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             done();
           }
@@ -110,8 +134,9 @@ describe('each', function () {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 1 },
-          function (err) {
+          function (err, empty) {
             assert.ok(!err);
+            assert.ok(empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
@@ -129,6 +154,32 @@ describe('each', function () {
         });
       });
 
+      it('infinite limit to get all', function (done) {
+        var spys = statsSpys();
+
+        var iterator = new Iterator(DIR, {
+          filter: function (entry, callback) {
+            setTimeout(callback, 50);
+          },
+          async: true,
+        });
+
+        iterator.each(
+          function (err, entry) {
+            spys(fs.lstatSync(entry.fullPath), entry.path);
+          },
+          { limit: Infinity, concurrency: 1 },
+          function (err, empty) {
+            assert.ok(!err);
+            assert.ok(empty);
+            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.file.callCount, 5);
+            assert.equal(spys.link.callCount, 2);
+            done();
+          }
+        );
+      });
+
       it('should run with concurrency 1', function (done) {
         var spys = statsSpys();
 
@@ -143,8 +194,9 @@ describe('each', function () {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 1 },
-          function (err) {
+          function (err, empty) {
             assert.ok(!err);
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
             assert.equal(spys.file.callCount, 1);
@@ -168,8 +220,9 @@ describe('each', function () {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 5 },
-          function (err) {
+          function (err, empty) {
             assert.ok(!err);
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             done();
           }
@@ -190,8 +243,9 @@ describe('each', function () {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: Infinity },
-          function (err) {
+          function (err, empty) {
             assert.ok(!err);
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             done();
           }
@@ -213,8 +267,9 @@ describe('each', function () {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 1 },
-          function (err) {
+          function (err, empty) {
             assert.ok(!err);
+            assert.ok(empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
@@ -234,6 +289,34 @@ describe('each', function () {
         });
       });
 
+      it('infinite limit to get all', function (done) {
+        var spys = statsSpys();
+
+        var iterator = new Iterator(DIR, {
+          filter: function (entry) {
+            return sleep(50);
+          },
+        });
+
+        iterator
+          .each(
+            function (err, entry) {
+              spys(fs.lstatSync(entry.fullPath), entry.path);
+            },
+            { limit: Infinity, concurrency: 1 }
+          )
+          .then(function (empty) {
+            assert.ok(empty);
+            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.file.callCount, 5);
+            assert.equal(spys.link.callCount, 2);
+            done();
+          })
+          .catch(function (err) {
+            assert.ok(!err);
+          });
+      });
+
       it('should run with concurrency 1', function (done) {
         var spys = statsSpys();
 
@@ -249,7 +332,8 @@ describe('each', function () {
             },
             { limit: 3, concurrency: 1 }
           )
-          .then(function () {
+          .then(function (empty) {
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
             assert.equal(spys.file.callCount, 1);
@@ -276,7 +360,8 @@ describe('each', function () {
             },
             { limit: 3, concurrency: 5 }
           )
-          .then(function () {
+          .then(function (empty) {
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             done();
           })
@@ -300,7 +385,8 @@ describe('each', function () {
             },
             { limit: 3, concurrency: Infinity }
           )
-          .then(function () {
+          .then(function (empty) {
+            assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             done();
           })
@@ -325,7 +411,8 @@ describe('each', function () {
             },
             { limit: 3, concurrency: 1 }
           )
-          .then(function () {
+          .then(function (empty) {
+            assert.ok(empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
