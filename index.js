@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var Stack = require('stack-lifo');
 var fifo = require('fifo');
+var callOnce = require('call-once-next-tick');
 
 var depthFirst = require('./lib/depthFirst');
 var each = require('./lib/each');
@@ -9,6 +10,8 @@ var next = require('./lib/next');
 var push = require('./lib/push');
 
 var DEFAULT_STAT = 'lstat';
+var DEFAULT_LIMIT = Infinity;
+var DEFAULT_CONCURRENCY = Infinity;
 
 function Iterator(root, options) {
   options = options || {};
@@ -49,8 +52,33 @@ Iterator.prototype.next = function (callback) {
   }
 };
 
-Iterator.prototype.each = function (options, callback) {
-  each(this, options, callback);
+Iterator.prototype.each = function (fn, options, callback) {
+  if (arguments.length === 0 || typeof fn !== 'function') throw new Error('Missing each function');
+
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  if (typeof callback === 'function') {
+    options = options || {};
+    options = {
+      concurrency: options.concurrency || DEFAULT_CONCURRENCY,
+      limit: options.limit || DEFAULT_LIMIT,
+      each: fn,
+      counter: 0,
+    };
+
+    // return each(this, options, callOnce(callback));
+    return each(this, options, callback);
+  } else {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+      self.each(options, function (err) {
+        err ? reject(err) : resolve();
+      });
+    });
+  }
 };
 
 Iterator.prototype.destroy = function (callback) {

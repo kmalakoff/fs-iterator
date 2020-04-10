@@ -5,7 +5,6 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var maximize = require('maximize-iterator');
 
 var Iterator = require('../..');
 
@@ -46,13 +45,10 @@ describe('errors', function () {
           throw new Error('Failed');
         },
       });
-      maximize(
-        iterator,
-        {
-          each: function (err) {
-            assert.ok(!!err);
-            throw err;
-          },
+      iterator.each(
+        function (err) {
+          assert.ok(!!err);
+          throw err;
         },
         function (err) {
           assert.ok(!!err);
@@ -78,13 +74,10 @@ describe('errors', function () {
         },
         async: true,
       });
-      maximize(
-        iterator,
-        {
-          each: function (err) {
-            assert.ok(!!err);
-            throw err;
-          },
+      iterator.each(
+        function (err) {
+          assert.ok(!!err);
+          throw err;
         },
         function (err) {
           assert.ok(!!err);
@@ -111,13 +104,10 @@ describe('errors', function () {
           });
         },
       });
-      maximize(
-        iterator,
-        {
-          each: function (err) {
-            assert.ok(!!err);
-            throw err;
-          },
+      iterator.each(
+        function (err) {
+          assert.ok(!!err);
+          throw err;
         },
         function (err) {
           assert.ok(!!err);

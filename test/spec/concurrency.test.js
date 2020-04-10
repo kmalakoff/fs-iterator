@@ -6,7 +6,6 @@ var sinon = require('sinon');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var maximize = require('maximize-iterator');
 
 var Iterator = require('../..');
 
@@ -49,11 +48,16 @@ describe('concurrency', function () {
           filterSpy();
         },
       });
-      maximize(iterator, { concurrency: 1 }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+
+      iterator.each(
+        function () {},
+        { concurrency: 1 },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
 
     it('should run with concurrency 5', function (done) {
@@ -64,11 +68,15 @@ describe('concurrency', function () {
           filterSpy();
         },
       });
-      maximize(iterator, { concurrency: 5 }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+      iterator.each(
+        function () {},
+        { concurrency: 5 },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
 
     it('should run with concurrency Infinity', function (done) {
@@ -79,11 +87,15 @@ describe('concurrency', function () {
           filterSpy();
         },
       });
-      maximize(iterator, { concurrency: Infinity }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+      iterator.each(
+        function () {},
+        { concurrency: Infinity },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
   });
 
@@ -104,11 +116,15 @@ describe('concurrency', function () {
         },
         async: true,
       });
-      maximize(iterator, { concurrency: 1 }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+      iterator.each(
+        function () {},
+        { concurrency: 1 },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
 
     it('should run with concurrency 5', function (done) {
@@ -121,11 +137,15 @@ describe('concurrency', function () {
         },
         async: true,
       });
-      maximize(iterator, { concurrency: 5 }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+      iterator.each(
+        function () {},
+        { concurrency: 5 },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
 
     it('should run with concurrency Infinity', function (done) {
@@ -138,11 +158,15 @@ describe('concurrency', function () {
         },
         async: true,
       });
-      maximize(iterator, { concurrency: Infinity }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+      iterator.each(
+        function () {},
+        { concurrency: Infinity },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
   });
 
@@ -164,11 +188,15 @@ describe('concurrency', function () {
           return sleep(50);
         },
       });
-      maximize(iterator, { concurrency: 1 }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+      iterator.each(
+        function () {},
+        { concurrency: 1 },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
 
     it('should run with concurrency 5', function (done) {
@@ -180,11 +208,15 @@ describe('concurrency', function () {
           return sleep(50);
         },
       });
-      maximize(iterator, { concurrency: 5 }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+      iterator.each(
+        function () {},
+        { concurrency: 5 },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
 
     it('should run with concurrency Infinity', function (done) {
@@ -196,11 +228,15 @@ describe('concurrency', function () {
           return sleep(50);
         },
       });
-      maximize(iterator, { concurrency: Infinity }, function (err) {
-        assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
-        done();
-      });
+      iterator.each(
+        function () {},
+        { concurrency: Infinity },
+        function (err) {
+          assert.ok(!err);
+          assert.ok(filterSpy.callCount, 13);
+          done();
+        }
+      );
     });
   });
 });
