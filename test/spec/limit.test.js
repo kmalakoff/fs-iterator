@@ -46,7 +46,6 @@ describe('forEach', function () {
         var spys = statsSpys();
 
         var iterator = new Iterator(DIR);
-
         iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
@@ -55,7 +54,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(empty);
-            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 2);
             done();
@@ -67,7 +66,6 @@ describe('forEach', function () {
         var spys = statsSpys();
 
         var iterator = new Iterator(DIR);
-
         iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
@@ -77,8 +75,8 @@ describe('forEach', function () {
             assert.ok(!err);
             assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
-            assert.equal(spys.dir.callCount, 2);
-            assert.equal(spys.file.callCount, 1);
+            assert.equal(spys.dir.callCount, 3);
+            assert.equal(spys.file.callCount, 0);
             assert.equal(spys.link.callCount, 0);
             done();
           }
@@ -133,12 +131,12 @@ describe('forEach', function () {
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
-          { limit: 3, concurrency: 1 },
+          { limit: 4, concurrency: 1 },
           function (err, empty) {
             assert.ok(!err);
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
-            assert.equal(spys.dir.callCount, 0);
+            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+            assert.equal(spys.dir.callCount, 1);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);
             done();
@@ -172,7 +170,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(empty);
-            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 2);
             done();
@@ -198,8 +196,8 @@ describe('forEach', function () {
             assert.ok(!err);
             assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
-            assert.equal(spys.dir.callCount, 2);
-            assert.equal(spys.file.callCount, 1);
+            assert.equal(spys.dir.callCount, 3);
+            assert.equal(spys.file.callCount, 0);
             assert.equal(spys.link.callCount, 0);
             done();
           }
@@ -266,12 +264,12 @@ describe('forEach', function () {
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
-          { limit: 3, concurrency: 1 },
+          { limit: 4, concurrency: 1 },
           function (err, empty) {
             assert.ok(!err);
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
-            assert.equal(spys.dir.callCount, 0);
+            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+            assert.equal(spys.dir.callCount, 1);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);
             done();
@@ -307,7 +305,7 @@ describe('forEach', function () {
           )
           .then(function (empty) {
             assert.ok(empty);
-            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.dir.callCount, 6);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 2);
             done();
@@ -335,8 +333,8 @@ describe('forEach', function () {
           .then(function (empty) {
             assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
-            assert.equal(spys.dir.callCount, 2);
-            assert.equal(spys.file.callCount, 1);
+            assert.equal(spys.dir.callCount, 3);
+            assert.equal(spys.file.callCount, 0);
             assert.equal(spys.link.callCount, 0);
             done();
           })
@@ -409,12 +407,12 @@ describe('forEach', function () {
             function (err, entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
-            { limit: 3, concurrency: 1 }
+            { limit: 4, concurrency: 1 }
           )
           .then(function (empty) {
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
-            assert.equal(spys.dir.callCount, 0);
+            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+            assert.equal(spys.dir.callCount, 1);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);
             done();
