@@ -73,7 +73,7 @@ describe('iterate over everything', function () {
       }
     );
   });
-  it('Should handle a delete (error in forEach default)', function (done) {
+  it('Should handle a delete (error in forEach default emits error)', function (done) {
     var spys = statsSpys();
     var errors = [];
 
@@ -83,6 +83,100 @@ describe('iterate over everything', function () {
 
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
+      },
+    });
+    iterator.on('error', function (err) {
+      errors.push(err);
+    });
+    iterator.forEach(
+      function () {},
+      {
+        concurrency: 1,
+      },
+      function (err) {
+        assert.ok(!err);
+        assert.equal(errors.length, 1);
+        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.file.callCount, 4);
+        assert.equal(spys.link.callCount, 2);
+        done();
+      }
+    );
+  });
+
+  it('Should handle a delete (error in forEach custom error handler)', function (done) {
+    var spys = statsSpys();
+    var errors = [];
+
+    var iterator = new Iterator(DIR, {
+      filter: function (entry) {
+        spys(fs.lstatSync(entry.fullPath), entry.path);
+
+        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        return true;
+      },
+      error: function (err) {
+        errors.push(err);
+      },
+    });
+    iterator.forEach(
+      function () {},
+      {
+        concurrency: 1,
+      },
+      function (err) {
+        assert.ok(!err);
+        assert.equal(errors.length, 1);
+        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.file.callCount, 4);
+        assert.equal(spys.link.callCount, 2);
+        done();
+      }
+    );
+  });
+
+  it('Should handle a delete (error in forEach custom error handler)', function (done) {
+    var spys = statsSpys();
+
+    var iterator = new Iterator(DIR, {
+      filter: function (entry) {
+        spys(fs.lstatSync(entry.fullPath), entry.path);
+
+        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        return true;
+      },
+      error: function (err) {
+        return false;
+      },
+    });
+    iterator.forEach(
+      function () {},
+      {
+        concurrency: 1,
+      },
+      function (err) {
+        assert.ok(!!err);
+        assert.equal(spys.dir.callCount, 3);
+        assert.equal(spys.file.callCount, 1);
+        assert.equal(spys.link.callCount, 0);
+        done();
+      }
+    );
+  });
+
+  it('Should handle a delete (error in forEach custom error handler)', function (done) {
+    var spys = statsSpys();
+    var errors = [];
+
+    var iterator = new Iterator(DIR, {
+      filter: function (entry) {
+        spys(fs.lstatSync(entry.fullPath), entry.path);
+
+        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        return true;
+      },
+      error: function (err) {
+        return false;
       },
     });
     iterator.forEach(
@@ -114,6 +208,9 @@ describe('iterate over everything', function () {
 
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
+      },
+      error: function (err) {
+        return false;
       },
     });
     iterator.forEach(
@@ -147,6 +244,9 @@ describe('iterate over everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
+      error: function (err) {
+        return false;
+      },
     });
     iterator.forEach(
       function () {},
@@ -177,6 +277,9 @@ describe('iterate over everything', function () {
 
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
+      },
+      error: function (err) {
+        return false;
       },
     });
     iterator.forEach(

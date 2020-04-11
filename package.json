@@ -30,7 +30,9 @@
   "homepage": "https://github.com/kmalakoff/fs-iterator",
   "dependencies": {
     "call-once-next-tick": "^1.0.0",
+    "eventemitter3": "^4.0.0",
     "fifo": "^2.3.0",
+    "inherits": "^2.0.4",
     "join-deep": "^1.2.0",
     "stack-lifo": "^0.1.6"
   },
