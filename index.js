@@ -1,5 +1,7 @@
 var fs = require('fs');
 var path = require('path');
+var EventEmitter = require('eventemitter3');
+var inherits = require('inherits');
 var Stack = require('stack-lifo');
 var fifo = require('fifo');
 var callOnce = require('call-once-next-tick');
@@ -12,8 +14,11 @@ var push = require('./lib/push');
 var DEFAULT_STAT = 'lstat';
 var DEFAULT_CONCURRENCY = Infinity;
 var DEFAULT_LIMIT = Infinity;
+var EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
 
 function Iterator(root, options) {
+  EventEmitter.call(this);
+
   options = options || {};
   this.options = {
     depth: options.depth === undefined ? Infinity : options.depth,
@@ -30,6 +35,13 @@ function Iterator(root, options) {
       stat(path, { bigint: true });
     };
   }
+  this.options.error =
+    options.error ||
+    function (err) {
+      if (!~EXPECTED_ERRORS.indexOf(err.code)) return false;
+      this.emit('error', err);
+      return true;
+    }.bind(this);
 
   this.root = path.resolve(root);
   this.stack = new Stack();
@@ -38,6 +50,7 @@ function Iterator(root, options) {
   this.queued = fifo();
   this.waiters = [];
 }
+inherits(Iterator, EventEmitter);
 
 Iterator.prototype.next = function (callback) {
   if (typeof callback === 'function') {
@@ -46,11 +59,9 @@ Iterator.prototype.next = function (callback) {
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
-      self.next(
-        callOnce(function (err, result) {
-          err ? reject(err) : resolve(result);
-        })
-      );
+      self.next(function (err, result) {
+        err ? reject(err) : resolve(result);
+      });
     });
   }
 };
@@ -77,7 +88,7 @@ Iterator.prototype.forEach = function (fn, options, callback) {
       counter: 0,
     };
 
-    return forEach(this, options, callback);
+    return forEach(this, options, callOnce(callback));
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
