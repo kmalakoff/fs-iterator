@@ -30,7 +30,7 @@ function sleep(timeout) {
   });
 }
 
-describe('each', function () {
+describe('forEach', function () {
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);
@@ -41,7 +41,7 @@ describe('each', function () {
   });
 
   describe('callback interface', function () {
-    it('each function is mandatory', function (done) {
+    it('forEach function is mandatory', function (done) {
       if (typeof Promise === 'undefined') return done(); // no promise support
 
       var spys = statsSpys();
@@ -52,7 +52,7 @@ describe('each', function () {
         },
       });
 
-      var promise = iterator.each(function (err) {
+      var promise = iterator.forEach(function (err) {
         assert.ok(!err);
       });
       assert.ok(isPromise(promise));
@@ -64,7 +64,7 @@ describe('each', function () {
             },
           });
 
-          var nothing = iterator2.each(
+          var nothing = iterator2.forEach(
             function () {},
             function (err) {
               assert.ok(!err);
@@ -78,7 +78,7 @@ describe('each', function () {
         });
     });
 
-    it('simple each (default)', function (done) {
+    it('simple forEach (default)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -87,7 +87,7 @@ describe('each', function () {
         },
       });
 
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -99,7 +99,7 @@ describe('each', function () {
       );
     });
 
-    it('simple each (concurency: 1)', function (done) {
+    it('simple forEach (concurency: 1)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -108,7 +108,7 @@ describe('each', function () {
         },
       });
 
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: 1 },
         function (err) {
@@ -121,7 +121,7 @@ describe('each', function () {
       );
     });
 
-    it('simple each (concurency: 5)', function (done) {
+    it('simple forEach (concurency: 5)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -130,7 +130,7 @@ describe('each', function () {
         },
       });
 
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: 5 },
         function (err) {
@@ -143,7 +143,7 @@ describe('each', function () {
       );
     });
 
-    it('simple each (concurency: Infinity)', function (done) {
+    it('simple forEach (concurency: Infinity)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -152,7 +152,7 @@ describe('each', function () {
         },
       });
 
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: Infinity },
         function (err) {
@@ -174,10 +174,8 @@ describe('each', function () {
         },
       });
 
-      iterator.each(
-        function (err) {
-          if (err) throw err;
-        },
+      iterator.forEach(
+        function () {},
         function (err) {
           assert.ok(!!err);
           done();
@@ -194,7 +192,7 @@ describe('each', function () {
         },
       });
 
-      iterator.each(
+      iterator.forEach(
         function (err) {
           if (err) throw err;
         },
@@ -215,7 +213,7 @@ describe('each', function () {
         },
       });
 
-      iterator.each(
+      iterator.forEach(
         function (err) {
           if (err) throw err;
         },
@@ -236,10 +234,8 @@ describe('each', function () {
         },
       });
 
-      iterator.each(
-        function (err) {
-          if (err) throw err;
-        },
+      iterator.forEach(
+        function () {},
         { concurrency: Infinity },
         function (err) {
           assert.ok(!!err);
@@ -252,7 +248,7 @@ describe('each', function () {
   describe('promise interface', function () {
     if (typeof Promise === 'undefined') return; // no promise support
 
-    it('each function is mandatory', function (done) {
+    it('forEach function is mandatory', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -263,7 +259,7 @@ describe('each', function () {
 
       try {
         iterator
-          .each()
+          .forEach()
           .then(function () {
             assert.ok(false);
           })
@@ -276,7 +272,7 @@ describe('each', function () {
       }
     });
 
-    it('simple each (default)', function (done) {
+    it('simple forEach (default)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -286,7 +282,7 @@ describe('each', function () {
       });
 
       iterator
-        .each(function () {})
+        .forEach(function () {})
         .then(function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
@@ -298,7 +294,7 @@ describe('each', function () {
         });
     });
 
-    it('simple each (concurrency: 1)', function (done) {
+    it('simple forEach (concurrency: 1)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -308,7 +304,7 @@ describe('each', function () {
       });
 
       iterator
-        .each(function () {}, { concurrency: 1 })
+        .forEach(function () {}, { concurrency: 1 })
         .then(function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
@@ -320,7 +316,7 @@ describe('each', function () {
         });
     });
 
-    it('simple each (concurrency: 5)', function (done) {
+    it('simple forEach (concurrency: 5)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -330,7 +326,7 @@ describe('each', function () {
       });
 
       iterator
-        .each(function () {}, { concurrency: 5 })
+        .forEach(function () {}, { concurrency: 5 })
         .then(function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
@@ -342,7 +338,7 @@ describe('each', function () {
         });
     });
 
-    it('simple each (concurrency: Infinity)', function (done) {
+    it('simple forEach (concurrency: Infinity)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -352,7 +348,7 @@ describe('each', function () {
       });
 
       iterator
-        .each(function () {}, { concurrency: Infinity })
+        .forEach(function () {}, { concurrency: Infinity })
         .then(function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
@@ -374,7 +370,7 @@ describe('each', function () {
       });
 
       iterator
-        .each(function (err) {
+        .forEach(function (err) {
           if (err) throw err;
         })
         .then(function () {
@@ -396,7 +392,7 @@ describe('each', function () {
       });
 
       iterator
-        .each(
+        .forEach(
           function (err) {
             if (err) throw err;
           },
@@ -421,7 +417,7 @@ describe('each', function () {
       });
 
       iterator
-        .each(
+        .forEach(
           function (err) {
             if (err) throw err;
           },
@@ -446,7 +442,7 @@ describe('each', function () {
       });
 
       iterator
-        .each(
+        .forEach(
           function (err) {
             if (err) throw err;
           },
