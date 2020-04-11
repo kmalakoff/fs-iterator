@@ -44,25 +44,14 @@ describe('forEach', function () {
     it('forEach function is mandatory', function (done) {
       if (typeof Promise === 'undefined') return done(); // no promise support
 
-      var spys = statsSpys();
-
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-        },
-      });
-
-      var promise = iterator.forEach(function (err) {
+      var iterator = new Iterator(DIR);
+      var promise = iterator.forEach(function (err, entry) {
         assert.ok(!err);
       });
       assert.ok(isPromise(promise));
       promise
         .then(function () {
-          var iterator2 = new Iterator(DIR, {
-            filter: function (entry) {
-              spys(fs.lstatSync(entry.fullPath), entry.path);
-            },
-          });
+          var iterator2 = new Iterator(DIR);
 
           var nothing = iterator2.forEach(
             function () {},
@@ -81,14 +70,11 @@ describe('forEach', function () {
     it('simple forEach (default)', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
+      var iterator = new Iterator(DIR);
+      iterator.forEach(
+        function (err, entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-      });
-
-      iterator.forEach(
-        function () {},
         function (err) {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 6);
@@ -102,14 +88,11 @@ describe('forEach', function () {
     it('simple forEach (concurency: 1)', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
+      var iterator = new Iterator(DIR);
+      iterator.forEach(
+        function (err, entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-      });
-
-      iterator.forEach(
-        function () {},
         { concurrency: 1 },
         function (err) {
           assert.ok(!err);
@@ -124,14 +107,11 @@ describe('forEach', function () {
     it('simple forEach (concurency: 5)', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
+      var iterator = new Iterator(DIR);
+      iterator.forEach(
+        function (err, entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-      });
-
-      iterator.forEach(
-        function () {},
         { concurrency: 5 },
         function (err) {
           assert.ok(!err);
@@ -146,14 +126,11 @@ describe('forEach', function () {
     it('simple forEach (concurency: Infinity)', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
+      var iterator = new Iterator(DIR);
+      iterator.forEach(
+        function (err, entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-      });
-
-      iterator.forEach(
-        function () {},
         { concurrency: Infinity },
         function (err) {
           assert.ok(!err);
@@ -193,9 +170,7 @@ describe('forEach', function () {
       });
 
       iterator.forEach(
-        function (err) {
-          if (err) throw err;
-        },
+        function () {},
         { concurrency: 1 },
         function (err) {
           assert.ok(!!err);
@@ -214,9 +189,7 @@ describe('forEach', function () {
       });
 
       iterator.forEach(
-        function (err) {
-          if (err) throw err;
-        },
+        function () {},
         { concurrency: 5 },
         function (err) {
           assert.ok(!!err);
@@ -249,15 +222,8 @@ describe('forEach', function () {
     if (typeof Promise === 'undefined') return; // no promise support
 
     it('forEach function is mandatory', function (done) {
-      var spys = statsSpys();
-
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-        },
-      });
-
       try {
+        var iterator = new Iterator(DIR);
         iterator
           .forEach()
           .then(function () {
@@ -275,14 +241,11 @@ describe('forEach', function () {
     it('simple forEach (default)', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-        },
-      });
-
+      var iterator = new Iterator(DIR);
       iterator
-        .forEach(function () {})
+        .forEach(function (err, entry) {
+          spys(fs.lstatSync(entry.fullPath), entry.path);
+        })
         .then(function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
@@ -297,14 +260,14 @@ describe('forEach', function () {
     it('simple forEach (concurrency: 1)', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-        },
-      });
-
+      var iterator = new Iterator(DIR);
       iterator
-        .forEach(function () {}, { concurrency: 1 })
+        .forEach(
+          function (err, entry) {
+            spys(fs.lstatSync(entry.fullPath), entry.path);
+          },
+          { concurrency: 1 }
+        )
         .then(function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
@@ -319,14 +282,14 @@ describe('forEach', function () {
     it('simple forEach (concurrency: 5)', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-        },
-      });
-
+      var iterator = new Iterator(DIR);
       iterator
-        .forEach(function () {}, { concurrency: 5 })
+        .forEach(
+          function (err, entry) {
+            spys(fs.lstatSync(entry.fullPath), entry.path);
+          },
+          { concurrency: 5 }
+        )
         .then(function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
@@ -341,14 +304,14 @@ describe('forEach', function () {
     it('simple forEach (concurrency: Infinity)', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
-        filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-        },
-      });
-
+      var iterator = new Iterator(DIR);
       iterator
-        .forEach(function () {}, { concurrency: Infinity })
+        .forEach(
+          function (err, entry) {
+            spys(fs.lstatSync(entry.fullPath), entry.path);
+          },
+          { concurrency: Infinity }
+        )
         .then(function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);

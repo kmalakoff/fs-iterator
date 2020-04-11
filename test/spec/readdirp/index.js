@@ -118,7 +118,7 @@ class ReaddirpStream extends Readable {
       const done = await this.iterator.forEach(
         (error, entry) => {
           if (this.destroyed) return false;
-          if (entry.entryType === 'directory' && !this._wantsDir) return true;
+          if (entry.entryType === 'directory' && (!entry.basename || !this._wantsDir)) return true;
           if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) return true;
           this.push(entry);
           return true;
