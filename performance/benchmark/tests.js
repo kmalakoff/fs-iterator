@@ -29,8 +29,8 @@ module.exports = async function run({ Iterator, version }, dir) {
         test.name,
         async function (deferred) {
           const iterator = new Iterator(dir, test.options);
-          var each = iterator.each ? iterator.each.bind(iterator) : maximize.bind(null, iterator);
-          await each(function () {}, test.options);
+          var forEach = iterator.forEach ? iterator.forEach.bind(iterator) : maximize.bind(null, iterator);
+          await forEach(function () {}, test.options);
           deferred.resolve();
         },
         { defer: true }

@@ -1,6 +1,6 @@
 {
   "name": "fs-iterator",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above",
   "main": "index.js",
   "engines": {
@@ -45,11 +45,11 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "fs-generate": "^1.4.0",
+    "fs-generate": "^1.5.0",
     "mocha": "^7.1.1",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
-    "sinon": "^9.0.1",
+    "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0"
   }
 }
