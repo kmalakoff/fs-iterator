@@ -12,13 +12,13 @@ module.exports = async function run({ Iterator, version }, dir) {
   const highest = { heapUsed: start.heapUsed };
 
   const iterator = new Iterator(dir);
-  var each = iterator.each ? iterator.each.bind(iterator) : maximize.bind(null, iterator);
-  await each(
+  var forEach = iterator.forEach ? iterator.forEach.bind(iterator) : maximize.bind(null, iterator);
+  await forEach(
     function () {
       updateMemory(highest);
     },
     {
-      concurrency: 100,
+      concurrency: 1024,
     }
   );
 
