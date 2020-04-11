@@ -95,7 +95,7 @@ class ReaddirpStream extends Readable {
     this._statsProp = this._isDirent ? 'dirent' : 'stats';
 
     this.highWaterMark = options.highWaterMark || 4096;
-    const iteratorOptions = {
+    this.iterator = new Iterator(root, {
       stat: opts.lstat ? 'lstat' : 'stat',
       alwaysStat: opts.alwaysStat,
       depth: opts.depth,
@@ -106,8 +106,8 @@ class ReaddirpStream extends Readable {
         if (entry.entryType === 'file' || this._includeAsFile(entry)) return this._fileFilter(entry);
         return true;
       },
-    };
-    this.iterator = new Iterator(root, iteratorOptions);
+      error: this._onError.bind(this),
+    });
   }
 
   async _read(batch) {
@@ -126,7 +126,6 @@ class ReaddirpStream extends Readable {
         {
           limit: batch,
           concurrency: this.highWaterMark,
-          error: this._onError.bind(this),
         }
       );
       if (done) this.push(null);
@@ -140,10 +139,10 @@ class ReaddirpStream extends Readable {
   _onError(err) {
     if (isNormalFlowError(err) && !this.destroyed) {
       this.emit('warn', err);
-      return false;
+      return true;
     }
     if (!this.destroyed) this.destroy(err);
-    return true;
+    return false;
   }
 
   async _getEntryType(entry) {
