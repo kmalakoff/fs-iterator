@@ -39,19 +39,64 @@ describe('errors', function () {
       });
     });
 
-    it('should propagate errors', function (done) {
+    it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
           throw new Error('Failed');
         },
       });
-      iterator.each(
+      iterator.forEach(
+        function () {},
         function (err) {
           assert.ok(!!err);
-          throw err;
+          done();
+        }
+      );
+    });
+
+    it('should propagate errors (true)', function (done) {
+      var errors = [];
+
+      var iterator = new Iterator(DIR, {
+        filter: function () {
+          throw new Error('Failed');
+        },
+      });
+      iterator.forEach(
+        function () {},
+        {
+          error: function (err) {
+            errors.push(err);
+            return true;
+          },
         },
         function (err) {
           assert.ok(!!err);
+          assert.equal(errors.length, 1);
+          done();
+        }
+      );
+    });
+
+    it('should not propagate errors (false)', function (done) {
+      var errors = [];
+
+      var iterator = new Iterator(DIR, {
+        filter: function () {
+          throw new Error('Failed');
+        },
+      });
+      iterator.forEach(
+        function () {},
+        {
+          error: function (err) {
+            errors.push(err);
+            return false;
+          },
+        },
+        function (err) {
+          assert.ok(!err);
+          assert.equal(errors.length, 1);
           done();
         }
       );
@@ -65,7 +110,7 @@ describe('errors', function () {
       });
     });
 
-    it('should propagate errors', function (done) {
+    it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           setTimeout(function () {
@@ -74,13 +119,64 @@ describe('errors', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
+        function () {},
         function (err) {
           assert.ok(!!err);
-          throw err;
+          done();
+        }
+      );
+    });
+
+    it('should propagate errors (true)', function (done) {
+      var errors = [];
+
+      var iterator = new Iterator(DIR, {
+        filter: function (entry, callback) {
+          setTimeout(function () {
+            callback(new Error('Failed'));
+          }, 50);
+        },
+        async: true,
+      });
+      iterator.forEach(
+        function () {},
+        {
+          error: function (err) {
+            errors.push(err);
+            return true;
+          },
         },
         function (err) {
           assert.ok(!!err);
+          assert.equal(errors.length, 1);
+          done();
+        }
+      );
+    });
+
+    it('should not propagate errors (false)', function (done) {
+      var errors = [];
+
+      var iterator = new Iterator(DIR, {
+        filter: function (entry, callback) {
+          setTimeout(function () {
+            callback(new Error('Failed'));
+          }, 50);
+        },
+        async: true,
+      });
+      iterator.forEach(
+        function () {},
+        {
+          error: function (err) {
+            errors.push(err);
+            return false;
+          },
+        },
+        function (err) {
+          assert.ok(!err);
+          assert.equal(errors.length, 1);
           done();
         }
       );
@@ -96,7 +192,7 @@ describe('errors', function () {
       });
     });
 
-    it('should propagate errors', function (done) {
+    it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
           return sleep(50).then(function () {
@@ -104,13 +200,62 @@ describe('errors', function () {
           });
         },
       });
-      iterator.each(
+      iterator.forEach(
+        function () {},
         function (err) {
           assert.ok(!!err);
-          throw err;
+          done();
+        }
+      );
+    });
+
+    it('should propagate errors (true)', function (done) {
+      var errors = [];
+
+      var iterator = new Iterator(DIR, {
+        filter: function () {
+          return sleep(50).then(function () {
+            throw new Error('Failed');
+          });
+        },
+      });
+      iterator.forEach(
+        function () {},
+        {
+          error: function (err) {
+            errors.push(err);
+            return true;
+          },
         },
         function (err) {
           assert.ok(!!err);
+          assert.equal(errors.length, 1);
+          done();
+        }
+      );
+    });
+
+    it('should not propagate errors (false)', function (done) {
+      var errors = [];
+
+      var iterator = new Iterator(DIR, {
+        filter: function () {
+          return sleep(50).then(function () {
+            throw new Error('Failed');
+          });
+        },
+      });
+      iterator.forEach(
+        function () {},
+        {
+          error: function (err) {
+            errors.push(err);
+            return false;
+          },
+        },
+        function (err) {
+          assert.ok(!err);
+          assert.equal(errors.length, 1);
           done();
         }
       );
