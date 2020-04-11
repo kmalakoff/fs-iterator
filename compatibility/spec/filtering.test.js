@@ -53,7 +53,7 @@ describe('filtering', function () {
           return false;
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -72,7 +72,7 @@ describe('filtering', function () {
           return path !== 'dir2';
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -91,7 +91,7 @@ describe('filtering', function () {
           return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -121,7 +121,7 @@ describe('filtering', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -143,7 +143,7 @@ describe('filtering', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -165,7 +165,7 @@ describe('filtering', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -196,7 +196,7 @@ describe('filtering', function () {
           });
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -217,7 +217,7 @@ describe('filtering', function () {
           });
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -231,14 +231,14 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (entrys) {
+        filter: function (entry) {
           filterSpy();
           return sleep(50).then(function () {
-            return !stats.isDirectory() || startsWith(path, 'dir3/dir4');
+            return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
           });
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);

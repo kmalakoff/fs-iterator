@@ -47,7 +47,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR);
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: Infinity, concurrency: 1 },
@@ -67,7 +67,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR);
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 1 },
@@ -88,7 +88,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR);
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 5 },
@@ -106,7 +106,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR);
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: Infinity },
@@ -128,7 +128,7 @@ describe('forEach', function () {
           },
         });
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 4, concurrency: 1 },
@@ -163,7 +163,7 @@ describe('forEach', function () {
         });
 
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: Infinity, concurrency: 1 },
@@ -188,7 +188,7 @@ describe('forEach', function () {
           async: true,
         });
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 1 },
@@ -214,7 +214,7 @@ describe('forEach', function () {
           async: true,
         });
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: 5 },
@@ -237,7 +237,7 @@ describe('forEach', function () {
           async: true,
         });
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 3, concurrency: Infinity },
@@ -261,7 +261,7 @@ describe('forEach', function () {
           async: true,
         });
         iterator.forEach(
-          function (err, entry) {
+          function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
           { limit: 4, concurrency: 1 },
@@ -298,7 +298,7 @@ describe('forEach', function () {
 
         iterator
           .forEach(
-            function (err, entry) {
+            function (entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
             { limit: Infinity, concurrency: 1 }
@@ -325,7 +325,7 @@ describe('forEach', function () {
         });
         iterator
           .forEach(
-            function (err, entry) {
+            function (entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
             { limit: 3, concurrency: 1 }
@@ -353,7 +353,7 @@ describe('forEach', function () {
         });
         iterator
           .forEach(
-            function (err, entry) {
+            function (entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
             { limit: 3, concurrency: 5 }
@@ -378,7 +378,7 @@ describe('forEach', function () {
         });
         iterator
           .forEach(
-            function (err, entry) {
+            function (entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
             { limit: 3, concurrency: Infinity }
@@ -404,7 +404,7 @@ describe('forEach', function () {
         });
         iterator
           .forEach(
-            function (err, entry) {
+            function (entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
             { limit: 4, concurrency: 1 }

@@ -49,7 +49,7 @@ describe('concurrency', function () {
         },
       });
 
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: 1 },
         function (err) {
@@ -68,7 +68,7 @@ describe('concurrency', function () {
           filterSpy();
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: 5 },
         function (err) {
@@ -87,7 +87,7 @@ describe('concurrency', function () {
           filterSpy();
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: Infinity },
         function (err) {
@@ -116,7 +116,7 @@ describe('concurrency', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: 1 },
         function (err) {
@@ -137,7 +137,7 @@ describe('concurrency', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: 5 },
         function (err) {
@@ -158,7 +158,7 @@ describe('concurrency', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: Infinity },
         function (err) {
@@ -188,7 +188,7 @@ describe('concurrency', function () {
           return sleep(50);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: 1 },
         function (err) {
@@ -208,7 +208,7 @@ describe('concurrency', function () {
           return sleep(50);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: 5 },
         function (err) {
@@ -228,7 +228,7 @@ describe('concurrency', function () {
           return sleep(50);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         { concurrency: Infinity },
         function (err) {
