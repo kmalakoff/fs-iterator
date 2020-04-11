@@ -1,5 +1,3 @@
-var maximize = require('maximize-iterator');
-
 var updateMemory = require('./updateMemory');
 var writeMemory = require('./writeMemory');
 
@@ -12,8 +10,7 @@ module.exports = async function run({ Iterator, version }, dir) {
   const highest = { heapUsed: start.heapUsed };
 
   const iterator = new Iterator(dir);
-  var forEach = iterator.forEach ? iterator.forEach.bind(iterator) : maximize.bind(null, iterator);
-  await forEach(
+  await iterator.forEach(
     function () {
       updateMemory(highest);
     },
