@@ -5,7 +5,7 @@ var fifo = require('fifo');
 var callOnce = require('call-once-next-tick');
 
 var depthFirst = require('./lib/depthFirst');
-var each = require('./lib/each');
+var forEach = require('./lib/forEach');
 var next = require('./lib/next');
 var push = require('./lib/push');
 
@@ -55,7 +55,7 @@ Iterator.prototype.next = function (callback) {
   }
 };
 
-Iterator.prototype.each = function (fn, options, callback) {
+Iterator.prototype.forEach = function (fn, options, callback) {
   if (typeof fn !== 'function') throw new Error('Missing each function');
   if (typeof options === 'function') {
     callback = options;
@@ -65,18 +65,23 @@ Iterator.prototype.each = function (fn, options, callback) {
   if (typeof callback === 'function') {
     options = options || {};
     options = {
+      each: fn,
       concurrency: options.concurrency || DEFAULT_CONCURRENCY,
       limit: options.limit || DEFAULT_LIMIT,
-      each: fn,
+      error:
+        options.error ||
+        function () {
+          return true; // default is exit on error
+        },
       total: 0,
       counter: 0,
     };
 
-    return each(this, options, callback);
+    return forEach(this, options, callback);
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
-      self.each(fn, options, function (err, done) {
+      self.forEach(fn, options, function (err, done) {
         err ? reject(err) : resolve(done);
       });
     });

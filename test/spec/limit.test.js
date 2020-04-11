@@ -29,7 +29,7 @@ function sleep(timeout) {
   });
 }
 
-describe('each', function () {
+describe('forEach', function () {
   describe('limit', function () {
     after(function (done) {
       rimraf(DIR, done);
@@ -47,7 +47,7 @@ describe('each', function () {
 
         var iterator = new Iterator(DIR);
 
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -68,7 +68,7 @@ describe('each', function () {
 
         var iterator = new Iterator(DIR);
 
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -89,7 +89,7 @@ describe('each', function () {
         var spys = statsSpys();
 
         var iterator = new Iterator(DIR);
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -107,7 +107,7 @@ describe('each', function () {
         var spys = statsSpys();
 
         var iterator = new Iterator(DIR);
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -129,7 +129,7 @@ describe('each', function () {
             return entry.basename ? !entry.stats.isDirectory() : true;
           },
         });
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -164,7 +164,7 @@ describe('each', function () {
           async: true,
         });
 
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -189,7 +189,7 @@ describe('each', function () {
           },
           async: true,
         });
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -215,7 +215,7 @@ describe('each', function () {
           },
           async: true,
         });
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -238,7 +238,7 @@ describe('each', function () {
           },
           async: true,
         });
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -262,7 +262,7 @@ describe('each', function () {
           },
           async: true,
         });
-        iterator.each(
+        iterator.forEach(
           function (err, entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
@@ -299,7 +299,7 @@ describe('each', function () {
         });
 
         iterator
-          .each(
+          .forEach(
             function (err, entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
@@ -326,7 +326,7 @@ describe('each', function () {
           },
         });
         iterator
-          .each(
+          .forEach(
             function (err, entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
@@ -354,7 +354,7 @@ describe('each', function () {
           },
         });
         iterator
-          .each(
+          .forEach(
             function (err, entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
@@ -379,7 +379,7 @@ describe('each', function () {
           },
         });
         iterator
-          .each(
+          .forEach(
             function (err, entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
@@ -405,7 +405,7 @@ describe('each', function () {
           },
         });
         iterator
-          .each(
+          .forEach(
             function (err, entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },

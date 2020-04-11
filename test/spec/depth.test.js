@@ -50,7 +50,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -71,7 +71,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -92,7 +92,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -113,7 +113,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -144,7 +144,7 @@ describe('depth', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -167,7 +167,7 @@ describe('depth', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -190,7 +190,7 @@ describe('depth', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -213,7 +213,7 @@ describe('depth', function () {
         },
         async: true,
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -245,7 +245,7 @@ describe('depth', function () {
           return sleep(50);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -267,7 +267,7 @@ describe('depth', function () {
           return sleep(50);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -289,7 +289,7 @@ describe('depth', function () {
           return sleep(50);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
@@ -311,7 +311,7 @@ describe('depth', function () {
           return sleep(50);
         },
       });
-      iterator.each(
+      iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
