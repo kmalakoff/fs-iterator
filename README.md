@@ -26,7 +26,7 @@ while(entry) {
 
 // using each with concurrency
 const iterator2 = new Iterator(__dirname);
-await iterator2.each((err, entry) => { /* do something */ }, { concurrency: 1024 })
+await iterator2.each((entry) => { /* do something */ }, { concurrency: 1024, error: (err) => { return true; /* filter errors */ } })
 ```
 
 **Callback**
@@ -36,7 +36,7 @@ const Iterator = require('fs-iterator');
 
 // traverse skipping .git folders
 const iterator = new Iterator(__dirname, { filter: (entry) => { return entry.stats.isDirectory() && entry.basename === '.git'; } });
-iterator.each((err, entry) => { /* do something */ }, { concurrency: 1024 }, (err) => {})
+iterator.each((entry) => { /* do something */ }, { concurrency: 1024, error: (err) => { return true; /* filter errors */ } }, (err) => {})
 ```
 
 **Options**:
