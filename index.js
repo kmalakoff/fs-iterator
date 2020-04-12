@@ -22,7 +22,12 @@ function Iterator(root, options) {
   options = options || {};
   this.options = {
     depth: options.depth === undefined ? Infinity : options.depth,
-    filter: options.filter,
+    filter:
+      options.filter ||
+      function (entry, callback) {
+        if (options.async) return callback(null, true);
+        return true;
+      },
     async: options.async,
     fs: options.fs || fs,
     push: push.bind(null, this),
