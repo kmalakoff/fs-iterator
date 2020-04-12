@@ -116,12 +116,12 @@ class ReaddirpStream extends Readable {
 
     try {
       const done = await this.iterator.forEach(
-        (entry) => {
-          if (this.destroyed) return false;
-          if (entry.entryType === 'directory' && (!entry.basename || !this._wantsDir)) return true;
-          if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) return true;
+        async (entry) => {
+          if (this.destroyed) return;
+          if (!entry.entryType && !(await this.iterator.options.filter(entry))) return;
+          if (entry.entryType === 'directory' && (!entry.basename || !this._wantsDir)) return;
+          if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) return;
           this.push(entry);
-          return true;
         },
         {
           limit: batch,
