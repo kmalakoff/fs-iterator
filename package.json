@@ -29,6 +29,7 @@
   "license": "MIT",
   "homepage": "https://github.com/kmalakoff/fs-iterator",
   "dependencies": {
+    "async-compatibilty": "^1.1.0",
     "call-once-next-tick": "^1.0.0",
     "eventemitter3": "^4.0.0",
     "fifo": "^2.3.0",
