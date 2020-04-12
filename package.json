@@ -33,6 +33,7 @@
     "eventemitter3": "^4.0.0",
     "fifo": "^2.3.0",
     "inherits": "^2.0.4",
+    "is-promise": "^2.1.0",
     "join-deep": "^1.2.0",
     "stack-lifo": "^0.1.6"
   },
