@@ -71,7 +71,11 @@ describe('forEach', function () {
       var iterator = new Iterator(DIR);
       iterator.forEach(
         function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          try {
+            spys(fs.lstatSync(entry.fullPath), entry.path);
+          } catch (err) {
+            return err;
+          }
         },
         function (err) {
           assert.ok(!err);
@@ -188,11 +192,12 @@ describe('forEach', function () {
 
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          return sleep(10).then(function () {
-            throw new Error('Failed');
-          });
+        filter: function (entry, callback) {
+          setImmediate(function () {
+            callback(null, new Error('Failed'));
+          }, 10);
         },
+        async: true,
       });
 
       iterator.forEach(
@@ -206,11 +211,12 @@ describe('forEach', function () {
 
     it('should propagate errors (concurency: 1)', function (done) {
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          return sleep(10).then(function () {
-            throw new Error('Failed');
-          });
+        filter: function (entry, callback) {
+          setImmediate(function () {
+            callback(null, new Error('Failed'));
+          }, 10);
         },
+        async: true,
       });
 
       iterator.forEach(
@@ -225,11 +231,12 @@ describe('forEach', function () {
 
     it('should propagate errors (concurency: 5)', function (done) {
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          return sleep(10).then(function () {
-            throw new Error('Failed');
-          });
+        filter: function (entry, callback) {
+          setImmediate(function () {
+            callback(null, new Error('Failed'));
+          }, 10);
         },
+        async: true,
       });
 
       iterator.forEach(
@@ -244,11 +251,12 @@ describe('forEach', function () {
 
     it('should propagate errors (concurency: Infinity)', function (done) {
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          return sleep(10).then(function () {
-            throw new Error('Failed');
-          });
+        filter: function (entry, callback) {
+          setImmediate(function () {
+            callback(null, new Error('Failed'));
+          }, 10);
         },
+        async: true,
       });
 
       iterator.forEach(
