@@ -6,6 +6,7 @@ var Lifo = require('stack-lifo');
 var Fifo = require('fifo');
 var callOnce = require('call-once-next-tick');
 
+var clear = require('./lib/clear');
 var depthFirst = require('./lib/depthFirst');
 var forEach = require('./lib/forEach');
 var next = require('./lib/next');
@@ -52,9 +53,9 @@ function Iterator(root, options) {
   this.root = path.resolve(root);
   this.stack = new Lifo();
   this.stack.push(depthFirst.bind(null, this.options, root));
-  this.processingCount = 0;
   this.queued = new Fifo();
-  this.waiters = [];
+  this.processing = new Fifo();
+  this.waiters = new Fifo();
 }
 inherits(Iterator, EventEmitter);
 
@@ -107,9 +108,20 @@ Iterator.prototype.forEach = function (fn, options, callback) {
 };
 
 Iterator.prototype.destroy = function (callback) {
-  // TODO: destroy inflight
-  this.destroyed = true;
-  callback();
+  if (typeof callback === 'function') {
+    if (this.destroyed) throw new Error('Already destroyed');
+
+    this.destroyed = true;
+    clear(this);
+    callback();
+  } else {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+      self.destroy(function (err) {
+        err ? reject(err) : resolve();
+      });
+    });
+  }
 };
 
 if (typeof Symbol !== 'undefined' && Symbol.asyncIterator) {
