@@ -16,19 +16,31 @@ module.exports = async function run({ Iterator, version }, dir) {
   var suite = new MemorySuite('Iterator ' + dir);
 
   for (const test of TESTS) {
-    suite.add(test.name, async function () {
+    suite.add(test.name, async function (fn) {
       const iterator = new Iterator(dir);
-      await iterator.forEach(function () {}, test.options);
+      await iterator.forEach(fn, test.options);
     });
   }
-  suite.add(`serial`, async function () {
+  suite.add(`serial`, async function (fn) {
     const iterator = new Iterator(dir);
     let result = await iterator.next();
-    while (result) result = await iterator.next();
+    while (result) {
+      fn();
+      result = await iterator.next();
+    }
   });
 
-  suite.on('cycle', (result) => {
-    console.log(result);
+  suite.on('cycle', (current) => {
+    console.log(`${current.end.name} (end) x ${suite.formatStats(current.end.stats)}`);
+    console.log(`${current.max.name} (max) x ${suite.formatStats(current.max.stats)}`);
+  });
+  suite.on('complete', function (largest) {
+    console.log('----------------');
+    console.log('Largest');
+    console.log('----------------');
+    console.log(`${largest.end.name} (end) x ${suite.formatStats(largest.end.stats)}`);
+    console.log(`${largest.max.name} (max) x ${suite.formatStats(largest.max.stats)}`);
+    console.log('****************\n');
   });
 
   console.log('Comparing ' + suite.name);
