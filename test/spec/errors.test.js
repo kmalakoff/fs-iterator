@@ -42,7 +42,7 @@ describe('errors', function () {
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          throw new Error('Failed');
+          return new Error('Failed');
         },
       });
       iterator.forEach(
@@ -59,7 +59,7 @@ describe('errors', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function () {
-          throw new Error('Failed');
+          return new Error('Failed');
         },
       });
       iterator.forEach(
@@ -83,7 +83,7 @@ describe('errors', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function () {
-          throw new Error('Failed');
+          return new Error('Failed');
         },
       });
       iterator.forEach(
