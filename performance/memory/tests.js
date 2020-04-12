@@ -19,6 +19,7 @@ module.exports = async function run({ Iterator, version }, dir) {
     suite.add(test.name, async function (fn) {
       const iterator = new Iterator(dir);
       await iterator.forEach(fn, test.options);
+      iterator.destroy(function () {});
     });
   }
   suite.add(`serial`, async function (fn) {
@@ -28,6 +29,7 @@ module.exports = async function run({ Iterator, version }, dir) {
       fn();
       result = await iterator.next();
     }
+    iterator.destroy(function () {});
   });
 
   suite.on('cycle', (current) => {
