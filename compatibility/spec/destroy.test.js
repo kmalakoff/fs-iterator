@@ -49,10 +49,8 @@ describe('destroy', function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
-          iterator.destroy(function (err) {
-            assert.ok(!err);
-            done();
-          });
+          iterator.destroy();
+          done();
         }
       );
     });
@@ -65,20 +63,17 @@ describe('destroy', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
-      iterator.destroy(function (err) {
-        assert.ok(!err);
-
-        iterator.forEach(
-          function () {},
-          function (err) {
-            assert.ok(!err);
-            assert.equal(spys.dir.callCount, 0);
-            assert.equal(spys.file.callCount, 0);
-            assert.equal(spys.link.callCount, 0);
-            done();
-          }
-        );
-      });
+      iterator.destroy();
+      iterator.forEach(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 0);
+          assert.equal(spys.file.callCount, 0);
+          assert.equal(spys.link.callCount, 0);
+          done();
+        }
+      );
     });
 
     it('handle mid-iterator destroy (concurrency 1)', function (done) {
@@ -114,7 +109,7 @@ describe('destroy', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          if (++count === 5) return iterator.destroy(callback);
+          if (++count === 5) iterator.destroy();
           callback();
         },
         async: true,
@@ -148,14 +143,8 @@ describe('destroy', function () {
           assert.equal(spys.dir.callCount, 6);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
-          iterator
-            .destroy()
-            .then(function () {
-              done();
-            })
-            .catch(function (err) {
-              assert.ok(!err);
-            });
+          iterator.destroy();
+          done();
         })
         .catch(function (err) {
           assert.ok(!err);
@@ -170,20 +159,14 @@ describe('destroy', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
       });
+      iterator.destroy();
       iterator
-        .destroy()
+        .forEach(function () {})
         .then(function () {
-          iterator
-            .forEach(function () {})
-            .then(function () {
-              assert.equal(spys.dir.callCount, 0);
-              assert.equal(spys.file.callCount, 0);
-              assert.equal(spys.link.callCount, 0);
-              done();
-            })
-            .catch(function (err) {
-              assert.ok(!err);
-            });
+          assert.equal(spys.dir.callCount, 0);
+          assert.equal(spys.file.callCount, 0);
+          assert.equal(spys.link.callCount, 0);
+          done();
         })
         .catch(function (err) {
           assert.ok(!err);
