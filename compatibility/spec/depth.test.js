@@ -41,7 +41,7 @@ describe('depth', function () {
       });
     });
 
-    it('depth 0', function (done) {
+    it('depth 0 (alwaysStat: true)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -49,12 +49,35 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
         function (err) {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
+          done();
+        }
+      );
+    });
+
+    it('depth 0 (alwaysStat: false)', function (done) {
+      var spys = statsSpys();
+
+      var iterator = new Iterator(DIR, {
+        depth: 0,
+        filter: function (entry) {
+          spys(fs.lstatSync(entry.fullPath), entry.path);
+        },
+        alwaysStat: false,
+      });
+      iterator.forEach(
+        function () {},
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 4);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
           done();
@@ -70,6 +93,7 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -91,6 +115,7 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -112,6 +137,7 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -143,6 +169,7 @@ describe('depth', function () {
           setTimeout(callback, 10);
         },
         async: true,
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -166,6 +193,7 @@ describe('depth', function () {
           setTimeout(callback, 10);
         },
         async: true,
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -189,6 +217,7 @@ describe('depth', function () {
           setTimeout(callback, 10);
         },
         async: true,
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -212,6 +241,7 @@ describe('depth', function () {
           setTimeout(callback, 10);
         },
         async: true,
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -244,6 +274,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(10);
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -266,6 +297,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(10);
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -288,6 +320,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(10);
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -310,6 +343,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(10);
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},

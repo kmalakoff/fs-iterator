@@ -126,6 +126,7 @@ describe('forEach', function () {
           filter: function (entry) {
             return entry.basename ? !entry.stats.isDirectory() : true;
           },
+          alwaysStat: true,
         });
         iterator.forEach(
           function (entry) {
@@ -259,6 +260,7 @@ describe('forEach', function () {
             }, 10);
           },
           async: true,
+          alwaysStat: true,
         });
         iterator.forEach(
           function (entry) {
@@ -401,6 +403,7 @@ describe('forEach', function () {
               return entry.basename ? !entry.stats.isDirectory() : true;
             });
           },
+          alwaysStat: true,
         });
         iterator
           .forEach(

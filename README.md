@@ -45,6 +45,7 @@ iterator.forEach((entry) => { /* do something */ }, { concurrency: 1024 }, (err)
 
 - number: filter - filter to continue processing the tree
 - number: depth - choose maximum depth of the tree to traverse. (default: infinity)
+- bool: alwaysStat - always call stats before filter. (default: false)
 - function: error - custom error callback for expected filesystem errors ('ENOENT', 'EPERM', 'EACCES', 'ELOOP'). Return false to stop processing. (default: silent filsystem errors)
 - object: fs - choose an fs implementation; for example, you can use use graceful-fs and concurrency 1. (default: fs)
 - bool: async - use an async filter function of the form function(entry, callback) with callback being of the form function(err, keep) where keep undefined means continue. `If you use promises, this is unnecessary`. (default: false)

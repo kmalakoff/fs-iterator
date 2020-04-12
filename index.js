@@ -22,6 +22,7 @@ function Iterator(root, options) {
   options = options || {};
   this.options = {
     depth: options.depth === undefined ? Infinity : options.depth,
+    alwaysStat: options.alwaysStat,
     filter:
       options.filter ||
       function (entry, callback) {
