@@ -140,7 +140,7 @@ describe('depth', function () {
         depth: 0,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          setTimeout(callback, 50);
+          setTimeout(callback, 10);
         },
         async: true,
       });
@@ -163,7 +163,7 @@ describe('depth', function () {
         depth: 1,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          setTimeout(callback, 50);
+          setTimeout(callback, 10);
         },
         async: true,
       });
@@ -186,7 +186,7 @@ describe('depth', function () {
         depth: 2,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          setTimeout(callback, 50);
+          setTimeout(callback, 10);
         },
         async: true,
       });
@@ -209,7 +209,7 @@ describe('depth', function () {
         depth: Infinity,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          setTimeout(callback, 50);
+          setTimeout(callback, 10);
         },
         async: true,
       });
@@ -242,7 +242,7 @@ describe('depth', function () {
         depth: 0,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          return sleep(50);
+          return sleep(10);
         },
       });
       iterator.forEach(
@@ -264,7 +264,7 @@ describe('depth', function () {
         depth: 1,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          return sleep(50);
+          return sleep(10);
         },
       });
       iterator.forEach(
@@ -286,7 +286,7 @@ describe('depth', function () {
         depth: 2,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          return sleep(50);
+          return sleep(10);
         },
       });
       iterator.forEach(
@@ -308,7 +308,7 @@ describe('depth', function () {
         depth: Infinity,
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          return sleep(50);
+          return sleep(10);
         },
       });
       iterator.forEach(

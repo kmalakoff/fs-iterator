@@ -83,6 +83,52 @@ describe('forEach', function () {
       );
     });
 
+    it('simple forEach (async)', function (done) {
+      var spys = statsSpys();
+
+      var iterator = new Iterator(DIR);
+      iterator.forEach(
+        function (entry, callback) {
+          spys(fs.lstatSync(entry.fullPath), entry.path);
+          assert.ok(entry);
+          assert.ok(callback);
+          setTimeout(callback, 10);
+        },
+        { async: true },
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
+    });
+
+    it('simple forEach (async, stop)', function (done) {
+      var spys = statsSpys();
+
+      var iterator = new Iterator(DIR);
+      iterator.forEach(
+        function (entry, callback) {
+          spys(fs.lstatSync(entry.fullPath), entry.path);
+          assert.ok(entry);
+          assert.ok(callback);
+          setTimeout(function () {
+            callback(null, false);
+          }, 10);
+        },
+        { async: true },
+        function (err) {
+          assert.ok(!err);
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
+    });
+
     it('simple forEach (concurency: 1)', function (done) {
       var spys = statsSpys();
 
@@ -143,7 +189,7 @@ describe('forEach', function () {
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -161,7 +207,7 @@ describe('forEach', function () {
     it('should propagate errors (concurency: 1)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -180,7 +226,7 @@ describe('forEach', function () {
     it('should propagate errors (concurency: 5)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -199,7 +245,7 @@ describe('forEach', function () {
     it('should propagate errors (concurency: Infinity)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -324,7 +370,7 @@ describe('forEach', function () {
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -346,7 +392,7 @@ describe('forEach', function () {
     it('should propagate errors (concurrency: 1)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -371,7 +417,7 @@ describe('forEach', function () {
     it('should propagate errors (concurrency: 5)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -396,7 +442,7 @@ describe('forEach', function () {
     it('should propagate errors (concurrency: Infinity)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },

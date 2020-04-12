@@ -157,7 +157,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
-            setTimeout(callback, 50);
+            setTimeout(callback, 10);
           },
           async: true,
         });
@@ -183,7 +183,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
-            setTimeout(callback, 50);
+            setTimeout(callback, 10);
           },
           async: true,
         });
@@ -209,7 +209,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
-            setTimeout(callback, 50);
+            setTimeout(callback, 10);
           },
           async: true,
         });
@@ -232,7 +232,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
-            setTimeout(callback, 50);
+            setTimeout(callback, 10);
           },
           async: true,
         });
@@ -256,7 +256,7 @@ describe('forEach', function () {
           filter: function (entry, callback) {
             setTimeout(function () {
               callback(null, entry.basename ? !entry.stats.isDirectory() : true);
-            }, 50);
+            }, 10);
           },
           async: true,
         });
@@ -292,7 +292,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(50);
+            return sleep(10);
           },
         });
 
@@ -320,7 +320,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(50);
+            return sleep(10);
           },
         });
         iterator
@@ -348,7 +348,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(50);
+            return sleep(10);
           },
         });
         iterator
@@ -373,7 +373,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(50);
+            return sleep(10);
           },
         });
         iterator
@@ -397,7 +397,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(50).then(function () {
+            return sleep(10).then(function () {
               return entry.basename ? !entry.stats.isDirectory() : true;
             });
           },
