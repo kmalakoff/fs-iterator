@@ -2,8 +2,8 @@ var fs = require('fs');
 var path = require('path');
 var EventEmitter = require('eventemitter3');
 var inherits = require('inherits');
-var Stack = require('stack-lifo');
-var fifo = require('fifo');
+var Lifo = require('stack-lifo');
+var Fifo = require('fifo');
 var callOnce = require('call-once-next-tick');
 
 var depthFirst = require('./lib/depthFirst');
@@ -44,10 +44,10 @@ function Iterator(root, options) {
     }.bind(this);
 
   this.root = path.resolve(root);
-  this.stack = new Stack();
+  this.stack = new Lifo();
   this.stack.push(depthFirst.bind(null, this.options, root));
   this.processingCount = 0;
-  this.queued = fifo();
+  this.queued = new Fifo();
   this.waiters = [];
 }
 inherits(Iterator, EventEmitter);
