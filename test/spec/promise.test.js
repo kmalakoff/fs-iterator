@@ -65,6 +65,50 @@ describe('promise', function () {
     consume();
   });
 
+  it('simple forEach (async)', function (done) {
+    var spys = statsSpys();
+
+    var iterator = new Iterator(DIR);
+    iterator.forEach(
+      function (entry, callback) {
+        spys(fs.lstatSync(entry.fullPath), entry.path);
+        assert.ok(entry);
+        assert.ok(!callback);
+        return sleep(10);
+      },
+      function (err) {
+        assert.ok(!err);
+        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.file.callCount, 5);
+        assert.equal(spys.link.callCount, 2);
+        done();
+      }
+    );
+  });
+
+  it('simple forEach (async, stop)', function (done) {
+    var spys = statsSpys();
+
+    var iterator = new Iterator(DIR);
+    iterator.forEach(
+      function (entry, callback) {
+        spys(fs.lstatSync(entry.fullPath), entry.path);
+        assert.ok(entry);
+        assert.ok(!callback);
+        return sleep(10).then(function () {
+          return false;
+        });
+      },
+      function (err) {
+        assert.ok(!err);
+        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.file.callCount, 5);
+        assert.equal(spys.link.callCount, 2);
+        done();
+      }
+    );
+  });
+
   it('Should find everything with no return', function (done) {
     var spys = statsSpys();
 
@@ -113,7 +157,7 @@ describe('promise', function () {
   it('should propagate errors', function (done) {
     var iterator = new Iterator(DIR, {
       filter: function () {
-        return sleep(50).then(function () {
+        return sleep(10).then(function () {
           throw new Error('Failed');
         });
       },

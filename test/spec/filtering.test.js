@@ -117,7 +117,7 @@ describe('filtering', function () {
           filterSpy();
           setTimeout(function () {
             callback(null, false);
-          }, 50);
+          }, 10);
         },
         async: true,
       });
@@ -139,7 +139,7 @@ describe('filtering', function () {
           filterSpy();
           setTimeout(function () {
             callback(null, entry.path !== 'dir2');
-          }, 50);
+          }, 10);
         },
         async: true,
       });
@@ -161,7 +161,7 @@ describe('filtering', function () {
           filterSpy();
           setTimeout(function () {
             done(null, !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4'));
-          }, 50);
+          }, 10);
         },
         async: true,
       });
@@ -191,7 +191,7 @@ describe('filtering', function () {
       var iterator = new Iterator(DIR, {
         filter: function () {
           filterSpy();
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             return false;
           });
         },
@@ -212,7 +212,7 @@ describe('filtering', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
           filterSpy();
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             return path !== 'dir2';
           });
         },
@@ -233,7 +233,7 @@ describe('filtering', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
           filterSpy();
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
           });
         },

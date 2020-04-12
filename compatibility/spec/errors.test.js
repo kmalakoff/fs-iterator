@@ -115,7 +115,7 @@ describe('errors', function () {
         filter: function (entry, callback) {
           setTimeout(function () {
             callback(new Error('Failed'));
-          }, 50);
+          }, 10);
         },
         async: true,
       });
@@ -135,7 +135,7 @@ describe('errors', function () {
         filter: function (entry, callback) {
           setTimeout(function () {
             callback(new Error('Failed'));
-          }, 50);
+          }, 10);
         },
         async: true,
       });
@@ -162,7 +162,7 @@ describe('errors', function () {
         filter: function (entry, callback) {
           setTimeout(function () {
             callback(new Error('Failed'));
-          }, 50);
+          }, 10);
         },
         async: true,
       });
@@ -195,7 +195,7 @@ describe('errors', function () {
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -214,7 +214,7 @@ describe('errors', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
@@ -240,7 +240,7 @@ describe('errors', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(50).then(function () {
+          return sleep(10).then(function () {
             throw new Error('Failed');
           });
         },
