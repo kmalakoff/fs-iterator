@@ -88,7 +88,7 @@ describe('filtering', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
           filterSpy();
-          return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
+          return !fs.statSync(entry.fullPath).isDirectory() || startsWith(entry.path, 'dir3/dir4');
         },
       });
       iterator.forEach(
@@ -164,6 +164,7 @@ describe('filtering', function () {
           }, 10);
         },
         async: true,
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
@@ -237,6 +238,7 @@ describe('filtering', function () {
             return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
           });
         },
+        alwaysStat: true,
       });
       iterator.forEach(
         function () {},
