@@ -6,9 +6,9 @@ var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 var fs = require('fs');
+var isPromise = require('is-promise');
 
 var Iterator = require('../..');
-var isPromise = require('../../lib/isPromise');
 var statsSpys = require('../utils').statsSpys;
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
