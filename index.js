@@ -107,43 +107,26 @@ Iterator.prototype.forEach = function (fn, options, callback) {
   }
 };
 
-Iterator.prototype.destroy = function (callback) {
-  if (typeof callback === 'function') {
-    if (this.destroyed) throw new Error('Already destroyed');
-
-    this.destroyed = true;
-    clear(this);
-    callback();
-  } else {
-    var self = this;
-    return new Promise(function (resolve, reject) {
-      self.destroy(function (err) {
-        err ? reject(err) : resolve();
-      });
-    });
-  }
+Iterator.prototype.destroy = function () {
+  if (this.destroyed) throw new Error('Already destroyed');
+  this.destroyed = true;
+  clear(this);
 };
 
 if (typeof Symbol !== 'undefined' && Symbol.asyncIterator) {
   Iterator.prototype[Symbol.asyncIterator] = function () {
     var self = this;
-    return { next: nextPromise, return: returnPromise };
-
-    function nextPromise() {
-      return new Promise(function (resolve, reject) {
-        self.next(function (err, value) {
-          err ? reject(err) : resolve({ value: value, done: value === null });
+    return {
+      next: function () {
+        return self.next().then(function (value) {
+          return Promise.resolve({ value: value, done: value === null });
         });
-      });
-    }
-
-    function returnPromise() {
-      return new Promise(function (resolve, reject) {
-        self.destroy(function (err) {
-          err ? reject(err) : resolve();
-        });
-      });
-    }
+      },
+      return: function () {
+        self.destroy();
+        return Promise.resolve();
+      },
+    };
   };
 }
 
