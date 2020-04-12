@@ -108,7 +108,7 @@ describe('asyncIterator', function () {
   it('should propagate errors', async function () {
     var iterator = new Iterator(DIR, {
       filter: function () {
-        return sleep(50).then(function () {
+        return sleep(10).then(function () {
           throw new Error('Failed');
         });
       },

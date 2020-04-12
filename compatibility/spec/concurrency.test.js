@@ -112,7 +112,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           filterSpy();
-          setTimeout(callback, 50);
+          setTimeout(callback, 10);
         },
         async: true,
       });
@@ -133,7 +133,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           filterSpy();
-          setTimeout(callback, 50);
+          setTimeout(callback, 10);
         },
         async: true,
       });
@@ -154,7 +154,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           filterSpy();
-          setTimeout(callback, 50);
+          setTimeout(callback, 10);
         },
         async: true,
       });
@@ -185,7 +185,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function () {
           filterSpy();
-          return sleep(50);
+          return sleep(10);
         },
       });
       iterator.forEach(
@@ -205,7 +205,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function () {
           filterSpy();
-          return sleep(50);
+          return sleep(10);
         },
       });
       iterator.forEach(
@@ -225,7 +225,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function () {
           filterSpy();
-          return sleep(50);
+          return sleep(10);
         },
       });
       iterator.forEach(
