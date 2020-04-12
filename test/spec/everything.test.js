@@ -23,7 +23,7 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-describe('iterate over everything', function () {
+describe('everything', function () {
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);

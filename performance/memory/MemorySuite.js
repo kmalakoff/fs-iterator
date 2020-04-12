@@ -11,6 +11,7 @@ async function runOnce(fn) {
   await fn(function () {
     stats.update(process.memoryUsage().heapUsed - start.heapUsed);
   });
+  memwatch.gc();
   return { end: hd.end().change.size_bytes, iteration: stats };
 }
 
