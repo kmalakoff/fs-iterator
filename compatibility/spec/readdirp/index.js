@@ -110,6 +110,11 @@ class ReaddirpStream extends Readable {
     });
   }
 
+  destroy(err) {
+    super.destroy(err);
+    if (!this.iterator.destroyed) this.iterator.destroy();
+  }
+
   async _read(batch) {
     if (this.reading) return;
     this.reading = true;
