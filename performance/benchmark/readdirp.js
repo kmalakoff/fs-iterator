@@ -14,7 +14,7 @@ module.exports = async function run({ ReaddirpStream, version }, dir) {
   console.log('----------------');
 
   return new Promise(function (resolve, reject) {
-    const suite = new Benchmark.Suite('Iterator ' + dir);
+    const suite = new Benchmark.Suite('ReaddirpStream ' + dir);
 
     for (const test of TESTS) {
       suite.add(

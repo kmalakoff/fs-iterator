@@ -1,6 +1,6 @@
 module.exports = [
   {
-    version: 'iterator',
+    version: 'ReaddirpStream(fs-iterator)',
     ReaddirpStream: require('../test/spec/readdirp').ReaddirpStream,
   },
   // {
