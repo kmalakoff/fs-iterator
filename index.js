@@ -2,8 +2,6 @@ var fs = require('fs');
 var path = require('path');
 var EventEmitter = require('eventemitter3');
 var inherits = require('inherits');
-var Lifo = require('stack-lifo');
-var Fifo = require('fifo');
 var callOnce = require('call-once-next-tick');
 
 var clear = require('./lib/clear');
@@ -11,6 +9,7 @@ var depthFirst = require('./lib/depthFirst');
 var forEach = require('./lib/forEach');
 var next = require('./lib/next');
 var push = require('./lib/push');
+var Fifo = require('./lib/Fifo');
 
 var DEFAULT_STAT = 'lstat';
 var DEFAULT_CONCURRENCY = Infinity;
@@ -51,7 +50,7 @@ function Iterator(root, options) {
     }.bind(this);
 
   this.root = path.resolve(root);
-  this.stack = new Lifo();
+  this.stack = new Fifo();
   this.stack.push(depthFirst.bind(null, this.options, root));
   this.queued = new Fifo();
   this.processing = new Fifo();
