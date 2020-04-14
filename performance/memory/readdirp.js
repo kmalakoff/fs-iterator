@@ -8,7 +8,7 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
   var suite = new MemorySuite('ReaddirpStream ' + dir);
 
   for (const test of testOptions) {
-    suite.add(test.name, function (fn) {
+    suite.add(`${version}-${test.name}`, function (fn) {
       return new Promise(function (resolve, reject) {
         const stream = new readdirp.ReaddirpStream(dir, { highWaterMark: test.options ? test.options.concurrency : 4096 });
         stream.on('data', function () {

@@ -8,7 +8,7 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
   var suite = new MemorySuite('Iterator ' + dir);
 
   for (const test of testOptions) {
-    suite.add(test.name, async function (fn) {
+    suite.add(`${version}-${test.name}`, async function (fn) {
       const iterator = new Iterator(dir);
       await iterator.forEach(fn, test.options);
       iterator.destroy(function () {});
