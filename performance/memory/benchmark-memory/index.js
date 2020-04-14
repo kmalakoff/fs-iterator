@@ -28,6 +28,6 @@ module.exports = class MemorySuite extends EventEmitter {
   }
 
   formatStats(stats) {
-    return `${humanize(stats.mean)} ±${Math.sqrt(stats.variance / stats.mean).toFixed(1)}% (${stats.n} runs sampled)`;
+    return `${humanize(stats.mean)} ±${(Math.sqrt(stats.variance / stats.mean) / 100).toFixed(1)}% (${stats.n} runs sampled)`;
   }
 };
