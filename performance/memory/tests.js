@@ -1,36 +1,28 @@
 var MemorySuite = require('./benchmark-memory');
 
-const CONCURRENCIES = [1, 100, 1600, Infinity];
-
-const TESTS = [];
-TESTS.push({ name: `default` });
-for (const concurrency of CONCURRENCIES) {
-  TESTS.push({ name: `${concurrency}`, options: { concurrency: concurrency } });
-}
-
-module.exports = async function run({ Iterator, version }, dir) {
+module.exports = async function run({ Iterator, version, testOptions }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
 
   var suite = new MemorySuite('Iterator ' + dir);
 
-  for (const test of TESTS) {
+  for (const test of testOptions) {
     suite.add(test.name, async function (fn) {
       const iterator = new Iterator(dir);
       await iterator.forEach(fn, test.options);
       iterator.destroy(function () {});
     });
   }
-  suite.add(`serial`, async function (fn) {
-    const iterator = new Iterator(dir);
-    let result = await iterator.next();
-    while (result) {
-      fn();
-      result = await iterator.next();
-    }
-    iterator.destroy(function () {});
-  });
+  // suite.add(`serial`, async function (fn) {
+  //   const iterator = new Iterator(dir);
+  //   let result = await iterator.next();
+  //   while (result) {
+  //     fn();
+  //     result = await iterator.next();
+  //   }
+  //   iterator.destroy(function () {});
+  // });
 
   suite.on('cycle', (current) => {
     console.log(`${current.end.name} (end) x ${suite.formatStats(current.end.stats)}`);
