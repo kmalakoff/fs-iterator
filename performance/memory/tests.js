@@ -1,4 +1,4 @@
-var MemorySuite = require('./benchmark-memory');
+var MemorySuite = require('../benchmark-memory');
 
 module.exports = async function run({ Iterator, version, testOptions }, dir) {
   console.log('****************\n');
