@@ -1,4 +1,5 @@
 var Stats = require('stats-incremental');
+var heapdump = require('heapdump');
 
 var gc = require('./gc');
 
@@ -14,7 +15,7 @@ module.exports = class Test {
     const stats = { end: { name: this.name, stats: Stats() }, max: { name: this.name, stats: Stats() } };
 
     do {
-      const run = await this.runOnce(this.fn);
+      const run = await this.runOnce(this.fn, options);
       stats.end.stats.update(run.end);
       stats.max.stats.update(run.iteration.max);
     } while (Date.now() - startTime <= maxTime);
@@ -22,12 +23,24 @@ module.exports = class Test {
     return stats;
   }
 
-  async runOnce(fn) {
+  async runOnce(fn, options = {}) {
+    const now = Date.now();
     const stats = Stats();
     gc();
     const start = process.memoryUsage();
-    await fn(function () {
-      stats.update(process.memoryUsage().heapUsed - start.heapUsed);
+
+    const dump = options.heapdumpTrigger && !options.heapdumped;
+    if (dump) {
+      options.heapdumped = true;
+      heapdump.writeSnapshot(`hd-${this.name}-${now}-start.heapsnapshot`);
+    }
+
+    await fn(() => {
+      const heapUsed = process.memoryUsage().heapUsed - start.heapUsed;
+      stats.update(heapUsed);
+      if (dump && heapUsed > options.heapdumpTrigger) {
+        heapdump.writeSnapshot(`hd-${this.name}-${now}-triggered.heapsnapshot`);
+      }
     });
     gc();
     return { end: process.memoryUsage().heapUsed - start.heapUsed, iteration: stats };
