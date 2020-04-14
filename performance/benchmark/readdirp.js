@@ -1,14 +1,6 @@
 var Benchmark = require('benchmark');
 
-const CONCURRENCIES = [1, 100, 1600, Infinity];
-
-const TESTS = [];
-TESTS.push({ name: `default` });
-for (const concurrency of CONCURRENCIES) {
-  TESTS.push({ name: `${concurrency}`, options: { highWaterMark: concurrency } });
-}
-
-module.exports = async function run({ readdirp, version }, dir) {
+module.exports = async function run({ readdirp, version, testOptions }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
@@ -16,11 +8,11 @@ module.exports = async function run({ readdirp, version }, dir) {
   return new Promise(function (resolve, reject) {
     const suite = new Benchmark.Suite('ReaddirpStream ' + dir);
 
-    for (const test of TESTS) {
+    for (const test of testOptions) {
       suite.add(
         test.name,
         async function (deferred) {
-          const stream = new readdirp.ReaddirpStream(dir, test.options);
+          const stream = new readdirp.ReaddirpStream(dir, { highWaterMark: test.options ? test.options.concurrency : 4096 });
           stream.on('data', function (entry) {});
           stream.on('error', function (err) {
             deferred.reject(err);

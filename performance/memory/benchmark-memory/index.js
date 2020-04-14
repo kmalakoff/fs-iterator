@@ -7,18 +7,18 @@ module.exports = class MemorySuite extends EventEmitter {
   constructor(name) {
     super();
     this.name = name;
-    this.tests = [];
+    this.testOptions = [];
   }
 
   add(name, fn) {
-    this.tests.push(new Test(name, fn));
+    this.testOptions.push(new Test(name, fn));
   }
 
   async run(options) {
     if (!options.maxTime) throw new Error('Missing maxTime option');
     const largest = { end: null, max: null };
 
-    for (const test of this.tests) {
+    for (const test of this.testOptions) {
       const stats = await test.run(options);
       if (!largest.end || largest.end.stats.max < stats.end.stats.max) largest.end = stats.end;
       if (!largest.max || largest.max.stats.max < stats.max.stats.max) largest.max = stats.max;
