@@ -1,4 +1,4 @@
-var MemorySuite = require('./MemorySuite');
+var MemorySuite = require('./benchmark-memory');
 
 const CONCURRENCIES = [1, 100, 1600, Infinity];
 
