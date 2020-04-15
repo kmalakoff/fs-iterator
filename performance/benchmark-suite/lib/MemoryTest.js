@@ -5,11 +5,10 @@ const gc = require('expose-gc/function');
 
 const writeSnapshot = pify(heapdump.writeSnapshot);
 
-module.exports = class Test {
+module.exports = class MemoryTest {
   constructor(name, fn) {
     this.name = name;
     this.fn = fn;
-    this.n = 0;
   }
 
   async run(options) {
