@@ -50,7 +50,7 @@ function Iterator(root, options) {
 
   this.root = path.resolve(root);
   this.stack = new Fifo();
-  this.stack.push({ root: root, paths: [], depth: 0 });
+  this.stack.push({ root: root, path: '', depth: 0 });
   this.queued = new Fifo();
   this.processing = new Fifo();
   this.waiters = new Fifo();
