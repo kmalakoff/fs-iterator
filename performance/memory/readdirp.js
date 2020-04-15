@@ -1,11 +1,11 @@
-var MemorySuite = require('../benchmark-memory');
+var BenchmarkSuite = require('../benchmark-suite');
 
 module.exports = async function run({ readdirp, version, testOptions }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
 
-  var suite = new MemorySuite('ReaddirpStream ' + dir);
+  var suite = new BenchmarkSuite('ReaddirpStream ' + dir, 'Memory');
 
   for (const test of testOptions) {
     suite.add(`${version}-${test.name}`, function (fn) {

@@ -1,11 +1,11 @@
-var MemorySuite = require('../benchmark-memory');
+var BenchmarkSuite = require('../benchmark-suite');
 
 module.exports = async function run({ Iterator, version, testOptions }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
 
-  var suite = new MemorySuite('Iterator ' + dir);
+  var suite = new BenchmarkSuite('Iterator ' + dir, 'Memory');
 
   for (const test of testOptions) {
     suite.add(`${version}-${test.name}`, async function (fn) {

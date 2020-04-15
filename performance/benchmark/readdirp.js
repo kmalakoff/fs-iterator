@@ -1,48 +1,45 @@
-var Benchmark = require('benchmark');
-const gc = require('expose-gc/function');
+var BenchmarkSuite = require('../benchmark-suite');
 
 module.exports = async function run({ readdirp, version, testOptions }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
 
-  return new Promise(function (resolve, reject) {
-    const suite = new Benchmark.Suite('ReaddirpStream ' + dir);
+  var suite = new BenchmarkSuite('ReaddirpStream ' + dir, 'Performance');
 
-    for (const test of testOptions) {
-      suite.add(
-        test.name,
-        async function (deferred) {
-          const stream = new readdirp.ReaddirpStream(dir, { highWaterMark: test.options ? test.options.concurrency : 4096 });
-          stream.on('data', function (entry) {});
-          stream.on('error', function (err) {
-            deferred.reject(err);
-          });
-          stream.on('end', function () {
-            deferred.resolve();
-          });
-        },
-        { defer: true }
-      );
-    }
+  for (const test of testOptions) {
+    suite.add(`${version}-${test.name}`, function () {
+      return new Promise(function (resolve, reject) {
+        let stream = new readdirp.ReaddirpStream(dir, { highWaterMark: test.options ? test.options.concurrency : 4096 });
+        stream.on('data', function () {});
+        stream.on('error', function (err) {
+          if (!stream) return;
+          stream.destroy();
+          stream = null;
+          reject(err);
+        });
+        stream.on('end', function () {
+          if (!stream) return;
+          stream.destroy();
+          stream = null;
+          resolve();
+        });
+      });
+    });
+  }
 
-    suite.on('start', function () {
-      console.log('Comparing ' + this.name);
-    });
-    suite.on('cycle', function (event) {
-      console.log(String(event.target));
-    });
-    suite.on('error', function () {
-      // eslint-disable-next-line prefer-promise-reject-errors
-      reject();
-    });
-    suite.on('complete', function () {
-      var fastest = this.filter('fastest')[0];
-      console.log('----------------\n');
-      console.log('Fastest is ' + fastest.name + ' x ' + fastest.hz.toFixed(2) + ' ops/sec');
-      console.log('****************\n');
-      resolve();
-    });
-    suite.run({ async: true, maxTime: 1000 });
+  suite.on('cycle', (current) => {
+    console.log(`${current.end.name} (end) x ${suite.formatStats(current.end.stats)}`);
   });
+  suite.on('complete', function (largest) {
+    console.log('----------------');
+    console.log('Fastest');
+    console.log('----------------');
+    console.log(`${largest.end.name} (end) x ${suite.formatStats(largest.end.stats)}`);
+    console.log('****************\n');
+  });
+
+  console.log('Comparing ' + suite.name);
+  await suite.run({ maxTime: 10000 });
+  console.log('****************\n');
 };

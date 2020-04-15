@@ -1,42 +1,41 @@
-var Benchmark = require('benchmark');
+var BenchmarkSuite = require('../benchmark-suite');
 
 module.exports = async function run({ Iterator, version, testOptions }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
 
-  return new Promise(function (resolve, reject) {
-    const suite = new Benchmark.Suite('Iterator ' + dir);
+  var suite = new BenchmarkSuite('Iterator ' + dir, 'Performance');
 
-    for (const test of testOptions) {
-      suite.add(
-        test.name,
-        async function (deferred) {
-          const iterator = new Iterator(dir, test.options);
-          await iterator.forEach(function () {}, test.options);
-          deferred.resolve();
-        },
-        { defer: true }
-      );
-    }
+  for (const test of testOptions) {
+    suite.add(`${version}-${test.name}`, async function (fn) {
+      const iterator = new Iterator(dir);
+      await iterator.forEach(fn, test.options);
+      iterator.destroy(function () {});
+    });
+  }
+  // suite.add(`serial`, async function (fn) {
+  //   const iterator = new Iterator(dir);
+  //   let result = await iterator.next();
+  //   while (result) {
+  //     fn();
+  //     result = await iterator.next();
+  //   }
+  //   iterator.destroy(function () {});
+  // });
 
-    suite.on('start', function () {
-      console.log('Comparing ' + this.name);
-    });
-    suite.on('cycle', function (event) {
-      console.log(String(event.target));
-    });
-    suite.on('error', function () {
-      // eslint-disable-next-line prefer-promise-reject-errors
-      reject();
-    });
-    suite.on('complete', function () {
-      var fastest = this.filter('fastest')[0];
-      console.log('----------------\n');
-      console.log('Fastest is ' + fastest.name + ' x ' + fastest.hz.toFixed(2) + ' ops/sec');
-      console.log('****************\n');
-      resolve();
-    });
-    suite.run({ async: true, maxTime: 1000 });
+  suite.on('cycle', (current) => {
+    console.log(`${current.end.name} (end) x ${suite.formatStats(current.end.stats)}`);
   });
+  suite.on('complete', function (largest) {
+    console.log('----------------');
+    console.log('Fastest');
+    console.log('----------------');
+    console.log(`${largest.end.name} (end) x ${suite.formatStats(largest.end.stats)}`);
+    console.log('****************\n');
+  });
+
+  console.log('Comparing ' + suite.name);
+  await suite.run({ maxTime: 10000 });
+  console.log('****************\n');
 };
