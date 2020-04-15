@@ -61,7 +61,7 @@ inherits(Iterator, EventEmitter);
 Iterator.prototype.next = function (callback) {
   if (typeof callback === 'function') {
     if (!this.options) return callback(null, null);
-    this.queued.push(callback);
+    this.queued.unshift(callback);
     this.processMore();
   } else {
     var self = this;
