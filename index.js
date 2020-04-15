@@ -5,7 +5,6 @@ var inherits = require('inherits');
 var callOnce = require('call-once-next-tick');
 
 var clear = require('./lib/clear');
-var processPath = require('./lib/processPath');
 var forEach = require('./lib/forEach');
 var next = require('./lib/next');
 var push = require('./lib/push');
@@ -51,7 +50,7 @@ function Iterator(root, options) {
 
   this.root = path.resolve(root);
   this.stack = new Fifo();
-  this.stack.push(processPath.bind(null, this.options, root, [], 0));
+  this.stack.push({ root: root, paths: [], depth: 0 });
   this.queued = new Fifo();
   this.processing = new Fifo();
   this.waiters = new Fifo();
