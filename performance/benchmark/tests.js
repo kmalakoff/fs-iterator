@@ -37,7 +37,6 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
       console.log('****************\n');
       resolve();
     });
-    global.gc();
     suite.run({ async: true, maxTime: 1000 });
   });
 };
