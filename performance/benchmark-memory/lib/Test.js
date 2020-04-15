@@ -1,7 +1,9 @@
 var Stats = require('stats-incremental');
 var heapdump = require('heapdump');
+const pify = require('pify');
+const gc = require('expose-gc/function');
 
-var gc = require('./gc');
+const writeSnapshot = pify(heapdump.writeSnapshot);
 
 module.exports = class Test {
   constructor(name, fn) {
@@ -12,11 +14,12 @@ module.exports = class Test {
 
   async run(options) {
     const maxTime = options.maxTime;
+    await this.callibrate();
     const startTime = Date.now();
     const stats = { end: { name: this.name, stats: Stats() }, max: { name: this.name, stats: Stats() } };
 
     do {
-      const run = await this.runOnce(this.fn, options);
+      const run = await this.runOnce(options);
       if (this.n > 1) {
         stats.end.stats.update(run.end);
         stats.max.stats.update(run.iteration.max);
@@ -26,33 +29,45 @@ module.exports = class Test {
     return stats;
   }
 
-  async runOnce(fn, options = {}) {
+  async callibrate(options = {}) {
+    await writeSnapshot(`hd-calibrate.heapsnapshot`);
+    await this.fn(() => {});
+    await this.fn(() => {});
+  }
+
+  async runOnce(options = {}) {
     const now = Date.now();
     const stats = Stats();
     this.n++;
 
-    let dump = options.heapdumpTrigger && !options.heapdumped;
+    const dump = options.heapdumpTrigger && !options.heapdumped;
+    let dumped = false;
     if (dump) {
-      if (this.n <= 1) {
-        heapdump.writeSnapshot(`hd-load.heapsnapshot`);
-        dump = false;
-      } else {
-        options.heapdumped = true;
-        heapdump.writeSnapshot(`hd-${this.name}-${now}-start.heapsnapshot`);
-      }
+      options.heapdumped = true;
+      gc();
+      await writeSnapshot(`hd-${this.name}-${now}-start.heapsnapshot`);
     }
     gc();
     const start = process.memoryUsage();
 
-    await fn(() => {
+    await this.fn(async () => {
+      gc();
       const heapUsed = process.memoryUsage().heapUsed - start.heapUsed;
       stats.update(heapUsed);
       if (dump && heapUsed > options.heapdumpTrigger) {
-        gc();
-        heapdump.writeSnapshot(`hd-${this.name}-${now}-triggered.heapsnapshot`);
+        if (!dumped) {
+          dumped = true;
+          await writeSnapshot(`hd-${this.name}-${now}-triggered.heapsnapshot`);
+        }
       }
     });
+
     gc();
-    return { end: process.memoryUsage().heapUsed - start.heapUsed, iteration: stats };
+    const end = process.memoryUsage().heapUsed - start.heapUsed;
+    if (dump) {
+      gc();
+      await writeSnapshot(`hd-${this.name}-${now}-end.heapsnapshot`);
+    }
+    return { end: end, iteration: stats };
   }
 };

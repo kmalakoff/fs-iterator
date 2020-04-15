@@ -10,14 +10,20 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
   for (const test of testOptions) {
     suite.add(`${version}-${test.name}`, function (fn) {
       return new Promise(function (resolve, reject) {
-        const stream = new readdirp.ReaddirpStream(dir, { highWaterMark: test.options ? test.options.concurrency : 4096 });
-        stream.on('data', function () {
-          fn();
+        let stream = new readdirp.ReaddirpStream(dir, { highWaterMark: test.options ? test.options.concurrency : 4096 });
+        stream.on('data', async function () {
+          await fn();
         });
         stream.on('error', function (err) {
+          if (!stream) return;
+          stream.destroy();
+          stream = null;
           reject(err);
         });
         stream.on('end', function () {
+          if (!stream) return;
+          stream.destroy();
+          stream = null;
           resolve();
         });
       });
@@ -39,6 +45,6 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
 
   console.log('Comparing ' + suite.name);
   global.gc();
-  await suite.run({ maxTime: 10000, heapdumpTrigger: 1024 * 1024 * 4 });
+  await suite.run({ maxTime: 10000, heapdumpTrigger: 1024 * 300 });
   console.log('****************\n');
 };
