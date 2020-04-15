@@ -1,4 +1,5 @@
 var Benchmark = require('benchmark');
+const gc = require('expose-gc/function');
 
 module.exports = async function run({ readdirp, version, testOptions }, dir) {
   console.log('****************\n');
@@ -42,7 +43,6 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
       console.log('****************\n');
       resolve();
     });
-    global.gc();
     suite.run({ async: true, maxTime: 1000 });
   });
 };

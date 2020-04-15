@@ -20,10 +20,8 @@ module.exports = class Test {
 
     do {
       const run = await this.runOnce(options);
-      if (this.n > 1) {
-        stats.end.stats.update(run.end);
-        stats.max.stats.update(run.iteration.max);
-      }
+      stats.end.stats.update(run.end);
+      stats.max.stats.update(run.iteration.max);
     } while (Date.now() - startTime <= maxTime);
 
     return stats;

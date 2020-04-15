@@ -9,8 +9,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "benchmark": "node --expose-gc benchmark/index.js",
-    "memory": "node --expose-gc memory/index.js",
+    "benchmark": "node benchmark/index.js",
+    "flame": "npx 0x benchmark/index.js",
+    "memory": "node memory/index.js",
     "test": "npm run benchmark && npm run memory"
   },
   "dependencies": {

@@ -44,7 +44,6 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
   });
 
   console.log('Comparing ' + suite.name);
-  global.gc();
   await suite.run({ maxTime: 10000, heapdumpTrigger: 1024 * 300 });
   console.log('****************\n');
 };
