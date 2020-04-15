@@ -38,7 +38,6 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
   });
 
   console.log('Comparing ' + suite.name);
-  global.gc();
   await suite.run({ maxTime: 10000 });
   console.log('****************\n');
 };
