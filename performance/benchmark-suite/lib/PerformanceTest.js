@@ -30,4 +30,8 @@ module.exports = class PerformanceTest {
     await this.fn(() => {});
     return { end: Date.now() - now };
   }
+
+  formatStats(stats) {
+    return `${stats.mean.toFixed(1)} ±${(Math.sqrt(stats.variance / stats.mean) / 100).toFixed(1)}% (${stats.n} runs sampled)`;
+  }
 };

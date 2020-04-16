@@ -1,5 +1,4 @@
 var EventEmitter = require('eventemitter3');
-var humanize = require('humanize-data');
 
 var TESTS = {
   Memory: require('./lib/MemoryTest'),
@@ -36,10 +35,6 @@ module.exports = class Suite extends EventEmitter {
   }
 
   formatStats(stats) {
-    if (this.type === 'Memory') {
-      return `${humanize(stats.mean)} ±${(Math.sqrt(stats.variance / stats.mean) / 100).toFixed(1)}% (${stats.n} runs sampled)`;
-    } else {
-      return `${stats.mean.toFixed(1)} ±${(Math.sqrt(stats.variance / stats.mean) / 100).toFixed(1)}% (${stats.n} runs sampled)`;
-    }
+    return this.Test.formatStats(stats);
   }
 };
