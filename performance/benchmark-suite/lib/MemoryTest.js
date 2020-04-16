@@ -69,7 +69,8 @@ module.exports = class MemoryTest {
     return { end: end, iteration: stats };
   }
 
-  formatStats(stats) {
-    return `${humanize(stats.mean)} ±${(Math.sqrt(stats.variance / stats.mean) / 100).toFixed(1)}% (${stats.n} runs sampled)`;
+  static formatStats(stats) {
+    var memoryStdev = Math.sqrt(stats.variance / stats.mean) / 100;
+    return `${humanize(stats.mean)} ±${memoryStdev.toFixed(1)}% (${stats.n} runs sampled)`;
   }
 };
