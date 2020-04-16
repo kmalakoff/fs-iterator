@@ -9,10 +9,10 @@
   },
   "license": "MIT",
   "scripts": {
-    "benchmark": "node benchmark/index.js",
-    "flame": "npx 0x benchmark/index.js",
+    "performance": "node performance/index.js",
+    "flame": "npx 0x performance/index.js",
     "memory": "node memory/index.js",
-    "test": "npm run benchmark && npm run memory"
+    "test": "npm run performance && npm run memory"
   },
   "dependencies": {
     "benchmark": "^2.1.4",

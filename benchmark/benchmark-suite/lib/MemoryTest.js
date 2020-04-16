@@ -16,15 +16,15 @@ module.exports = class MemoryTest {
     const maxTime = options.maxTime;
     await this.callibrate();
     const startTime = Date.now();
-    const stats = { end: { name: this.name, stats: Stats() }, max: { name: this.name, stats: Stats() } };
+    const results = { end: { name: this.name, stats: Stats() }, iteration: { name: this.name, stats: Stats() } };
 
     do {
       const run = await this.runOnce(options);
-      stats.end.stats.update(run.end);
-      stats.max.stats.update(run.iteration.max);
+      results.end.stats.update(run.end);
+      results.iteration.stats.update(run.iteration.max);
     } while (Date.now() - startTime <= maxTime);
 
-    return stats;
+    return results;
   }
 
   async callibrate(options = {}) {
