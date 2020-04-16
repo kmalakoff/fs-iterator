@@ -13,8 +13,8 @@ module.exports = class PerformanceTest {
     const stats = { end: { name: this.name, stats: Stats() } };
 
     do {
-      const run = await this.runOnce(options);
-      stats.end.stats.update(run.end);
+      const time = await this.runOnce(options);
+      stats.end.stats.update(time);
     } while (Date.now() - startTime <= maxTime);
 
     return stats;
@@ -28,10 +28,12 @@ module.exports = class PerformanceTest {
   async runOnce(options = {}) {
     const now = Date.now();
     await this.fn(() => {});
-    return { end: Date.now() - now };
+    return Date.now() - now;
   }
 
-  formatStats(stats) {
-    return `${stats.mean.toFixed(1)} ±${(Math.sqrt(stats.variance / stats.mean) / 100).toFixed(1)}% (${stats.n} runs sampled)`;
+  static formatStats(stats) {
+    var ops = stats.n / stats.mean;
+    var opsStdev = stats.n / Math.sqrt(stats.variance / stats.mean) / 100;
+    return `${ops.toFixed(2)} ops/s ±${opsStdev.toFixed(1)}% (${stats.n} runs sampled)`;
   }
 };
