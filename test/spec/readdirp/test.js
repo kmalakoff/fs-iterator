@@ -28,7 +28,7 @@ const root = path.join(__dirname, 'test-fixtures');
 let testCount = 0;
 let currPath;
 
-const sort = (res, items) => items.map((x) => res.find((y) => x === y.path));
+const sort = (res, items) => items.map((x) => res.find((y) => x === y.basename));
 
 const read = async (options) => readdirp.promise(currPath, options);
 
