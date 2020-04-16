@@ -22,19 +22,19 @@ module.exports = class Suite extends EventEmitter {
 
   async run(options) {
     if (!options.maxTime) throw new Error('Missing maxTime option');
-    const largest = {};
+    const results = {};
 
     for (const test of this.tests) {
-      const stats = await test.run(options);
-      for (var key in stats) {
-        if (!largest[key] || largest[key].stats.max < stats[key].stats.max) largest[key] = stats.end;
+      const result = await test.run(options);
+      for (var key in result) {
+        if (!results[key] || results[key].result.results < result[key].result.results) results[key] = result[key];
       }
-      this.emit('cycle', stats);
+      this.emit('cycle', result);
     }
-    this.emit('complete', largest);
+    this.emit('complete', results);
   }
 
-  formatStats(stats) {
-    return this.Test.formatStats(stats);
+  formatStats(result) {
+    return this.Test.formatStats(result);
   }
 };

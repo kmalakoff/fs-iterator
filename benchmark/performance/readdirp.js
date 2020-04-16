@@ -28,14 +28,14 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
     });
   }
 
-  suite.on('cycle', (current) => {
-    console.log(`${current.end.name} (end) x ${suite.formatStats(current.end.stats)}`);
+  suite.on('cycle', (results) => {
+    for (var key in results) console.log(`${results[key].name} (${key}) x ${suite.formatStats(results[key].stats)}`);
   });
-  suite.on('complete', function (largest) {
+  suite.on('complete', function (results) {
     console.log('----------------');
     console.log('Fastest');
     console.log('----------------');
-    console.log(`${largest.end.name} (end) x ${suite.formatStats(largest.end.stats)}`);
+    for (var key in results) console.log(`${results[key].name} (${key}) x ${suite.formatStats(results[key].stats)}`);
     console.log('****************\n');
   });
 
