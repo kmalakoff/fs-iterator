@@ -8,7 +8,7 @@ module.exports = class PerformanceTest {
 
   async run(options) {
     const maxTime = options.maxTime;
-    await this.callibrate();
+    await this.callibrate(options);
     const startTime = Date.now();
     const stats = { end: { name: this.name, stats: Stats() } };
 
@@ -20,12 +20,12 @@ module.exports = class PerformanceTest {
     return stats;
   }
 
-  async callibrate(options = {}) {
+  async callibrate(options) {
     await this.fn(() => {});
     await this.fn(() => {});
   }
 
-  async runOnce(options = {}) {
+  async runOnce(options) {
     const now = Date.now();
     await this.fn(() => {});
     return Date.now() - now;

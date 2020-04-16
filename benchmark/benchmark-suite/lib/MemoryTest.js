@@ -14,7 +14,7 @@ module.exports = class MemoryTest {
 
   async run(options) {
     const maxTime = options.maxTime;
-    await this.callibrate();
+    await this.callibrate(options);
     const startTime = Date.now();
     const results = { end: { name: this.name, stats: Stats() }, iteration: { name: this.name, stats: Stats() } };
 
@@ -27,8 +27,8 @@ module.exports = class MemoryTest {
     return results;
   }
 
-  async callibrate(options = {}) {
-    await writeSnapshot(`hd-calibrate.heapsnapshot`);
+  async callibrate(options) {
+    if (options.heapdumpTrigger) await writeSnapshot(`hd-calibrate.heapsnapshot`);
     await this.fn(() => {});
     await this.fn(() => {});
   }
