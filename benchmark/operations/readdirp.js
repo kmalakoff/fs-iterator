@@ -1,11 +1,11 @@
-var BenchmarkSuite = require('../benchmark-suite');
+var BenchmarkSuite = require('benchmark-suite');
 
 module.exports = async function run({ readdirp, version, testOptions }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
 
-  var suite = new BenchmarkSuite('ReaddirpStream ' + dir, 'Performance');
+  var suite = new BenchmarkSuite('ReaddirpStream ' + dir, 'Operations');
 
   for (const test of testOptions) {
     suite.add(`${version}-${test.name}`, function () {
@@ -40,6 +40,6 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
   });
 
   console.log('Comparing ' + suite.name);
-  await suite.run({ maxTime: 10000 });
+  await suite.run({ time: 10000 });
   console.log('****************\n');
 };

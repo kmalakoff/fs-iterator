@@ -1,4 +1,4 @@
-var BenchmarkSuite = require('../benchmark-suite');
+var BenchmarkSuite = require('benchmark-suite');
 
 module.exports = async function run({ readdirp, version, testOptions }, dir) {
   console.log('****************\n');
@@ -42,6 +42,6 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
   });
 
   console.log('Comparing ' + suite.name);
-  await suite.run({ maxTime: 10000 }); //, heapdumpTrigger: 1024 * 1000 });
+  await suite.run({ time: 10000, heapdumpTrigger: 1024 * 1000 });
   console.log('****************\n');
 };
