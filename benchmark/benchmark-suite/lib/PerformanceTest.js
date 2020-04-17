@@ -31,9 +31,12 @@ module.exports = class PerformanceTest {
     return Date.now() - now;
   }
 
+  static metric(stats) {
+    return stats.n / stats.mean;
+  }
+
   static formatStats(stats) {
-    var ops = stats.n / stats.mean;
     var opsStdev = stats.n / Math.sqrt(stats.variance / stats.mean) / 100;
-    return `${ops.toFixed(2)} ops/s ±${opsStdev.toFixed(1)}% (${stats.n} runs sampled)`;
+    return `${PerformanceTest.metric(stats).toFixed(2)} ops/s ±${opsStdev.toFixed(1)}% (${stats.n} runs sampled)`;
   }
 };

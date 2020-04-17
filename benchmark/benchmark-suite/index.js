@@ -27,7 +27,7 @@ module.exports = class Suite extends EventEmitter {
     for (const test of this.tests) {
       const result = await test.run(options);
       for (var key in result) {
-        if (!results[key] || results[key].stats.max < result[key].stats.max) results[key] = result[key];
+        if (!results[key] || this.Test.metric(results[key].stats) < this.Test.metric(result[key].stats)) results[key] = result[key];
       }
       this.emit('cycle', result);
     }
