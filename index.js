@@ -9,6 +9,7 @@ var forEach = require('./lib/forEach');
 var next = require('./lib/next');
 var push = require('./lib/push');
 var Fifo = require('./lib/Fifo');
+var PathStack = require('./lib/PathStack');
 
 var DEFAULT_STAT = 'lstat';
 var DEFAULT_CONCURRENCY = Infinity;
@@ -49,7 +50,7 @@ function Iterator(root, options) {
     }.bind(this);
 
   this.root = path.resolve(root);
-  this.stack = new Fifo();
+  this.stack = new PathStack(this);
   this.stack.push({ root: root, path: null, basename: '', depth: 0 });
   this.queued = new Fifo();
   this.processing = new Fifo();
