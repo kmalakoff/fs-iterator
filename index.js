@@ -5,11 +5,12 @@ var inherits = require('inherits');
 var callOnce = require('call-once-next-tick');
 
 var clear = require('./lib/clear');
-var forEach = require('./lib/forEach');
-var next = require('./lib/next');
-var push = require('./lib/push');
+var createProcesor = require('./lib/createProcessor');
 var Fifo = require('./lib/Fifo');
+var next = require('./lib/next');
 var PathStack = require('./lib/PathStack');
+var push = require('./lib/push');
+var remove = require('./lib/remove');
 
 var DEFAULT_STAT = 'lstat';
 var DEFAULT_CONCURRENCY = Infinity;
@@ -54,7 +55,7 @@ function Iterator(root, options) {
   this.stack.push({ root: root, path: null, basename: '', depth: 0 });
   this.queued = new Fifo();
   this.processing = new Fifo();
-  this.waiters = new Fifo();
+  this.processors = new Fifo();
   this.processMore = next(this);
 }
 inherits(Iterator, EventEmitter);
@@ -75,6 +76,7 @@ Iterator.prototype.next = function (callback) {
 };
 
 Iterator.prototype.forEach = function (fn, options, callback) {
+  var self = this;
   if (typeof fn !== 'function') throw new Error('Missing each function');
   if (typeof options === 'function') {
     callback = options;
@@ -82,6 +84,7 @@ Iterator.prototype.forEach = function (fn, options, callback) {
   }
 
   if (typeof callback === 'function') {
+    if (!this.options) return callback();
     options = options || {};
     options = {
       each: fn,
@@ -95,11 +98,28 @@ Iterator.prototype.forEach = function (fn, options, callback) {
         },
       total: 0,
       counter: 0,
+      stop() {
+        return !self.options || self.queued.length >= self.stack.length;
+      },
     };
 
-    return forEach(this, options, callOnce(callback));
+    var processor = createProcesor(this.next.bind(this), options, function (err) {
+      remove(self.processors, processor);
+      processor = null;
+      callOnce(callback.bind(null, err, !self.options ? true : !self.stack.length))();
+    });
+    this.processors.push(processor);
+    processor();
+
+    // forEach(this, options, callOnce(callback));
+    // var processor = createProcesor(nextCallback(this), options, function (err) {
+    //   remove(self.processors, processor);
+    //   processor = null;
+    //   callOnce(callback.bind(null, err, !self.options ? true : !self.stack.length));
+    // });
+    // this.processors.push(processor);
+    // processor();
   } else {
-    var self = this;
     return new Promise(function (resolve, reject) {
       self.forEach(fn, options, function (err, done) {
         err ? reject(err) : resolve(done);
