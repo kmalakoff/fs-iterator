@@ -3,9 +3,9 @@ var path = require('path');
 var EventEmitter = require('eventemitter3');
 var inherits = require('inherits');
 var callOnce = require('call-once-next-tick');
+var createProcesor = require('maximize-iterator/lib/createProcessor');
 
 var clear = require('./lib/clear');
-var createProcesor = require('./lib/createProcessor');
 var Fifo = require('./lib/Fifo');
 var next = require('./lib/next');
 var PathStack = require('./lib/PathStack');
