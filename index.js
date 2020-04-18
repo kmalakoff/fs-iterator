@@ -97,7 +97,7 @@ Iterator.prototype.forEach = function forEach(fn, options, callback) {
         },
       total: 0,
       counter: 0,
-      stop() {
+      stop: function stop() {
         return !self.options || self.queued.length >= self.stack.length;
       },
     };
