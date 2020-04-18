@@ -5,12 +5,9 @@ var inherits = require('inherits');
 var callOnce = require('call-once-next-tick');
 var createProcesor = require('maximize-iterator/lib/createProcessor');
 
-var clear = require('./lib/clear');
 var Fifo = require('./lib/Fifo');
 var next = require('./lib/next');
 var PathStack = require('./lib/PathStack');
-var push = require('./lib/push');
-var remove = require('./lib/remove');
 
 var DEFAULT_STAT = 'lstat';
 var DEFAULT_CONCURRENCY = Infinity;
@@ -19,6 +16,7 @@ var EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
 
 function Iterator(root, options) {
   EventEmitter.call(this);
+  var self = this;
 
   options = options || {};
   this.options = {
@@ -26,56 +24,57 @@ function Iterator(root, options) {
     alwaysStat: options.alwaysStat,
     filter:
       options.filter ||
-      function (entry, callback) {
-        if (options.async) return callback(null, true);
-        return true;
+      function defaultFilter(entry, callback) {
+        return options.async ? callback(null, true) : true;
       },
     async: options.async,
     fs: options.fs || fs,
-    push: push.bind(null, this),
+    push: function stackPush(item) {
+      if (self.options) self.stack.push(item);
+    },
   };
 
   this.options.stat = this.options.fs[options.stat || DEFAULT_STAT];
   if (process.platform === 'win32' && fs.stat.length === 3) {
     var stat = this.options.stat;
-    this.options.stat = function (path) {
+    this.options.stat = function windowsStat(path) {
       stat(path, { bigint: true });
     };
   }
   this.options.error =
     options.error ||
-    function (err) {
+    function defaultError(err) {
       if (!~EXPECTED_ERRORS.indexOf(err.code)) return false;
       this.emit('error', err);
       return true;
     }.bind(this);
 
   this.root = path.resolve(root);
-  this.stack = new PathStack(this);
-  this.stack.push({ root: root, path: null, basename: '', depth: 0 });
   this.queued = new Fifo();
   this.processing = new Fifo();
   this.processors = new Fifo();
   this.processMore = next(this);
+  this.stack = new PathStack(this);
+  this.stack.push({ root: root, path: null, basename: '', depth: 0 });
 }
 inherits(Iterator, EventEmitter);
 
-Iterator.prototype.next = function (callback) {
+Iterator.prototype.next = function next(callback) {
   if (typeof callback === 'function') {
     if (!this.options) return callback(null, null);
     this.queued.unshift(callback);
     this.processMore();
   } else {
     var self = this;
-    return new Promise(function (resolve, reject) {
-      self.next(function (err, result) {
+    return new Promise(function nextPromise(resolve, reject) {
+      self.next(function nextPromise(err, result) {
         err ? reject(err) : resolve(result);
       });
     });
   }
 };
 
-Iterator.prototype.forEach = function (fn, options, callback) {
+Iterator.prototype.forEach = function forEach(fn, options, callback) {
   var self = this;
   if (typeof fn !== 'function') throw new Error('Missing each function');
   if (typeof options === 'function') {
@@ -93,7 +92,7 @@ Iterator.prototype.forEach = function (fn, options, callback) {
       limit: options.limit || DEFAULT_LIMIT,
       error:
         options.error ||
-        function () {
+        function defaultError() {
           return true; // default is exit on error
         },
       total: 0,
@@ -103,47 +102,53 @@ Iterator.prototype.forEach = function (fn, options, callback) {
       },
     };
 
-    var processor = createProcesor(this.next.bind(this), options, function (err) {
-      remove(self.processors, processor);
+    var processor = createProcesor(this.next.bind(this), options, function processorCallback(err) {
+      if (self.options) self.processors.discard(processor);
       processor = null;
       callOnce(callback.bind(null, err, !self.options ? true : !self.stack.length))();
     });
     this.processors.push(processor);
     processor();
-
-    // forEach(this, options, callOnce(callback));
-    // var processor = createProcesor(nextCallback(this), options, function (err) {
-    //   remove(self.processors, processor);
-    //   processor = null;
-    //   callOnce(callback.bind(null, err, !self.options ? true : !self.stack.length));
-    // });
-    // this.processors.push(processor);
-    // processor();
   } else {
-    return new Promise(function (resolve, reject) {
-      self.forEach(fn, options, function (err, done) {
+    return new Promise(function forEachPromise(resolve, reject) {
+      self.forEach(fn, options, function forEachCallback(err, done) {
         err ? reject(err) : resolve(done);
       });
     });
   }
 };
 
-Iterator.prototype.destroy = function () {
-  if (this.destroyed) throw new Error('Already destroyed');
-  this.destroyed = true;
-  clear(this);
+Iterator.prototype.destroy = function destroy(clear) {
+  if (!clear) {
+    if (this.destroyed) throw new Error('Already destroyed');
+    this.destroyed = true;
+  }
+
+  if (!this.options) return;
+  this.options = null;
+  while (this.stack.length) this.stack.pop();
+  while (this.processors.length) this.processors.pop()(true);
+  while (this.processing.length) this.processing.pop()(null, null);
+  while (this.queued.length) this.queued.pop()(null, null);
+  this.removeAllListeners();
+  this.root = null;
+  this.stack = null;
+  this.processors = null;
+  this.processing = null;
+  this.queued = null;
+  this.processMore = null;
 };
 
 if (typeof Symbol !== 'undefined' && Symbol.asyncIterator) {
-  Iterator.prototype[Symbol.asyncIterator] = function () {
+  Iterator.prototype[Symbol.asyncIterator] = function asyncIterator() {
     var self = this;
     return {
-      next: function () {
-        return self.next().then(function (value) {
+      next: function next() {
+        return self.next().then(function nextCallback(value) {
           return Promise.resolve({ value: value, done: value === null });
         });
       },
-      return: function () {
+      destroy: function destroy() {
         self.destroy();
         return Promise.resolve();
       },
