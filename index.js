@@ -55,7 +55,7 @@ function Iterator(root, options) {
   this.processors = new Fifo();
   this.processMore = next(this);
   this.stack = new PathStack(this);
-  this.stack.push({ root: root, paths: [], depth: 0 });
+  this.stack.push({ root: root, path: null, basename: '', depth: 0 });
 }
 inherits(Iterator, EventEmitter);
 

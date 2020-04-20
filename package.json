@@ -1,6 +1,6 @@
 {
   "name": "fs-iterator",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "description": "A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above",
   "main": "index.js",
   "engines": {
@@ -34,7 +34,6 @@
     "every-async": "^1.2.3",
     "fifo": "^2.3.0",
     "inherits": "^2.0.4",
-    "join-deep": "^1.2.1",
     "maximize-iterator": "^2.5.1",
     "next-tick": "^1.1.0"
   },
