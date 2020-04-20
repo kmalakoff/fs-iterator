@@ -15,7 +15,7 @@
     "test": "npm run operations && npm run memory"
   },
   "dependencies": {
-    "benchmark-suite": "^0.1.0",
+    "benchmark-suite": "^0.1.4",
     "fs-iterator-2.2.0": "npm:fs-iterator@^2.2.0"
   }
 }

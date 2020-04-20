@@ -1,6 +1,6 @@
 {
   "name": "fs-iterator",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "description": "A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above",
   "main": "index.js",
   "engines": {
@@ -29,13 +29,13 @@
   "license": "MIT",
   "homepage": "https://github.com/kmalakoff/fs-iterator",
   "dependencies": {
-    "async-compatibilty": "^1.3.0",
-    "call-once-next-tick": "^1.0.0",
+    "async-compat": "^1.4.0",
     "eventemitter3": "^4.0.0",
-    "every-async": "^1.2.0",
+    "every-async": "^1.2.3",
     "fifo": "^2.3.0",
     "inherits": "^2.0.4",
-    "maximize-iterator": "^2.2.0"
+    "maximize-iterator": "^2.5.0",
+    "next-tick": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

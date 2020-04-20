@@ -16,8 +16,18 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "memory",
-      "args": ["${workspaceFolder}/performance/memory/index.js"],
+      "name": "Memory Benchmark",
+      "cwd": "${workspaceFolder}/benchmark",
+      "program": "${workspaceFolder}/benchmark/memory/index.js",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Operations Benchmark",
+      "cwd": "${workspaceFolder}/benchmark",
+      "program": "${workspaceFolder}/benchmark/operations/index.js",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     }
