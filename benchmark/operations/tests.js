@@ -14,15 +14,15 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
       iterator.destroy(function () {});
     });
   }
-  suite.add(`serial`, async function (fn) {
-    const iterator = new Iterator(dir);
-    let result = await iterator.next();
-    while (result) {
-      fn();
-      result = await iterator.next();
-    }
-    iterator.destroy(function () {});
-  });
+  // suite.add(`serial`, async function (fn) {
+  //   const iterator = new Iterator(dir);
+  //   let result = await iterator.next();
+  //   while (result) {
+  //     fn();
+  //     result = await iterator.next();
+  //   }
+  //   iterator.destroy(function () {});
+  // });
 
   suite.on('cycle', (results) => {
     for (var key in results) console.log(`${results[key].name} (${key}) x ${suite.formatStats(results[key].stats)}`);
