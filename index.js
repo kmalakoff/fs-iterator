@@ -106,7 +106,8 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
       if (self.options) self.processors.discard(processor);
       options = null;
       processor = null;
-      skipNextTick ? callback(err, !self.options ? true : !self.stack.length) : nextTick(callback.bind(null, err, !self.options ? true : !self.stack.length));
+      callback = callback.bind(null, err, !self.options ? true : !self.stack.length);
+      skipNextTick ? callback() : nextTick(callback);
     });
     this.processors.push(processor);
     processor();
@@ -129,16 +130,15 @@ Iterator.prototype.destroy = function destroy(clear) {
     if (this.destroyed) throw new Error('Already destroyed');
     this.destroyed = true;
   }
-
+  if (!this.options) return;
   if (!this.options) return;
   this.options = null;
-  while (this.stack.length) this.stack.pop();
   while (this.processors.length) this.processors.pop()(true);
   while (this.processing.length) this.processing.pop()(null, null);
   while (this.queued.length) this.queued.pop()(null, null);
   this.removeAllListeners();
-  this.root = null;
   this.stack = null;
+  this.root = null;
   this.processors = null;
   this.processing = null;
   this.queued = null;
