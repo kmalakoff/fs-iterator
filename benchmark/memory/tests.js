@@ -25,14 +25,14 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
   });
 
   suite.on('cycle', (results) => {
-    // for (var key in results) console.log(`${results[key].name} (${key}) x ${suite.formatStats(results[key].stats)}`);
+    for (var key in results) console.log(`${results[key].name} (${key}) x ${suite.formatStats(results[key].stats)}`);
   });
   suite.on('complete', function (results) {
-    // console.log('----------------');
-    // console.log('Largest');
+    console.log('----------------');
+    console.log('Largest');
     // console.log('----------------');
     for (var key in results) console.log(`${results[key].name} (${key}) x ${suite.formatStats(results[key].stats)}`);
-    // console.log('****************\n');
+    console.log('****************\n');
   });
 
   // console.log('Comparing ' + suite.name);
