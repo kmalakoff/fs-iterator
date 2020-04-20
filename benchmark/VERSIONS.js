@@ -1,15 +1,15 @@
 module.exports = [
-  {
-    version: '2.2.0',
-    Iterator: require('fs-iterator-2.2.0'),
-  },
+  // {
+  //   version: '2.5.3',
+  //   Iterator: require('fs-iterator-2.5.3'),
+  // },
   {
     version: 'latest',
     Iterator: require('..'),
   },
   // {
-  //   version: '2.2.0',
-  //   Iterator: require('fs-iterator-2.2.0'),
+  //   version: '2.5.3',
+  //   Iterator: require('fs-iterator-2.5.3'),
   // },
   // {
   //   version: 'latest',

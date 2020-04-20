@@ -55,7 +55,7 @@ function Iterator(root, options) {
   this.processors = new Fifo();
   this.processMore = next(this);
   this.stack = new PathStack(this);
-  this.stack.push({ root: root, path: null, basename: '', depth: 0 });
+  this.stack.push({ root: root, paths: [], depth: 0 });
 }
 inherits(Iterator, EventEmitter);
 
@@ -74,7 +74,7 @@ Iterator.prototype.next = function next(callback) {
   }
 };
 
-Iterator.prototype.forEach = function forEach(fn, options, callback) {
+Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTick) {
   var self = this;
   if (typeof fn !== 'function') throw new Error('Missing each function');
   if (typeof options === 'function') {
@@ -106,15 +106,20 @@ Iterator.prototype.forEach = function forEach(fn, options, callback) {
       if (self.options) self.processors.discard(processor);
       options = null;
       processor = null;
-      nextTick(callback.bind(null, err, !self.options ? true : !self.stack.length));
+      skipNextTick ? callback(err, !self.options ? true : !self.stack.length) : nextTick(callback.bind(null, err, !self.options ? true : !self.stack.length));
     });
     this.processors.push(processor);
     processor();
   } else {
     return new Promise(function forEachPromise(resolve, reject) {
-      self.forEach(fn, options, function forEachCallback(err, done) {
-        err ? reject(err) : resolve(done);
-      });
+      self.forEach(
+        fn,
+        options,
+        function forEachCallback(err, done) {
+          err ? reject(err) : resolve(done);
+        },
+        true
+      );
     });
   }
 };
