@@ -41,7 +41,7 @@ describe('depth', function () {
       });
     });
 
-    it('depth 0 (alwaysStat: true)', function (done) {
+    it('depth 0 (stats: true)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -49,7 +49,7 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -63,7 +63,7 @@ describe('depth', function () {
       );
     });
 
-    it('depth 0 (alwaysStat: false)', function (done) {
+    it('depth 0 (stats: false)', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
@@ -71,7 +71,7 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-        alwaysStat: false,
+        stats: false,
       });
       iterator.forEach(
         function () {},
@@ -93,7 +93,7 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -115,7 +115,7 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -137,7 +137,7 @@ describe('depth', function () {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -168,8 +168,8 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 10);
         },
-        async: true,
-        alwaysStat: true,
+        callbacks: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -192,8 +192,8 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 10);
         },
-        async: true,
-        alwaysStat: true,
+        callbacks: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -216,8 +216,8 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 10);
         },
-        async: true,
-        alwaysStat: true,
+        callbacks: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -240,8 +240,8 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           setTimeout(callback, 10);
         },
-        async: true,
-        alwaysStat: true,
+        callbacks: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -274,7 +274,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(10);
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -297,7 +297,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(10);
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -320,7 +320,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(10);
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -343,7 +343,7 @@ describe('depth', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
           return sleep(10);
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},

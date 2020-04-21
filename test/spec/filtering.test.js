@@ -119,7 +119,7 @@ describe('filtering', function () {
             callback(null, false);
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},
@@ -141,7 +141,7 @@ describe('filtering', function () {
             callback(null, entry.path !== 'dir2');
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},
@@ -163,8 +163,8 @@ describe('filtering', function () {
             done(null, !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4'));
           }, 10);
         },
-        async: true,
-        alwaysStat: true,
+        callbacks: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -238,7 +238,7 @@ describe('filtering', function () {
             return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
           });
         },
-        alwaysStat: true,
+        stats: true,
       });
       iterator.forEach(
         function () {},

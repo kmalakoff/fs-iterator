@@ -124,7 +124,7 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
-      alwaysStat: true,
+      stats: true,
     });
     iterator.on('error', function (err) {
       errors.push(err);

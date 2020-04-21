@@ -114,7 +114,7 @@ describe('concurrency', function () {
           filterSpy();
           setTimeout(callback, 10);
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},
@@ -135,7 +135,7 @@ describe('concurrency', function () {
           filterSpy();
           setTimeout(callback, 10);
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},
@@ -156,7 +156,7 @@ describe('concurrency', function () {
           filterSpy();
           setTimeout(callback, 10);
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},

@@ -34,7 +34,7 @@
     "every-async": "^1.2.3",
     "fifo": "^2.3.0",
     "inherits": "^2.0.4",
-    "maximize-iterator": "^2.5.1",
+    "maximize-iterator": "^2.6.0",
     "next-tick": "^1.1.0"
   },
   "devDependencies": {

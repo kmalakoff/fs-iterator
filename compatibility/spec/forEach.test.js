@@ -98,7 +98,7 @@ describe('forEach', function () {
           assert.ok(callback);
           setTimeout(callback, 10);
         },
-        { async: true },
+        { callbacks: true },
         function (err) {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 6);
@@ -122,7 +122,7 @@ describe('forEach', function () {
             callback(null, false);
           }, 10);
         },
-        { async: true },
+        { callbacks: true },
         function (err) {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 6);
@@ -197,7 +197,7 @@ describe('forEach', function () {
             callback(null, new Error('Failed'));
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
 
       iterator.forEach(
@@ -216,7 +216,7 @@ describe('forEach', function () {
             callback(null, new Error('Failed'));
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
 
       iterator.forEach(
@@ -236,7 +236,7 @@ describe('forEach', function () {
             callback(null, new Error('Failed'));
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
 
       iterator.forEach(
@@ -256,7 +256,7 @@ describe('forEach', function () {
             callback(null, new Error('Failed'));
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
 
       iterator.forEach(
