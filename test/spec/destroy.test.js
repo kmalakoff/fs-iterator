@@ -86,7 +86,7 @@ describe('destroy', function () {
           if (++count === 5) return iterator.destroy(callback);
           callback();
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},
@@ -112,7 +112,7 @@ describe('destroy', function () {
           if (++count === 5) iterator.destroy();
           callback();
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},
@@ -207,7 +207,7 @@ describe('destroy', function () {
           if (++count === 5) return iterator.destroy(callback);
           callback();
         },
-        async: true,
+        callbacks: true,
       });
       iterator
         .forEach(function () {}, { concurrency: Infinity })

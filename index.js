@@ -21,13 +21,13 @@ function Iterator(root, options) {
   options = options || {};
   this.options = {
     depth: options.depth === undefined ? Infinity : options.depth,
-    alwaysStat: options.alwaysStat,
+    stats: options.stats || options.alwaysStat,
     filter:
       options.filter ||
       function defaultFilter(entry, callback) {
-        return options.async ? callback(null, true) : true;
+        return options.callbacks ? callback(null, true) : true;
       },
-    async: options.async,
+    callbacks: options.callbacks || options.async,
     fs: options.fs || fs,
     push: function stackPush(item) {
       if (self.options) self.stack.push(item);
@@ -87,7 +87,7 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
     options = options || {};
     options = {
       each: fn,
-      async: options.async,
+      callbacks: options.callbacks || options.async,
       concurrency: options.concurrency || DEFAULT_CONCURRENCY,
       limit: options.limit || DEFAULT_LIMIT,
       error:
