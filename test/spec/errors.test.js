@@ -117,7 +117,7 @@ describe('errors', function () {
             callback(new Error('Failed'));
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},
@@ -137,7 +137,7 @@ describe('errors', function () {
             callback(new Error('Failed'));
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},
@@ -164,7 +164,7 @@ describe('errors', function () {
             callback(new Error('Failed'));
           }, 10);
         },
-        async: true,
+        callbacks: true,
       });
       iterator.forEach(
         function () {},

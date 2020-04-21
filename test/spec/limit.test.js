@@ -126,7 +126,7 @@ describe('forEach', function () {
           filter: function (entry) {
             return entry.basename ? !entry.stats.isDirectory() : true;
           },
-          alwaysStat: true,
+          stats: true,
         });
         iterator.forEach(
           function (entry) {
@@ -160,7 +160,7 @@ describe('forEach', function () {
           filter: function (entry, callback) {
             setTimeout(callback, 10);
           },
-          async: true,
+          callbacks: true,
         });
 
         iterator.forEach(
@@ -186,7 +186,7 @@ describe('forEach', function () {
           filter: function (entry, callback) {
             setTimeout(callback, 10);
           },
-          async: true,
+          callbacks: true,
         });
         iterator.forEach(
           function (entry) {
@@ -212,7 +212,7 @@ describe('forEach', function () {
           filter: function (entry, callback) {
             setTimeout(callback, 10);
           },
-          async: true,
+          callbacks: true,
         });
         iterator.forEach(
           function (entry) {
@@ -235,7 +235,7 @@ describe('forEach', function () {
           filter: function (entry, callback) {
             setTimeout(callback, 10);
           },
-          async: true,
+          callbacks: true,
         });
         iterator.forEach(
           function (entry) {
@@ -259,8 +259,8 @@ describe('forEach', function () {
               callback(null, entry.basename ? !entry.stats.isDirectory() : true);
             }, 10);
           },
-          async: true,
-          alwaysStat: true,
+          callbacks: true,
+          stats: true,
         });
         iterator.forEach(
           function (entry) {
@@ -403,7 +403,7 @@ describe('forEach', function () {
               return entry.basename ? !entry.stats.isDirectory() : true;
             });
           },
-          alwaysStat: true,
+          stats: true,
         });
         iterator
           .forEach(

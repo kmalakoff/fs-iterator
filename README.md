@@ -26,9 +26,9 @@ while(entry) {
   entry = await iterator.next();
 }
 
-// using each with concurrency
+// using forEach with concurrency
 const iterator2 = new Iterator(__dirname, { error: (err) => { return true; /* filter errors */ }});
-await iterator2.forEach((entry) => { /* do something */ }, { concurrency: 1024 })
+const done = await iterator2.forEach((entry) => { /* do something */ }, { concurrency: 1024 })
 ```
 
 **Callback**
@@ -38,14 +38,19 @@ const Iterator = require('fs-iterator');
 
 // traverse skipping .git folders
 const iterator = new Iterator(__dirname, { filter: (entry) => { return entry.stats.isDirectory() && entry.basename === '.git'; }, error: (err) => { return true; /* filter errors */ } });
-iterator.forEach((entry) => { /* do something */ }, { concurrency: 1024 }, (err) => {})
+iterator.forEach((entry) => { /* do something */ }, { concurrency: 1024 }, (err, done) => {})
 ```
 
-**Options**:
+**Iterator Options**:
 
-- number: filter - filter to continue processing the tree
-- number: depth - choose maximum depth of the tree to traverse. (default: infinity)
-- bool: alwaysStat - always call stats before filter. (default: false)
+- number: depth - choose maximum depth of the tree to traverse. (default: Infinity)
+- function: filter - filter function to continue processing the tree. Return false to skip processing (default: process all)
+- bool: callbacks - use a filter function with a callback format like `function(entry, callback)`. (default: false)
+- bool: stats - always call stats before filter. (default: false)
 - function: error - custom error callback for expected filesystem errors ('ENOENT', 'EPERM', 'EACCES', 'ELOOP'). Return false to stop processing. (default: silent filsystem errors)
-- object: fs - choose an fs implementation; for example, you can use use graceful-fs and concurrency 1. (default: fs)
-- bool: async - use an async filter function of the form function(entry, callback) with callback being of the form function(err, keep) where keep undefined means continue. `If you use promises, this is unnecessary`. (default: false)
+
+**forEach Options**:
+
+- bool: callbacks - use an each function with a callback `function(entry, callback)` (default: false)
+- number: concurrency - parallelism of processing. (default: Infinity)
+- number: limit - maximum number to process. (default: Infinity)

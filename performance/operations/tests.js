@@ -1,14 +1,14 @@
 var BenchmarkSuite = require('benchmark-suite');
 
 module.exports = async function run({ Iterator, version, testOptions }, dir) {
-  // console.log('****************\n');
+  // console.log('----------****\n');
   // console.log(`Running: ${version}`);
   // console.log('----------------');
 
-  var suite = new BenchmarkSuite('Iterator ' + dir, 'Operations');
+  var suite = new BenchmarkSuite('Iterator ' + version, 'Operations');
 
   for (const test of testOptions) {
-    suite.add(`${version}-${test.name}`, async function (fn) {
+    suite.add(`${test.name}`, async function (fn) {
       const iterator = new Iterator(dir);
       await iterator.forEach(fn, test.options);
       iterator.destroy(function () {});
@@ -18,24 +18,21 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
     const iterator = new Iterator(dir);
     let result = await iterator.next();
     while (result) {
-      fn();
+      await fn();
       result = await iterator.next();
     }
     iterator.destroy(function () {});
   });
 
   suite.on('cycle', (results) => {
-    for (var key in results) console.log(`${results[key].name} (${key}) x ${suite.formatStats(results[key].stats)}`);
+    for (var key in results) console.log(`${results[key].name.padStart(8, ' ')}| ${suite.formatStats(results[key].stats)}`);
   });
   suite.on('complete', function (results) {
-    console.log('----------------');
-    console.log('Fastest');
-    // console.log('----------------');
-    for (var key in results) console.log(`${results[key].name} (${key}) x ${suite.formatStats(results[key].stats)}`);
-    console.log('****************\n');
+    console.log('-----Fastest-----');
+    for (var key in results) console.log(`${results[key].name.padStart(8, ' ')}| ${suite.formatStats(results[key].stats)}`);
   });
 
-  // console.log('Comparing ' + suite.name);
+  console.log('----------' + suite.name + '----------');
   await suite.run({ time: 1000 });
-  // console.log('****************\n');
+  console.log('');
 };
