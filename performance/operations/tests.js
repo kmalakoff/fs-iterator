@@ -1,10 +1,6 @@
 var BenchmarkSuite = require('benchmark-suite');
 
 module.exports = async function run({ Iterator, version, testOptions }, dir) {
-  // console.log('----------****\n');
-  // console.log(`Running: ${version}`);
-  // console.log('----------------');
-
   var suite = new BenchmarkSuite('Iterator ' + version, 'Operations');
 
   for (const test of testOptions) {
