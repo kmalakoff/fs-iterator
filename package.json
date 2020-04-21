@@ -1,6 +1,6 @@
 {
   "name": "fs-iterator",
-  "version": "2.5.5",
+  "version": "2.5.6",
   "description": "A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above",
   "main": "index.js",
   "engines": {
