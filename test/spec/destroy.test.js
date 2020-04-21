@@ -83,7 +83,7 @@ describe('destroy', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          if (++count === 5) return iterator.destroy(callback);
+          if (++count === 5) iterator.destroy();
           callback();
         },
         callbacks: true,
@@ -204,7 +204,7 @@ describe('destroy', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          if (++count === 5) return iterator.destroy(callback);
+          if (++count === 5) iterator.destroy();
           callback();
         },
         callbacks: true,

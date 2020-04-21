@@ -47,7 +47,7 @@ function Iterator(root, options) {
 
   this.root = path.resolve(root);
   this.queued = new Fifo();
-  this.processing = new Fifo();
+  this.processing = 0;
   this.processors = new Fifo();
   this.processMore = next(this);
   this.stack = new PathStack(this);
@@ -130,13 +130,11 @@ Iterator.prototype.destroy = function destroy(clear) {
   this.options = null;
   while (this.stack.length) this.stack.pop();
   while (this.processors.length) this.processors.pop()(true);
-  while (this.processing.length) this.processing.pop()(null, null);
   while (this.queued.length) this.queued.pop()(null, null);
   this.removeAllListeners();
   this.root = null;
   this.stack = null;
   this.processors = null;
-  this.processing = null;
   this.queued = null;
   this.processMore = null;
 };
