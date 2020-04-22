@@ -5,7 +5,6 @@ var inherits = require('inherits');
 var createProcesor = require('maximize-iterator/lib/createProcessor');
 
 var Fifo = require('./lib/Fifo');
-var next = require('./lib/next');
 var PathStack = require('./lib/PathStack');
 var processOrQueue = require('./lib/processOrQueue');
 
@@ -47,11 +46,10 @@ function Iterator(root, options) {
 
   this.root = path.resolve(root);
   this.queued = new Fifo();
-  this.processing = 0;
   this.processors = new Fifo();
-  this.processMore = next(this);
   this.stack = new PathStack(this);
   this.stack.push({ root: root, path: null, basename: '', depth: 0 });
+  this.processing = 0;
 }
 inherits(Iterator, EventEmitter);
 
@@ -92,14 +90,14 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
       total: 0,
       counter: 0,
       stop: function stop() {
-        return !self.options || self.queued.length >= self.stack.length;
+        return self.done || self.queued.length >= self.stack.length;
       },
     };
 
     var processor = createProcesor(this.next.bind(this), options, function processorCallback(err) {
-      if (self.options) self.processors.discard(processor);
-      options = null;
+      if (!self.destroyed) self.processors.discard(processor);
       processor = null;
+      options = null;
       return callback(err, !self.options ? true : !self.stack.length);
     });
     this.processors.push(processor);
@@ -121,19 +119,17 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
 Iterator.prototype.destroy = function destroy() {
   if (this.destroyed) throw new Error('Already destroyed');
   this.destroyed = true;
-
   this.done = true;
+  this._events = null;
+  this._eventsCount = 0;
+  this.options = null;
+  this.root = null;
   while (this.processors.length) this.processors.pop()(true);
   this.processors = null;
   while (this.queued.length) this.queued.pop()(null, null);
   this.queued = null;
-  this.removeAllListeners();
-  this.options = null;
-  this.root = null;
-  this.stack = null;
-  this.processors = null;
-  this.queued = null;
   this.processMore = null;
+  this.stack.destroy();
   this.stack = null;
 };
 
