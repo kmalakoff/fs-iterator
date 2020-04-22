@@ -23,13 +23,12 @@ function Iterator(root, options) {
     stats: options.stats || options.alwaysStat,
     filter: options.filter,
     callbacks: options.callbacks || options.async,
-    fs: options.fs || fs,
     push: function stackPush(item) {
       if (!self.done) self.stack.push(item);
     },
   };
 
-  this.options.stat = this.options.fs[options.stat || DEFAULT_STAT];
+  this.options.stat = fs[options.stat || DEFAULT_STAT];
   if (process.platform === 'win32' && fs.stat.length === 3) {
     var stat = this.options.stat;
     this.options.stat = function windowsStat(path) {
