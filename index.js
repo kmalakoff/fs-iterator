@@ -26,7 +26,7 @@ function Iterator(root, options) {
     callbacks: options.callbacks || options.async,
     fs: options.fs || fs,
     push: function stackPush(item) {
-      if (self.options) self.stack.push(item);
+      if (!self.done) self.stack.push(item);
     },
   };
 
@@ -77,7 +77,7 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
   }
 
   if (typeof callback === 'function') {
-    if (!this.options) return callback(null, true);
+    if (this.done) return callback(null, true);
     options = options || {};
     options = {
       each: fn,
@@ -118,37 +118,23 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
   }
 };
 
-Iterator.prototype.destroy = function destroy(clear) {
-  if (!clear) {
-    if (this.destroyed) throw new Error('Already destroyed');
-    this.destroyed = true;
-  }
+Iterator.prototype.destroy = function destroy() {
+  if (this.destroyed) throw new Error('Already destroyed');
+  this.destroyed = true;
 
-  if (!this.options) return;
-  this.options = null;
-  while (this.stack.length) this.stack.pop();
+  this.done = true;
   while (this.processors.length) this.processors.pop()(true);
+  this.processors = null;
   while (this.queued.length) this.queued.pop()(null, null);
+  this.queued = null;
   this.removeAllListeners();
+  this.options = null;
   this.root = null;
   this.stack = null;
   this.processors = null;
   this.queued = null;
   this.processMore = null;
-
-  // this.done = true;
-  // while (this.processors.length) this.processors.pop()(true);
-  // this.processors = null;
-  // while (this.queued.length) this.queued.pop()(null, null);
-  // this.queued = null;
-  // this.removeAllListeners();
-  // this.options = null;
-  // this.root = null;
-  // this.stack = null;
-  // this.processors = null;
-  // this.queued = null;
-  // this.processMore = null;
-  // this.stack = null;
+  this.stack = null;
 };
 
 if (typeof Symbol !== 'undefined' && Symbol.asyncIterator) {
