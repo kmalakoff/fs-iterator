@@ -24,9 +24,6 @@ function Iterator(root, options) {
     stats: options.stats || options.alwaysStat,
     filter: options.filter,
     callbacks: options.callbacks || options.async,
-    push: function stackPush(item) {
-      if (!self.done) self.stack.push(item);
-    },
   };
 
   this.options.dirent = !this.options.stats && DIRENT_SUPPORTED;
@@ -55,11 +52,11 @@ function Iterator(root, options) {
       return true;
     }.bind(this);
 
-  this.root = path.resolve(root);
+  this.root = root;
   this.queued = new Fifo();
   this.processors = new Fifo();
   this.stack = new PathStack(this);
-  this.stack.push({ root: root, path: null, basename: '', depth: 0 });
+  this.stack.push({ path: null, basename: '', depth: 0 });
   this.processing = 0;
 }
 inherits(Iterator, EventEmitter);
@@ -125,9 +122,13 @@ Iterator.prototype.forEach = function forEach(fn, options, callback) {
 Iterator.prototype.destroy = function destroy() {
   if (this.destroyed) throw new Error('Already destroyed');
   this.destroyed = true;
-  this.done = true;
+
+  // event emitter
   this._events = null;
   this._eventsCount = 0;
+
+  // iterator
+  this.done = true;
   this.options = null;
   this.root = null;
   while (this.processors.length) this.processors.pop()(true);
