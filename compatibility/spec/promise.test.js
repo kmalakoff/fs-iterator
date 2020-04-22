@@ -78,7 +78,7 @@ describe('promise', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
         done();
@@ -101,7 +101,7 @@ describe('promise', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
         done();
@@ -121,7 +121,7 @@ describe('promise', function () {
     function consume() {
       iterator.next().then(function (value) {
         if (value === null) {
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -144,7 +144,7 @@ describe('promise', function () {
     function consume() {
       iterator.next().then(function (value) {
         if (value === null) {
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();

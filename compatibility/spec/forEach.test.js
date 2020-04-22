@@ -79,7 +79,7 @@ describe('forEach', function () {
         },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -101,7 +101,7 @@ describe('forEach', function () {
         { callbacks: true },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -125,7 +125,7 @@ describe('forEach', function () {
         { callbacks: true },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -144,7 +144,7 @@ describe('forEach', function () {
         { concurrency: 1 },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -163,7 +163,7 @@ describe('forEach', function () {
         { concurrency: 5 },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -182,7 +182,7 @@ describe('forEach', function () {
         { concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -299,7 +299,7 @@ describe('forEach', function () {
           spys(fs.lstatSync(entry.fullPath), entry.path);
         })
         .then(function () {
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -321,7 +321,7 @@ describe('forEach', function () {
           { concurrency: 1 }
         )
         .then(function () {
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -343,7 +343,7 @@ describe('forEach', function () {
           { concurrency: 5 }
         )
         .then(function () {
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -365,7 +365,7 @@ describe('forEach', function () {
           { concurrency: Infinity }
         )
         .then(function () {
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();

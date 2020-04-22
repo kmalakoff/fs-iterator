@@ -48,7 +48,7 @@ describe('symlink', function () {
       function () {},
       function (err) {
         assert.ok(!err);
-        assert.equal(spys.dir.callCount, 6);
+        assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 3);
         done();

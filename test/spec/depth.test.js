@@ -55,7 +55,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
           done();
@@ -77,7 +77,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 4);
+          assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
           done();
@@ -99,7 +99,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 4);
+          assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 4);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -121,7 +121,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.dir.callCount, 4);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -143,7 +143,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -175,7 +175,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
           done();
@@ -199,7 +199,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 4);
+          assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 4);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -223,7 +223,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.dir.callCount, 4);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -247,7 +247,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -280,7 +280,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
           done();
@@ -303,7 +303,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 4);
+          assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 4);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -326,7 +326,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.dir.callCount, 4);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
@@ -349,7 +349,7 @@ describe('depth', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();

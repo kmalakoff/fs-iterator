@@ -82,7 +82,7 @@ describe('async await', function () {
       value = await iterator.next();
     }
 
-    assert.equal(spys.dir.callCount, 6);
+    assert.equal(spys.dir.callCount, 5);
     assert.equal(spys.file.callCount, 5);
     assert.equal(spys.link.callCount, 2);
   });
@@ -106,7 +106,7 @@ describe('async await', function () {
       value = await iterator.next();
     }
 
-    assert.equal(spys.dir.callCount, 6);
+    assert.equal(spys.dir.callCount, 5);
     assert.equal(spys.file.callCount, 5);
     assert.equal(spys.link.callCount, 2);
   });
