@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var EventEmitter = require('eventemitter3');
 var inherits = require('inherits');
+var compat = require('async-compat');
 var createProcesor = require('maximize-iterator/lib/createProcessor');
 
 var Fifo = require('./lib/Fifo');
@@ -56,8 +57,17 @@ function Iterator(root, options) {
   this.queued = new Fifo();
   this.processors = new Fifo();
   this.stack = new PathStack(this);
-  this.stack.push({ path: null, basename: '', depth: 0 });
-  this.processing = 0;
+
+  this.processing = 1; // fetch first
+  this.options.readdir(this.root, function (err, files) {
+    self.processing--;
+    if (self.done) return;
+    if (err && compat.defaultValue(self.options.error(err), true)) err = null;
+
+    // handle error
+    if (err) self.done = err;
+    else if (files.length) self.stack.push({ path: null, depth: 1, files: Fifo.lifoFromArray(files) });
+  });
 }
 inherits(Iterator, EventEmitter);
 

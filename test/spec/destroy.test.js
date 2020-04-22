@@ -46,7 +46,7 @@ describe('destroy', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           iterator.destroy();
@@ -94,7 +94,7 @@ describe('destroy', function () {
         function (err) {
           assert.ok(!err);
           assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 5);
-          assert.equal(spys.dir.callCount, 3);
+          assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 0);
           done();
@@ -140,7 +140,7 @@ describe('destroy', function () {
       iterator
         .forEach(function () {})
         .then(function () {
-          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           iterator.destroy();
@@ -187,7 +187,7 @@ describe('destroy', function () {
         .forEach(function () {}, { concurrency: 1 })
         .then(function () {
           assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 5);
-          assert.equal(spys.dir.callCount, 3);
+          assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 0);
           done();
