@@ -78,7 +78,7 @@ describe('asyncIterator', function () {
       assert.ok(typeof value.stats === 'object');
     }
 
-    assert.equal(spys.dir.callCount, 6);
+    assert.equal(spys.dir.callCount, 5);
     assert.equal(spys.file.callCount, 5);
     assert.equal(spys.link.callCount, 2);
   });
@@ -100,7 +100,7 @@ describe('asyncIterator', function () {
       assert.ok(typeof value.stats === 'object');
     }
 
-    assert.equal(spys.dir.callCount, 6);
+    assert.equal(spys.dir.callCount, 5);
     assert.equal(spys.file.callCount, 5);
     assert.equal(spys.link.callCount, 2);
   });
