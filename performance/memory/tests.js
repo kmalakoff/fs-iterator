@@ -29,6 +29,6 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
   });
 
   console.log('----------' + suite.name + '----------');
-  await suite.run({ time: 1000 }); //, heapdumpTrigger: 1024 * 10 });
+  await suite.run({ time: 1000 }); //, heapdumpTrigger: 1024 * 100 });
   console.log('');
 };

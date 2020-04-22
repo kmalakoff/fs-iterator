@@ -12,6 +12,7 @@ var DEFAULT_STAT = 'lstat';
 var DEFAULT_CONCURRENCY = Infinity;
 var DEFAULT_LIMIT = Infinity;
 var EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
+var DIRENT_SUPPORTED = 'Dirent' in fs;
 
 function Iterator(root, options) {
   EventEmitter.call(this);
@@ -28,13 +29,24 @@ function Iterator(root, options) {
     },
   };
 
-  this.options.stat = fs[options.stat || DEFAULT_STAT];
+  this.options.dirent = !this.options.stats && DIRENT_SUPPORTED;
+  this.options.readdir = fs.readdir;
+  if (this.options.dirent) {
+    var readdirOptions = { encoding: 'utf8', withFileTypes: this.options.dirent };
+    this.options.readdir = function readdir(fullPath, callback) {
+      fs.readdir(fullPath, readdirOptions, callback);
+    };
+  }
+
+  this.options.statName = options.stat || DEFAULT_STAT;
+  this.options.stat = fs[this.options.statName];
   if (process.platform === 'win32' && fs.stat.length === 3) {
     var stat = this.options.stat;
     this.options.stat = function windowsStat(path) {
       stat(path, { bigint: true });
     };
   }
+
   this.options.error =
     options.error ||
     function defaultError(err) {
