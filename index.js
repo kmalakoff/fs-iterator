@@ -2,12 +2,12 @@ var fs = require('fs');
 var path = require('path');
 var EventEmitter = require('eventemitter3');
 var inherits = require('inherits');
-var nextTick = require('next-tick');
 var createProcesor = require('maximize-iterator/lib/createProcessor');
 
 var Fifo = require('./lib/Fifo');
 var next = require('./lib/next');
 var PathStack = require('./lib/PathStack');
+var processOrQueue = require('./lib/processOrQueue');
 
 var DEFAULT_STAT = 'lstat';
 var DEFAULT_CONCURRENCY = Infinity;
@@ -57,9 +57,7 @@ inherits(Iterator, EventEmitter);
 
 Iterator.prototype.next = function next(callback) {
   if (typeof callback === 'function') {
-    if (!this.options) return callback(null, null);
-    this.queued.unshift(callback);
-    this.processMore();
+    processOrQueue(this, callback);
   } else {
     var self = this;
     return new Promise(function nextPromise(resolve, reject) {
@@ -79,7 +77,7 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
   }
 
   if (typeof callback === 'function') {
-    if (!this.options) return callback();
+    if (!this.options) return callback(null, true);
     options = options || {};
     options = {
       each: fn,
@@ -102,7 +100,7 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
       if (self.options) self.processors.discard(processor);
       options = null;
       processor = null;
-      skipNextTick ? callback(err, !self.options ? true : !self.stack.length) : nextTick(callback.bind(null, err, !self.options ? true : !self.stack.length));
+      return callback(err, !self.options ? true : !self.stack.length);
     });
     this.processors.push(processor);
     processor();
@@ -137,6 +135,20 @@ Iterator.prototype.destroy = function destroy(clear) {
   this.processors = null;
   this.queued = null;
   this.processMore = null;
+
+  // this.done = true;
+  // while (this.processors.length) this.processors.pop()(true);
+  // this.processors = null;
+  // while (this.queued.length) this.queued.pop()(null, null);
+  // this.queued = null;
+  // this.removeAllListeners();
+  // this.options = null;
+  // this.root = null;
+  // this.stack = null;
+  // this.processors = null;
+  // this.queued = null;
+  // this.processMore = null;
+  // this.stack = null;
 };
 
 if (typeof Symbol !== 'undefined' && Symbol.asyncIterator) {
