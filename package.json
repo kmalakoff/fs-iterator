@@ -33,8 +33,7 @@
     "eventemitter3": "^4.0.0",
     "fifo": "^2.3.0",
     "inherits": "^2.0.4",
-    "maximize-iterator": "^2.6.0",
-    "next-tick": "^1.1.0"
+    "maximize-iterator": "^2.6.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

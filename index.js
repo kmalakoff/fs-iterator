@@ -66,7 +66,7 @@ Iterator.prototype.next = function next(callback) {
   }
 };
 
-Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTick) {
+Iterator.prototype.forEach = function forEach(fn, options, callback) {
   var self = this;
   if (typeof fn !== 'function') throw new Error('Missing each function');
   if (typeof options === 'function') {
@@ -98,20 +98,15 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
       if (!self.destroyed) self.processors.discard(processor);
       processor = null;
       options = null;
-      return callback(err, !self.options ? true : !self.stack.length);
+      return callback(err, self.done ? true : !self.stack.length);
     });
     this.processors.push(processor);
     processor();
   } else {
     return new Promise(function forEachPromise(resolve, reject) {
-      self.forEach(
-        fn,
-        options,
-        function forEachCallback(err, done) {
-          err ? reject(err) : resolve(done);
-        },
-        true
-      );
+      self.forEach(fn, options, function forEachCallback(err, done) {
+        err ? reject(err) : resolve(done);
+      });
     });
   }
 };
