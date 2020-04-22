@@ -100,7 +100,7 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 2);
+        assert.ok(errors.length === 1 || errors.length === 2);
         assert.equal(spys.dir.callCount, 6);
         assert.equal(spys.file.callCount, 4);
         assert.equal(spys.link.callCount, 2);
@@ -170,7 +170,7 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 2);
+        assert.ok(errors.length === 1 || errors.length === 2);
         assert.equal(spys.dir.callCount, 6);
         assert.equal(spys.file.callCount, 4);
         assert.equal(spys.link.callCount, 2);
@@ -241,7 +241,7 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 2);
+        assert.ok(errors.length === 1 || errors.length === 2);
         assert.equal(spys.dir.callCount, 6);
         assert.equal(spys.file.callCount, 4);
         assert.equal(spys.link.callCount, 2);
@@ -280,7 +280,7 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 2);
+        assert.ok(errors.length === 1 || errors.length === 2);
         assert.equal(spys.dir.callCount, 6);
         assert.equal(spys.file.callCount, 4);
         assert.equal(spys.link.callCount, 2);
@@ -356,7 +356,7 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 2);
+        assert.ok(errors.length === 1 || errors.length === 2);
         assert.equal(spys.dir.callCount, 6);
         assert.equal(spys.file.callCount, 4);
         assert.equal(spys.link.callCount, 2);
