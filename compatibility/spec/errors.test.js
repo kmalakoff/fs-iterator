@@ -31,14 +31,13 @@ describe('errors', function () {
   after(function (done) {
     rimraf(DIR, done);
   });
+  beforeEach(function (done) {
+    rimraf(DIR, function () {
+      generate(DIR, STRUCTURE, done);
+    });
+  });
 
   describe('synchronous', function () {
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
-      });
-    });
-
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
@@ -65,6 +64,7 @@ describe('errors', function () {
       iterator.forEach(
         function () {},
         {
+          concurrency: 1,
           error: function (err) {
             errors.push(err);
             return true;
@@ -96,7 +96,7 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!err);
-          assert.equal(errors.length, 5);
+          assert.equal(errors.length, 6);
           done();
         }
       );
@@ -104,10 +104,27 @@ describe('errors', function () {
   });
 
   describe('callbacks', function () {
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
+    it('handle invalid root (next)', function (done) {
+      var iterator = new Iterator(DIR + 'does-not-exist');
+
+      iterator.next(function (err, value) {
+        assert.ok(err);
+        assert.equal(err.code, 'ENOENT');
+        assert.ok(!value);
+        done();
       });
+    });
+
+    it('handle invalid root (forEach)', function (done) {
+      var iterator = new Iterator(DIR + 'does-not-exist');
+      iterator.forEach(
+        function () {},
+        function (err) {
+          assert.ok(err);
+          assert.equal(err.code, 'ENOENT');
+          done();
+        }
+      );
     });
 
     it('should propagate errors (default)', function (done) {
@@ -142,6 +159,7 @@ describe('errors', function () {
       iterator.forEach(
         function () {},
         {
+          concurrency: 1,
           error: function (err) {
             errors.push(err);
             return true;
@@ -176,7 +194,7 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!err);
-          assert.equal(errors.length, 5);
+          assert.equal(errors.length, 6);
           done();
         }
       );
@@ -186,10 +204,31 @@ describe('errors', function () {
   describe('promise', function () {
     if (typeof Promise === 'undefined') return; // no promise support
 
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
-      });
+    it('handle invalid root (next)', function (done) {
+      var iterator = new Iterator(DIR + 'does-not-exist');
+
+      iterator
+        .next()
+        .then(function (value) {
+          assert.ok(!value);
+        })
+        .catch(function (err) {
+          assert.ok(err);
+          assert.equal(err.code, 'ENOENT');
+          done();
+        });
+    });
+
+    it('handle invalid root (forEach)', function (done) {
+      var iterator = new Iterator(DIR + 'does-not-exist');
+      iterator.forEach(
+        function () {},
+        function (err) {
+          assert.ok(err);
+          assert.equal(err.code, 'ENOENT');
+          done();
+        }
+      );
     });
 
     it('should propagate errors (default)', function (done) {
@@ -222,6 +261,7 @@ describe('errors', function () {
       iterator.forEach(
         function () {},
         {
+          concurrency: 1,
           error: function (err) {
             errors.push(err);
             return true;
@@ -255,7 +295,7 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!err);
-          assert.equal(errors.length, 5);
+          assert.equal(errors.length, 6);
           done();
         }
       );
