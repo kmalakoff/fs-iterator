@@ -36,14 +36,13 @@ describe('filtering', function () {
   after(function (done) {
     rimraf(DIR, done);
   });
+  beforeEach(function (done) {
+    rimraf(DIR, function () {
+      generate(DIR, STRUCTURE, done);
+    });
+  });
 
   describe('synchronous', function () {
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
-      });
-    });
-
     it('Should filter everything under the root directory', function (done) {
       var filterSpy = sinon.spy();
 
@@ -103,12 +102,6 @@ describe('filtering', function () {
   });
 
   describe('callbacks', function () {
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
-      });
-    });
-
     it('Should filter everything under the root directory', function (done) {
       var filterSpy = sinon.spy();
 
@@ -179,12 +172,6 @@ describe('filtering', function () {
 
   describe('promise', function () {
     if (typeof Promise === 'undefined') return; // no promise support
-
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
-      });
-    });
 
     it('Should filter everything under the root directory', function (done) {
       var filterSpy = sinon.spy();
