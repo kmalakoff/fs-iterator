@@ -33,7 +33,7 @@ describe('concurrency', function () {
     rimraf(DIR, done);
   });
 
-  describe('sync', function () {
+  describe('synchronous', function () {
     beforeEach(function (done) {
       rimraf(DIR, function () {
         generate(DIR, STRUCTURE, done);
@@ -99,7 +99,7 @@ describe('concurrency', function () {
     });
   });
 
-  describe('async', function () {
+  describe('callbacks', function () {
     beforeEach(function (done) {
       rimraf(DIR, function () {
         generate(DIR, STRUCTURE, done);

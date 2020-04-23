@@ -62,10 +62,8 @@ function Iterator(root, options) {
   this.options.readdir(this.root, function (err, files) {
     self.processing--;
     if (self.done) return;
-    if (err && compat.defaultValue(self.options.error(err), true)) err = null;
 
-    // handle error
-    if (err) self.done = err;
+    if (err) self.stack.push({ error: err });
     else if (files.length) self.stack.push({ path: null, depth: 1, files: Fifo.lifoFromArray(files) });
   });
 }
