@@ -35,7 +35,7 @@ describe('forEach', function () {
       rimraf(DIR, done);
     });
 
-    describe('sync', function () {
+    describe('synchronous', function () {
       beforeEach(function (done) {
         rimraf(DIR, function () {
           generate(DIR, STRUCTURE, done);
@@ -76,7 +76,7 @@ describe('forEach', function () {
             assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
-            assert.equal(spys.file.callCount, 0);
+            assert.equal(spys.file.callCount, 1);
             assert.equal(spys.link.callCount, 0);
             done();
           }
@@ -124,7 +124,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return entry.basename ? !entry.stats.isDirectory() : true;
+            return !entry.stats.isDirectory();
           },
           stats: true,
         });
@@ -132,11 +132,11 @@ describe('forEach', function () {
           function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
-          { limit: 4, concurrency: 1 },
+          { limit: 100, concurrency: 1 },
           function (err, empty) {
             assert.ok(!err);
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);
@@ -146,7 +146,7 @@ describe('forEach', function () {
       });
     });
 
-    describe('async', function () {
+    describe('callbacks', function () {
       beforeEach(function (done) {
         rimraf(DIR, function () {
           generate(DIR, STRUCTURE, done);
@@ -198,7 +198,7 @@ describe('forEach', function () {
             assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
-            assert.equal(spys.file.callCount, 0);
+            assert.equal(spys.file.callCount, 1);
             assert.equal(spys.link.callCount, 0);
             done();
           }
@@ -256,7 +256,7 @@ describe('forEach', function () {
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
             setTimeout(function () {
-              callback(null, entry.basename ? !entry.stats.isDirectory() : true);
+              callback(null, !entry.stats.isDirectory());
             }, 10);
           },
           callbacks: true,
@@ -266,11 +266,11 @@ describe('forEach', function () {
           function (entry) {
             spys(fs.lstatSync(entry.fullPath), entry.path);
           },
-          { limit: 4, concurrency: 1 },
+          { limit: 100, concurrency: 1 },
           function (err, empty) {
             assert.ok(!err);
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);
@@ -336,7 +336,7 @@ describe('forEach', function () {
             assert.ok(!empty);
             assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
-            assert.equal(spys.file.callCount, 0);
+            assert.equal(spys.file.callCount, 1);
             assert.equal(spys.link.callCount, 0);
             done();
           })
@@ -400,7 +400,7 @@ describe('forEach', function () {
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
             return sleep(10).then(function () {
-              return entry.basename ? !entry.stats.isDirectory() : true;
+              return !entry.stats.isDirectory();
             });
           },
           stats: true,
@@ -410,11 +410,11 @@ describe('forEach', function () {
             function (entry) {
               spys(fs.lstatSync(entry.fullPath), entry.path);
             },
-            { limit: 4, concurrency: 1 }
+            { limit: 100, concurrency: 1 }
           )
           .then(function (empty) {
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);

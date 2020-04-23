@@ -37,7 +37,7 @@ describe('filtering', function () {
     rimraf(DIR, done);
   });
 
-  describe('sync', function () {
+  describe('synchronous', function () {
     beforeEach(function (done) {
       rimraf(DIR, function () {
         generate(DIR, STRUCTURE, done);
@@ -102,7 +102,7 @@ describe('filtering', function () {
     });
   });
 
-  describe('async', function () {
+  describe('callbacks', function () {
     beforeEach(function (done) {
       rimraf(DIR, function () {
         generate(DIR, STRUCTURE, done);
@@ -157,10 +157,10 @@ describe('filtering', function () {
       var filterSpy = sinon.spy();
 
       var iterator = new Iterator(DIR, {
-        filter: function (entry) {
+        filter: function (entry, callback) {
           filterSpy();
           setTimeout(function () {
-            done(null, !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4'));
+            callback(null, !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4'));
           }, 10);
         },
         callbacks: true,
