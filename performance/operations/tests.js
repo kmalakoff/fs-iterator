@@ -5,7 +5,7 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
 
   for (const test of testOptions) {
     suite.add(`${test.name}`, async function (fn) {
-      const iterator = new Iterator(dir);
+      const iterator = new Iterator(dir, test.options);
       await iterator.forEach(fn, test.options);
       iterator.destroy(function () {});
     });
@@ -21,11 +21,11 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
   });
 
   suite.on('cycle', (results) => {
-    for (var key in results) console.log(`${results[key].name.padStart(8, ' ')}| ${suite.formatStats(results[key].stats)}`);
+    for (var key in results) console.log(`${results[key].name.padStart(10, ' ')}| ${suite.formatStats(results[key].stats)}`);
   });
   suite.on('complete', function (results) {
     console.log('-----Fastest-----');
-    for (var key in results) console.log(`${results[key].name.padStart(8, ' ')}| ${suite.formatStats(results[key].stats)}`);
+    for (var key in results) console.log(`${results[key].name.padStart(10, ' ')}| ${suite.formatStats(results[key].stats)}`);
   });
 
   console.log('----------' + suite.name + '----------');
