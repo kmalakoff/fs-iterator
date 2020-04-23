@@ -31,13 +31,13 @@ function sleep(timeout) {
 }
 
 describe('asyncIterator', function () {
+  after(function (done) {
+    rimraf(DIR, done);
+  });
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);
     });
-  });
-  after(function (done) {
-    rimraf(DIR, done);
   });
 
   it('should be default false', async function () {

@@ -29,14 +29,13 @@ describe('legacy', function () {
   after(function (done) {
     rimraf(DIR, done);
   });
-
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);
     });
   });
 
-  it('Iterator alwaysStat renamed to stats', function (done) {
+  it('Iterator alwaysStat renamed to stats (alwaysStat: true)', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -50,7 +49,29 @@ describe('legacy', function () {
       function () {},
       function (err) {
         assert.ok(!err);
-        assert.equal(spys.dir.callCount, 0);
+        assert.equal(spys.dir.callCount, 3);
+        assert.equal(spys.file.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
+        done();
+      }
+    );
+  });
+
+  it('Iterator alwaysStat renamed to stats (alwaysStat: false)', function (done) {
+    var spys = statsSpys();
+
+    var iterator = new Iterator(DIR, {
+      depth: 0,
+      filter: function (entry) {
+        spys(fs.lstatSync(entry.fullPath), entry.path);
+      },
+      alwaysStat: false,
+    });
+    iterator.forEach(
+      function () {},
+      function (err) {
+        assert.ok(!err);
+        assert.equal(spys.dir.callCount, 3);
         assert.equal(spys.file.callCount, 2);
         assert.equal(spys.link.callCount, 1);
         done();

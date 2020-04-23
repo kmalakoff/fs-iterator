@@ -100,10 +100,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 1 || errors.length === 2);
+        assert.ok(errors.length === 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );
@@ -136,14 +136,15 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 1);
+        assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );
   });
+
   it('Should handle a delete (error in forEach custom error handler)', function (done) {
     var spys = statsSpys();
     var errors = [];
@@ -170,10 +171,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 1 || errors.length === 2);
+        assert.ok(errors.length === 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );
@@ -241,10 +242,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 1 || errors.length === 2);
+        assert.ok(errors.length === 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );
@@ -280,10 +281,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 1 || errors.length === 2);
+        assert.ok(errors.length === 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );
@@ -356,10 +357,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 1 || errors.length === 2);
+        assert.ok(errors.length === 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );

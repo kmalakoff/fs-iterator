@@ -5,27 +5,27 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
 
   for (const test of testOptions) {
     suite.add(`${test.name}`, async function (fn) {
-      const iterator = new Iterator(dir);
+      const iterator = new Iterator(dir, test.options);
       await iterator.forEach(fn, test.options);
       iterator.destroy(function () {});
     });
   }
-  // suite.add(`serial`, async function (fn) {
-  //   const iterator = new Iterator(dir);
-  //   let result = await iterator.next();
-  //   while (result) {
-  //     await fn();
-  //     result = await iterator.next();
-  //   }
-  //   iterator.destroy(function () {});
-  // });
+  suite.add(`serial`, async function (fn) {
+    const iterator = new Iterator(dir);
+    let result = await iterator.next();
+    while (result) {
+      await fn();
+      result = await iterator.next();
+    }
+    iterator.destroy(function () {});
+  });
 
   suite.on('cycle', (results) => {
-    for (var key in results) console.log(`${results[key].name.padStart(8, ' ')}| ${suite.formatStats(results[key].stats)} - ${key}`);
+    for (var key in results) console.log(`${results[key].name.padStart(10, ' ')}| ${suite.formatStats(results[key].stats)} - ${key}`);
   });
   suite.on('complete', function (results) {
     console.log('-----Largest-----');
-    for (var key in results) console.log(`${results[key].name.padStart(8, ' ')}| ${suite.formatStats(results[key].stats)} - ${key}`);
+    for (var key in results) console.log(`${results[key].name.padStart(10, ' ')}| ${suite.formatStats(results[key].stats)} - ${key}`);
   });
 
   console.log('----------' + suite.name + '----------');

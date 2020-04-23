@@ -42,7 +42,7 @@ describe('symlink', function () {
         spys(fs.lstatSync(entry.fullPath), entry.path);
       },
       stats: true,
-      stat: 'lstat',
+      lstat: true,
     });
     iterator.forEach(
       function () {},
@@ -64,7 +64,7 @@ describe('symlink', function () {
         spys(fs.lstatSync(entry.fullPath), entry.path);
       },
       stats: true,
-      stat: 'stat',
+      lstat: false,
     });
     iterator.forEach(
       function () {},

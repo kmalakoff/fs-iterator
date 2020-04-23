@@ -32,14 +32,13 @@ describe('concurrency', function () {
   after(function (done) {
     rimraf(DIR, done);
   });
+  beforeEach(function (done) {
+    rimraf(DIR, function () {
+      generate(DIR, STRUCTURE, done);
+    });
+  });
 
   describe('synchronous', function () {
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
-      });
-    });
-
     it('should run with concurrency 1', function (done) {
       var filterSpy = sinon.spy();
 
@@ -100,12 +99,6 @@ describe('concurrency', function () {
   });
 
   describe('callbacks', function () {
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
-      });
-    });
-
     it('should run with concurrency 1', function (done) {
       var filterSpy = sinon.spy();
 
@@ -172,12 +165,6 @@ describe('concurrency', function () {
 
   describe('promise', function () {
     if (typeof Promise === 'undefined') return; // no promise support
-
-    beforeEach(function (done) {
-      rimraf(DIR, function () {
-        generate(DIR, STRUCTURE, done);
-      });
-    });
 
     it('should run with concurrency 1', function (done) {
       var filterSpy = sinon.spy();

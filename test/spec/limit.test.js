@@ -34,14 +34,13 @@ describe('forEach', function () {
     after(function (done) {
       rimraf(DIR, done);
     });
+    beforeEach(function (done) {
+      rimraf(DIR, function () {
+        generate(DIR, STRUCTURE, done);
+      });
+    });
 
     describe('synchronous', function () {
-      beforeEach(function (done) {
-        rimraf(DIR, function () {
-          generate(DIR, STRUCTURE, done);
-        });
-      });
-
       it('infinite limit to get all', function (done) {
         var spys = statsSpys();
 
@@ -147,12 +146,6 @@ describe('forEach', function () {
     });
 
     describe('callbacks', function () {
-      beforeEach(function (done) {
-        rimraf(DIR, function () {
-          generate(DIR, STRUCTURE, done);
-        });
-      });
-
       it('infinite limit to get all', function (done) {
         var spys = statsSpys();
 
@@ -282,12 +275,6 @@ describe('forEach', function () {
 
     describe('promise', function () {
       if (typeof Promise === 'undefined') return; // no promise support
-
-      beforeEach(function (done) {
-        rimraf(DIR, function () {
-          generate(DIR, STRUCTURE, done);
-        });
-      });
 
       it('infinite limit to get all', function (done) {
         var spys = statsSpys();

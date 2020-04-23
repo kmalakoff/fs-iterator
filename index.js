@@ -2,18 +2,14 @@ var fs = require('fs');
 var path = require('path');
 var EventEmitter = require('eventemitter3');
 var inherits = require('inherits');
-var compat = require('async-compat');
 var createProcesor = require('maximize-iterator/lib/createProcessor');
 
 var Fifo = require('./lib/Fifo');
 var PathStack = require('./lib/PathStack');
 var processOrQueue = require('./lib/processOrQueue');
 
-var DEFAULT_STAT = 'lstat';
-var DEFAULT_CONCURRENCY = Infinity;
-var DEFAULT_LIMIT = Infinity;
-var EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
 var DIRENT_SUPPORTED = 'Dirent' in fs;
+var EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
 
 function Iterator(root, options) {
   EventEmitter.call(this);
@@ -22,28 +18,26 @@ function Iterator(root, options) {
   options = options || {};
   this.options = {
     depth: options.depth === undefined ? Infinity : options.depth,
-    stats: options.stats || options.alwaysStat,
     filter: options.filter,
     callbacks: options.callbacks || options.async,
+    lstat: options.lstat,
   };
 
-  this.options.dirent = !this.options.stats && DIRENT_SUPPORTED;
-  this.options.readdir = fs.readdir;
-  if (this.options.dirent) {
-    var readdirOptions = { encoding: 'utf8', withFileTypes: this.options.dirent };
+  // use dirent vs stat each file
+  if (DIRENT_SUPPORTED && !options.alwaysStat) {
+    var readdirOptions = { encoding: 'utf8', withFileTypes: true };
     this.options.readdir = function readdir(fullPath, callback) {
       fs.readdir(fullPath, readdirOptions, callback);
     };
-  }
+  } else this.options.readdir = fs.readdir;
 
-  this.options.statName = options.stat || DEFAULT_STAT;
-  this.options.stat = fs[this.options.statName];
+  // platform compatibility
   if (process.platform === 'win32' && fs.stat.length === 3) {
-    var stat = this.options.stat;
+    var stat = fs[this.options.lstat ? 'lstat' : 'stat'];
     this.options.stat = function windowsStat(path) {
       stat(path, { bigint: true });
     };
-  }
+  } else this.options.stat = fs[this.options.lstat ? 'lstat' : 'stat'];
 
   this.options.error =
     options.error ||
@@ -53,7 +47,7 @@ function Iterator(root, options) {
       return true;
     }.bind(this);
 
-  this.root = root;
+  this.root = path.resolve(root);
   this.queued = new Fifo();
   this.processors = new Fifo();
   this.stack = new PathStack(this);
@@ -64,7 +58,7 @@ function Iterator(root, options) {
     if (self.done) return;
 
     if (err) self.stack.push({ error: err });
-    else if (files.length) self.stack.push({ path: null, depth: 1, files: Fifo.lifoFromArray(files) });
+    else if (files.length) self.stack.push({ path: null, depth: 0, files: Fifo.lifoFromArray(files) });
   });
 }
 inherits(Iterator, EventEmitter);
@@ -96,8 +90,8 @@ Iterator.prototype.forEach = function forEach(fn, options, callback) {
     options = {
       each: fn,
       callbacks: options.callbacks || options.async,
-      concurrency: options.concurrency || DEFAULT_CONCURRENCY,
-      limit: options.limit || DEFAULT_LIMIT,
+      concurrency: options.concurrency || Infinity,
+      limit: options.limit || Infinity,
       error:
         options.error ||
         function defaultError() {
