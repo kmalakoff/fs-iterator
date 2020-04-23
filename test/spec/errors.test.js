@@ -32,7 +32,7 @@ describe('errors', function () {
     rimraf(DIR, done);
   });
 
-  describe('sync', function () {
+  describe('synchronous', function () {
     beforeEach(function (done) {
       rimraf(DIR, function () {
         generate(DIR, STRUCTURE, done);
@@ -96,14 +96,14 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!err);
-          assert.equal(errors.length, 1);
+          assert.equal(errors.length, 5);
           done();
         }
       );
     });
   });
 
-  describe('async', function () {
+  describe('callbacks', function () {
     beforeEach(function (done) {
       rimraf(DIR, function () {
         generate(DIR, STRUCTURE, done);
@@ -176,7 +176,7 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!err);
-          assert.equal(errors.length, 1);
+          assert.equal(errors.length, 5);
           done();
         }
       );
@@ -255,7 +255,7 @@ describe('errors', function () {
         },
         function (err) {
           assert.ok(!err);
-          assert.equal(errors.length, 1);
+          assert.equal(errors.length, 5);
           done();
         }
       );

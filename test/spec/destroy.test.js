@@ -83,7 +83,7 @@ describe('destroy', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          if (++count === 5) iterator.destroy();
+          if (++count === 4) iterator.destroy();
           callback();
         },
         callbacks: true,
@@ -93,7 +93,7 @@ describe('destroy', function () {
         { concurrency: 1 },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 5);
+          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 0);
@@ -109,7 +109,7 @@ describe('destroy', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          if (++count === 5) iterator.destroy();
+          if (++count === 4) iterator.destroy();
           callback();
         },
         callbacks: true,
@@ -119,7 +119,7 @@ describe('destroy', function () {
         { concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 5);
+          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
           done();
         }
       );
@@ -180,13 +180,13 @@ describe('destroy', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          if (++count === 5) return iterator.destroy();
+          if (++count === 4) return iterator.destroy();
         },
       });
       iterator
         .forEach(function () {}, { concurrency: 1 })
         .then(function () {
-          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 5);
+          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 0);
@@ -204,7 +204,7 @@ describe('destroy', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           spys(fs.lstatSync(entry.fullPath), entry.path);
-          if (++count === 5) iterator.destroy();
+          if (++count === 4) iterator.destroy();
           callback();
         },
         callbacks: true,
@@ -212,7 +212,7 @@ describe('destroy', function () {
       iterator
         .forEach(function () {}, { concurrency: Infinity })
         .then(function () {
-          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 5);
+          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
           done();
         })
         .catch(function (err) {
