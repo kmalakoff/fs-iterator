@@ -5,7 +5,6 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -44,10 +43,10 @@ describe('forEach', function () {
       it('infinite limit to get all', function (done) {
         var spys = statsSpys();
 
-        var iterator = new Iterator(DIR);
+        var iterator = new Iterator(DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
           { limit: Infinity, concurrency: 1 },
           function (err, empty) {
@@ -64,10 +63,10 @@ describe('forEach', function () {
       it('should run with concurrency 1', function (done) {
         var spys = statsSpys();
 
-        var iterator = new Iterator(DIR);
+        var iterator = new Iterator(DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
           { limit: 3, concurrency: 1 },
           function (err, empty) {
@@ -85,10 +84,10 @@ describe('forEach', function () {
       it('should run with concurrency 5', function (done) {
         var spys = statsSpys();
 
-        var iterator = new Iterator(DIR);
+        var iterator = new Iterator(DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
           { limit: 3, concurrency: 5 },
           function (err, empty) {
@@ -103,10 +102,10 @@ describe('forEach', function () {
       it('should run with concurrency Infinity', function (done) {
         var spys = statsSpys();
 
-        var iterator = new Iterator(DIR);
+        var iterator = new Iterator(DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
           { limit: 3, concurrency: Infinity },
           function (err, empty) {
@@ -125,11 +124,11 @@ describe('forEach', function () {
           filter: function (entry) {
             return !entry.stats.isDirectory();
           },
-          stats: true,
+          lstat: true,
         });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
           { limit: 100, concurrency: 1 },
           function (err, empty) {
@@ -154,11 +153,12 @@ describe('forEach', function () {
             setTimeout(callback, 10);
           },
           callbacks: true,
+          lstat: true,
         });
 
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
           { limit: Infinity, concurrency: 1 },
           function (err, empty) {
@@ -180,12 +180,13 @@ describe('forEach', function () {
             setTimeout(callback, 10);
           },
           callbacks: true,
+          lstat: true,
         });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
-          { limit: 3, concurrency: 1 },
+          { lstat: true, limit: 3, concurrency: 1 },
           function (err, empty) {
             assert.ok(!err);
             assert.ok(!empty);
@@ -206,12 +207,13 @@ describe('forEach', function () {
             setTimeout(callback, 10);
           },
           callbacks: true,
+          lstat: true,
         });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
-          { limit: 3, concurrency: 5 },
+          { lstat: true, limit: 3, concurrency: 5 },
           function (err, empty) {
             assert.ok(!err);
             assert.ok(!empty);
@@ -229,10 +231,11 @@ describe('forEach', function () {
             setTimeout(callback, 10);
           },
           callbacks: true,
+          lstat: true,
         });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
           { limit: 3, concurrency: Infinity },
           function (err, empty) {
@@ -253,11 +256,11 @@ describe('forEach', function () {
             }, 10);
           },
           callbacks: true,
-          stats: true,
+          lstat: true,
         });
         iterator.forEach(
           function (entry) {
-            spys(fs.lstatSync(entry.fullPath), entry.path);
+            spys(entry.stats, entry.path);
           },
           { limit: 100, concurrency: 1 },
           function (err, empty) {
@@ -283,12 +286,13 @@ describe('forEach', function () {
           filter: function (entry) {
             return sleep(10);
           },
+          lstat: true,
         });
 
         iterator
           .forEach(
             function (entry) {
-              spys(fs.lstatSync(entry.fullPath), entry.path);
+              spys(entry.stats, entry.path);
             },
             { limit: Infinity, concurrency: 1 }
           )
@@ -311,11 +315,12 @@ describe('forEach', function () {
           filter: function (entry) {
             return sleep(10);
           },
+          lstat: true,
         });
         iterator
           .forEach(
             function (entry) {
-              spys(fs.lstatSync(entry.fullPath), entry.path);
+              spys(entry.stats, entry.path);
             },
             { limit: 3, concurrency: 1 }
           )
@@ -339,11 +344,12 @@ describe('forEach', function () {
           filter: function (entry) {
             return sleep(10);
           },
+          lstat: true,
         });
         iterator
           .forEach(
             function (entry) {
-              spys(fs.lstatSync(entry.fullPath), entry.path);
+              spys(entry.stats, entry.path);
             },
             { limit: 3, concurrency: 5 }
           )
@@ -364,11 +370,12 @@ describe('forEach', function () {
           filter: function (entry) {
             return sleep(10);
           },
+          lstat: true,
         });
         iterator
           .forEach(
             function (entry) {
-              spys(fs.lstatSync(entry.fullPath), entry.path);
+              spys(entry.stats, entry.path);
             },
             { limit: 3, concurrency: Infinity }
           )
@@ -390,12 +397,12 @@ describe('forEach', function () {
               return !entry.stats.isDirectory();
             });
           },
-          stats: true,
+          lstat: true,
         });
         iterator
           .forEach(
             function (entry) {
-              spys(fs.lstatSync(entry.fullPath), entry.path);
+              spys(entry.stats, entry.path);
             },
             { limit: 100, concurrency: 1 }
           )

@@ -5,7 +5,6 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -40,37 +39,15 @@ describe('depth', function () {
   });
 
   describe('synchronous', function () {
-    it('depth 0 (stats: true)', function (done) {
+    it('depth 0', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         },
-        stats: true,
-      });
-      iterator.forEach(
-        function () {},
-        function (err) {
-          assert.ok(!err);
-          assert.equal(spys.dir.callCount, 3);
-          assert.equal(spys.file.callCount, 2);
-          assert.equal(spys.link.callCount, 1);
-          done();
-        }
-      );
-    });
-
-    it.skip('depth 0 (stats: false)', function (done) {
-      var spys = statsSpys();
-
-      var iterator = new Iterator(DIR, {
-        depth: 0,
-        filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
-        },
-        stats: false,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -90,9 +67,9 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         },
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -112,9 +89,9 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         },
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -132,11 +109,11 @@ describe('depth', function () {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        depth: 3,
+        depth: Infinity,
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         },
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -152,17 +129,17 @@ describe('depth', function () {
   });
 
   describe('callbacks', function () {
-    it('depth 0 (stats: true)', function (done) {
+    it('depth 0', function (done) {
       var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           setTimeout(callback, 10);
         },
         callbacks: true,
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -182,11 +159,11 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           setTimeout(callback, 10);
         },
         callbacks: true,
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -206,11 +183,11 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           setTimeout(callback, 10);
         },
         callbacks: true,
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -230,11 +207,11 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           setTimeout(callback, 10);
         },
         callbacks: true,
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -258,10 +235,10 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           return sleep(10);
         },
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -281,10 +258,10 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           return sleep(10);
         },
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -304,10 +281,10 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           return sleep(10);
         },
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -327,10 +304,10 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           return sleep(10);
         },
-        stats: true,
+        lstat: true,
       });
       iterator.forEach(
         function () {},

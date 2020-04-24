@@ -1,6 +1,5 @@
 var chai = require('chai');
 chai.use(require('sinon-chai'));
-var fs = require('fs');
 
 var assert = chai.assert;
 var sinon = require('sinon');
@@ -35,50 +34,6 @@ describe('legacy', function () {
     });
   });
 
-  it('Iterator alwaysStat renamed to stats (alwaysStat: true)', function (done) {
-    var spys = statsSpys();
-
-    var iterator = new Iterator(DIR, {
-      depth: 0,
-      filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
-      },
-      alwaysStat: true,
-    });
-    iterator.forEach(
-      function () {},
-      function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 3);
-        assert.equal(spys.file.callCount, 2);
-        assert.equal(spys.link.callCount, 1);
-        done();
-      }
-    );
-  });
-
-  it('Iterator alwaysStat renamed to stats (alwaysStat: false)', function (done) {
-    var spys = statsSpys();
-
-    var iterator = new Iterator(DIR, {
-      depth: 0,
-      filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
-      },
-      alwaysStat: false,
-    });
-    iterator.forEach(
-      function () {},
-      function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 3);
-        assert.equal(spys.file.callCount, 2);
-        assert.equal(spys.link.callCount, 1);
-        done();
-      }
-    );
-  });
-
   it('Iterator async renamed to callbacks', function (done) {
     var filterSpy = sinon.spy();
 
@@ -88,6 +43,7 @@ describe('legacy', function () {
         setTimeout(callback, 10);
       },
       async: true,
+      lstat: true,
     });
     iterator.forEach(
       function () {},
@@ -103,10 +59,10 @@ describe('legacy', function () {
   it('forEach async renamed to callbacks', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR);
+    var iterator = new Iterator(DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
         assert.ok(entry);
         assert.ok(callback);
         setTimeout(function () {
