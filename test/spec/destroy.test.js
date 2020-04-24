@@ -5,7 +5,6 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -39,8 +38,9 @@ describe('destroy', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         },
+        lstat: true,
       });
       iterator.forEach(
         function () {},
@@ -60,7 +60,7 @@ describe('destroy', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         },
       });
       iterator.destroy();
@@ -82,7 +82,7 @@ describe('destroy', function () {
       var count = 0;
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           if (++count === 4) iterator.destroy();
           callback();
         },
@@ -108,7 +108,7 @@ describe('destroy', function () {
       var count = 0;
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           if (++count === 4) iterator.destroy();
           callback();
         },
@@ -134,8 +134,9 @@ describe('destroy', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         },
+        lstat: true,
       });
       iterator
         .forEach(function () {})
@@ -156,7 +157,7 @@ describe('destroy', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         },
       });
       iterator.destroy();
@@ -179,9 +180,10 @@ describe('destroy', function () {
       var count = 0;
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           if (++count === 4) return iterator.destroy();
         },
+        lstat: true,
       });
       iterator
         .forEach(function () {}, { concurrency: 1 })
@@ -203,7 +205,7 @@ describe('destroy', function () {
       var count = 0;
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
           if (++count === 4) iterator.destroy();
           callback();
         },
