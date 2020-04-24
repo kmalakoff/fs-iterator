@@ -30,9 +30,7 @@
   "homepage": "https://github.com/kmalakoff/fs-iterator",
   "dependencies": {
     "async-compat": "^1.4.1",
-    "eventemitter3": "^4.0.0",
     "fifo": "^2.3.0",
-    "inherits": "^2.0.4",
     "maximize-iterator": "^2.6.2"
   },
   "devDependencies": {
