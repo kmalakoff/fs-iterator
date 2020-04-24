@@ -8,7 +8,7 @@ var Fifo = require('./lib/Fifo');
 var PathStack = require('./lib/PathStack');
 var processOrQueue = require('./lib/processOrQueue');
 
-var DIRENT_SUPPORTED = 'Dirent' in fs;
+var DIRENT_SUPPORTED = !!fs.Dirent;
 var EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
 
 function Iterator(root, options) {
@@ -18,9 +18,9 @@ function Iterator(root, options) {
   options = options || {};
   this.options = {
     depth: options.depth === undefined ? Infinity : options.depth,
-    filter: options.filter,
-    callbacks: options.callbacks || options.async,
-    lstat: options.lstat,
+    filter: options.filter || null,
+    callbacks: options.callbacks || options.async || false,
+    lstat: options.lstat || false,
   };
 
   // use dirent vs stat each file

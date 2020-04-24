@@ -9,7 +9,7 @@ Entries are of the format:
 - string: basename - file or directory name
 - string: path - realtive path from the directory to the file or directory
 - string: fullPath - full path to the file or directory
-- fs.Stats: stats - file, directory or symlink stats
+- fs.Stats || fsDirent: stats - file, directory or symlink stats
 
 **Promise**
 
