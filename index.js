@@ -1,18 +1,12 @@
 var fs = require('fs');
 var path = require('path');
-var EventEmitter = require('eventemitter3');
-var inherits = require('inherits');
 var createProcesor = require('maximize-iterator/lib/createProcessor');
 
 var Fifo = require('./lib/Fifo');
 var PathStack = require('./lib/PathStack');
 var processOrQueue = require('./lib/processOrQueue');
 
-var DIRENT_SUPPORTED = !!fs.Dirent;
-var EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
-
 function Iterator(root, options) {
-  EventEmitter.call(this);
   var self = this;
 
   options = options || {};
@@ -24,7 +18,7 @@ function Iterator(root, options) {
   };
 
   // use dirent vs stat each file
-  if (DIRENT_SUPPORTED && !options.alwaysStat) {
+  if (fs.Dirent && !options.alwaysStat) {
     var readdirOptions = { encoding: 'utf8', withFileTypes: true };
     this.options.readdir = function readdir(fullPath, callback) {
       fs.readdir(fullPath, readdirOptions, callback);
@@ -42,10 +36,8 @@ function Iterator(root, options) {
   this.options.error =
     options.error ||
     function defaultError(err) {
-      if (!~EXPECTED_ERRORS.indexOf(err.code)) return false;
-      this.emit('error', err);
-      return true;
-    }.bind(this);
+      return ~Iterator.EXPECTED_ERRORS.indexOf(err.code); // skip known issues
+    };
 
   this.root = path.resolve(root);
   this.queued = new Fifo();
@@ -61,7 +53,25 @@ function Iterator(root, options) {
     else if (files.length) self.stack.push({ path: null, depth: 0, files: Fifo.lifoFromArray(files) });
   });
 }
-inherits(Iterator, EventEmitter);
+
+Iterator.EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
+
+Iterator.prototype.destroy = function destroy() {
+  if (this.destroyed) throw new Error('Already destroyed');
+  this.destroyed = true;
+
+  // iterator
+  this.done = true;
+  this.options = null;
+  this.root = null;
+  while (this.processors.length) this.processors.pop()(true);
+  this.processors = null;
+  while (this.queued.length) this.queued.pop()(null, null);
+  this.queued = null;
+  this.processMore = null;
+  this.stack.destroy();
+  this.stack = null;
+};
 
 Iterator.prototype.next = function next(callback) {
   if (typeof callback === 'function') {
@@ -119,27 +129,6 @@ Iterator.prototype.forEach = function forEach(fn, options, callback) {
       });
     });
   }
-};
-
-Iterator.prototype.destroy = function destroy() {
-  if (this.destroyed) throw new Error('Already destroyed');
-  this.destroyed = true;
-
-  // event emitter
-  this._events = null;
-  this._eventsCount = 0;
-
-  // iterator
-  this.done = true;
-  this.options = null;
-  this.root = null;
-  while (this.processors.length) this.processors.pop()(true);
-  this.processors = null;
-  while (this.queued.length) this.queued.pop()(null, null);
-  this.queued = null;
-  this.processMore = null;
-  this.stack.destroy();
-  this.stack = null;
 };
 
 if (typeof Symbol !== 'undefined' && Symbol.asyncIterator) {
