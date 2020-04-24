@@ -6,7 +6,6 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -67,8 +66,9 @@ describe('asyncIterator', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
       },
+      lstat: true,
     });
 
     for await (const value of iterator) {
@@ -88,9 +88,10 @@ describe('asyncIterator', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
         return true;
       },
+      lstat: true,
     });
 
     for await (const value of iterator) {

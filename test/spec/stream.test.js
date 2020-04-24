@@ -5,7 +5,7 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
+
 var stream = require('stream');
 var inherits = require('inherits');
 
@@ -70,9 +70,9 @@ describe('stream', function () {
   it('simple forEach (async)', function (done) {
     var spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(new Iterator(DIR));
+    var iteratorStream = new IteratorStream(new Iterator(DIR, { lstat: true }));
     iteratorStream.on('data', function (entry) {
-      spys(fs.lstatSync(entry.fullPath), entry.path);
+      spys(entry.stats, entry.path);
     });
     iteratorStream.on('error', function (err) {
       assert.ok(!err);

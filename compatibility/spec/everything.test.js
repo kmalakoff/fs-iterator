@@ -5,7 +5,6 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -38,8 +37,9 @@ describe('everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
       },
+      lstat: true,
     });
     iterator.forEach(
       function () {},
@@ -58,9 +58,10 @@ describe('everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
         return true;
       },
+      lstat: true,
     });
     iterator.forEach(
       function () {},
@@ -81,7 +82,7 @@ describe('everything', function () {
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
         try {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         } catch (err) {
           return err;
         }
@@ -89,6 +90,8 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
+      alwaysStat: true,
+      lstat: true,
     });
     iterator.on('error', function (err) {
       errors.push(err);
@@ -100,10 +103,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 2);
+        assert.equal(errors.length, 1);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 1);
+        assert.equal(spys.link.callCount, 2);
         done();
       }
     );
@@ -116,7 +119,7 @@ describe('everything', function () {
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
         try {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         } catch (err) {
           return err;
         }
@@ -124,7 +127,8 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
-      stats: true,
+      alwaysStat: true,
+      lstat: true,
     });
     iterator.on('error', function (err) {
       errors.push(err);
@@ -136,10 +140,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 2);
+        assert.equal(errors.length, 1);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 1);
+        assert.equal(spys.link.callCount, 2);
         done();
       }
     );
@@ -152,7 +156,7 @@ describe('everything', function () {
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
         try {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         } catch (err) {
           return err;
         }
@@ -160,6 +164,8 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
+      alwaysStat: true,
+      lstat: true,
       error: function (err) {
         errors.push(err);
       },
@@ -171,10 +177,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 2);
+        assert.equal(errors.length, 1);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 1);
+        assert.equal(spys.link.callCount, 2);
         done();
       }
     );
@@ -186,7 +192,7 @@ describe('everything', function () {
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
         try {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         } catch (err) {
           return err;
         }
@@ -194,6 +200,8 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
+      alwaysStat: true,
+      lstat: true,
       error: function (err) {
         return false;
       },
@@ -220,7 +228,7 @@ describe('everything', function () {
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
         try {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         } catch (err) {
           return err;
         }
@@ -228,6 +236,8 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
+      alwaysStat: true,
+      lstat: true,
       error: function (err) {
         return false;
       },
@@ -242,10 +252,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 2);
+        assert.equal(errors.length, 1);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 1);
+        assert.equal(spys.link.callCount, 2);
         done();
       }
     );
@@ -258,7 +268,7 @@ describe('everything', function () {
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
         try {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         } catch (err) {
           return err;
         }
@@ -266,6 +276,8 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
+      alwaysStat: true,
+      lstat: true,
       error: function (err) {
         return false;
       },
@@ -281,10 +293,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 2);
+        assert.equal(errors.length, 1);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 1);
+        assert.equal(spys.link.callCount, 2);
         done();
       }
     );
@@ -297,7 +309,7 @@ describe('everything', function () {
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
         try {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         } catch (err) {
           return err;
         }
@@ -305,6 +317,8 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
+      alwaysStat: true,
+      lstat: true,
       error: function (err) {
         return false;
       },
@@ -335,7 +349,7 @@ describe('everything', function () {
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
         try {
-          spys(fs.lstatSync(entry.fullPath), entry.path);
+          spys(entry.stats, entry.path);
         } catch (err) {
           return err;
         }
@@ -343,6 +357,8 @@ describe('everything', function () {
         if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
+      alwaysStat: true,
+      lstat: true,
       error: function (err) {
         return false;
       },
@@ -357,10 +373,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.ok(errors.length === 2);
+        assert.equal(errors.length, 1);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 1);
+        assert.equal(spys.link.callCount, 2);
         done();
       }
     );

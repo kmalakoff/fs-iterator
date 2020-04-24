@@ -6,7 +6,6 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -68,10 +67,10 @@ describe('promise', function () {
   it('simple forEach (async)', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR);
+    var iterator = new Iterator(DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
         assert.ok(entry);
         assert.ok(!callback);
         return sleep(10);
@@ -89,10 +88,10 @@ describe('promise', function () {
   it('simple forEach (async, stop)', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR);
+    var iterator = new Iterator(DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
         assert.ok(entry);
         assert.ok(!callback);
         return sleep(10).then(function () {
@@ -114,8 +113,9 @@ describe('promise', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
       },
+      lstat: true,
     });
 
     function consume() {
@@ -136,9 +136,10 @@ describe('promise', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
         return true;
       },
+      lstat: true,
     });
 
     function consume() {

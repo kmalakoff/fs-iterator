@@ -20,23 +20,45 @@ var STRUCTURE = {
   'dir3/dir4/dir5': null,
   link1: '~dir3/dir4/file1',
   'dir3/link2': '~dir2/file1',
-  link2: '~dir3/dir4',
 };
 
-describe('symlink', function () {
+describe('alwaysStat', function () {
+  after(function (done) {
+    rimraf(DIR, done);
+  });
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);
     });
   });
-  after(function (done) {
-    rimraf(DIR, done);
-  });
 
-  it('Should find everything with no return (lstat)', function (done) {
+  it('depth 0', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
+      depth: 0,
+      filter: function (entry) {
+        spys(entry.stats, entry.path);
+      },
+      lstat: true,
+    });
+    iterator.forEach(
+      function () {},
+      function (err) {
+        assert.ok(!err);
+        assert.equal(spys.dir.callCount, 3);
+        assert.equal(spys.file.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
+        done();
+      }
+    );
+  });
+
+  it('depth Infinity', function (done) {
+    var spys = statsSpys();
+
+    var iterator = new Iterator(DIR, {
+      depth: Infinity,
       filter: function (entry) {
         spys(entry.stats, entry.path);
       },
@@ -48,28 +70,7 @@ describe('symlink', function () {
         assert.ok(!err);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 3);
-        done();
-      }
-    );
-  });
-
-  it('Should find everything with no return (stat)', function (done) {
-    var spys = statsSpys();
-
-    var iterator = new Iterator(DIR, {
-      filter: function (entry) {
-        spys(entry.stats, entry.path);
-      },
-      lstat: false,
-    });
-    iterator.forEach(
-      function () {},
-      function (err) {
-        assert.ok(!err);
-        assert.equal(spys.dir.callCount, 7);
-        assert.equal(spys.file.callCount, 8);
-        assert.equal(spys.link.callCount, 0);
+        assert.equal(spys.link.callCount, 2);
         done();
       }
     );

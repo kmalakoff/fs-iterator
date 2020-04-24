@@ -6,7 +6,6 @@ var sinon = require('sinon');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
 
 var Iterator = require('../..');
 
@@ -87,7 +86,7 @@ describe('filtering', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
           filterSpy();
-          return !fs.statSync(entry.fullPath).isDirectory() || startsWith(entry.path, 'dir3/dir4');
+          return entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
         },
       });
       iterator.forEach(
@@ -157,7 +156,6 @@ describe('filtering', function () {
           }, 10);
         },
         callbacks: true,
-        stats: true,
       });
       iterator.forEach(
         function () {},
@@ -225,7 +223,6 @@ describe('filtering', function () {
             return !entry.stats.isDirectory() || startsWith(entry.path, 'dir3/dir4');
           });
         },
-        stats: true,
       });
       iterator.forEach(
         function () {},

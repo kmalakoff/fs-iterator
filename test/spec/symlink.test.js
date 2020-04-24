@@ -5,7 +5,6 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -39,9 +38,8 @@ describe('symlink', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
       },
-      stats: true,
       lstat: true,
     });
     iterator.forEach(
@@ -61,18 +59,17 @@ describe('symlink', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(fs.lstatSync(entry.fullPath), entry.path);
+        spys(entry.stats, entry.path);
       },
-      stats: true,
       lstat: false,
     });
     iterator.forEach(
       function () {},
       function (err) {
         assert.ok(!err);
-        assert.equal(spys.dir.callCount, 6);
-        assert.equal(spys.file.callCount, 6);
-        assert.equal(spys.link.callCount, 3);
+        assert.equal(spys.dir.callCount, 7);
+        assert.equal(spys.file.callCount, 8);
+        assert.equal(spys.link.callCount, 0);
         done();
       }
     );
