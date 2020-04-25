@@ -9,29 +9,29 @@
   },
   "license": "MIT",
   "scripts": {
-    "test-main": "mocha . spec/**/*.test.js",
-    "test-0.8": "nave use 0.8 npm run test-main",
-    "test-0.10": "nave use 0.10 npm run test-main",
-    "test-0.12": "nave use 0.12 npm run test-main",
-    "test-4": "nave use 4 npm run test-main",
-    "test-6": "nave use 6 npm run test-main",
-    "test-8": "nave use 8 npm run test-main",
-    "test-10": "nave use 10 npm run test-main",
-    "test-12": "nave use 12 npm run test-main",
-    "test-13": "nave use 13 npm run test-main",
-    "test": "npm run test-12 && npm run test-13 && npm run test-0.10 && npm run test-0.12 && npm run test-4 && npm run test-6 && npm run test-8 && npm run test-10"
+    "test": "node --version && mocha . spec/**/*.test.js",
+    "test-0.8": "nave use 0.8 npm run test",
+    "test-0.10": "nave use 0.10 npm run test",
+    "test-0.12": "nave use 0.12 npm run test",
+    "test-4": "nave use 4 npm run test",
+    "test-6": "nave use 6 npm run test",
+    "test-8": "nave use 8 npm run test",
+    "test-10": "nave use 10 npm run test",
+    "test-12": "nave use 12 npm run test",
+    "test-14": "nave use 14 npm run test",
+    "test-all": "run-s test-0.10 test-0.12 test-4 test-6 test-8 test-10 test-12 test-14"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "chai": "^4.2.0",
-    "fs-extra": "^1.0.0",
     "fs-generate": "^1.1.0",
+    "inherits": "^2.0.4",
+    "is-promise": "^2.2.2",
     "mocha": "^3.5.3",
     "nave": "^3.2.1",
-    "queue-cb": "^1.1.0",
-    "require-dir": "^1.2.0",
+    "npm-run-all": "^4.1.5",
     "rimraf": "^2.7.1",
     "sinon": "^2.4.1",
     "sinon-chai": "^2.14.0"
-  },
-  "devDependencies": {}
+  }
 }
