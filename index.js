@@ -14,7 +14,6 @@ function Iterator(root, options) {
     depth: options.depth === undefined ? Infinity : options.depth,
     filter: options.filter || null,
     callbacks: options.callbacks || options.async || false,
-    lstat: options.lstat || false,
   };
 
   // use dirent vs stat each file
@@ -27,11 +26,11 @@ function Iterator(root, options) {
 
   // platform compatibility
   if (process.platform === 'win32' && fs.stat.length === 3) {
-    var stat = fs[this.options.lstat ? 'lstat' : 'stat'];
+    var stat = fs[options.lstat ? 'lstat' : 'stat'];
     this.options.stat = function windowsStat(path) {
       stat(path, { bigint: true });
     };
-  } else this.options.stat = fs[this.options.lstat ? 'lstat' : 'stat'];
+  } else this.options.stat = fs[options.lstat ? 'lstat' : 'stat'];
 
   this.options.error =
     options.error ||
@@ -115,7 +114,7 @@ Iterator.prototype.forEach = function forEach(fn, options, callback) {
     };
 
     var processor = createProcesor(this.next.bind(this), options, function processorCallback(err) {
-      if (!self.destroyed) self.processors.discard(processor);
+      if (!self.destroyed) self.processors.remove(self.processors.find(processor));
       processor = null;
       options = null;
       return callback(err, self.done ? true : !self.stack.length);

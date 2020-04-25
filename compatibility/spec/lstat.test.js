@@ -5,6 +5,7 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
+var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -46,9 +47,15 @@ describe('lstat', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 3);
-          assert.equal(spys.file.callCount, 3);
-          assert.equal(spys.link.callCount, 0);
+          if (fs.Dirent) {
+            assert.equal(spys.dir.callCount, 3);
+            assert.equal(spys.file.callCount, 2);
+            assert.equal(spys.link.callCount, 1);
+          } else {
+            assert.equal(spys.dir.callCount, 3);
+            assert.equal(spys.file.callCount, 3);
+            assert.equal(spys.link.callCount, 0);
+          }
           done();
         }
       );
@@ -67,9 +74,15 @@ describe('lstat', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 7);
-          assert.equal(spys.link.callCount, 0);
+          if (fs.Dirent) {
+            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.file.callCount, 5);
+            assert.equal(spys.link.callCount, 2);
+          } else {
+            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.file.callCount, 7);
+            assert.equal(spys.link.callCount, 0);
+          }
           done();
         }
       );
@@ -91,9 +104,15 @@ describe('lstat', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 3);
-          assert.equal(spys.file.callCount, 3);
-          assert.equal(spys.link.callCount, 0);
+          if (fs.Dirent) {
+            assert.equal(spys.dir.callCount, 3);
+            assert.equal(spys.file.callCount, 2);
+            assert.equal(spys.link.callCount, 1);
+          } else {
+            assert.equal(spys.dir.callCount, 3);
+            assert.equal(spys.file.callCount, 3);
+            assert.equal(spys.link.callCount, 0);
+          }
           done();
         }
       );
@@ -113,9 +132,15 @@ describe('lstat', function () {
         function () {},
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 7);
-          assert.equal(spys.link.callCount, 0);
+          if (fs.Dirent) {
+            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.file.callCount, 5);
+            assert.equal(spys.link.callCount, 2);
+          } else {
+            assert.equal(spys.dir.callCount, 5);
+            assert.equal(spys.file.callCount, 7);
+            assert.equal(spys.link.callCount, 0);
+          }
           done();
         }
       );
