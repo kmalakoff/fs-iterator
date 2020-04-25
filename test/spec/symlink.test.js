@@ -5,6 +5,7 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
+var fs = require('fs');
 
 var Iterator = require('../..');
 var statsSpys = require('../utils').statsSpys;
@@ -46,9 +47,15 @@ describe('symlink', function () {
       function () {},
       function (err) {
         assert.ok(!err);
-        assert.equal(spys.dir.callCount, 5);
-        assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 3);
+        if (fs.Dirent) {
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 6);
+          assert.equal(spys.link.callCount, 3);
+        } else {
+          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 3);
+        }
         done();
       }
     );
@@ -67,9 +74,15 @@ describe('symlink', function () {
       function () {},
       function (err) {
         assert.ok(!err);
-        assert.equal(spys.dir.callCount, 7);
-        assert.equal(spys.file.callCount, 8);
-        assert.equal(spys.link.callCount, 0);
+        if (fs.Dirent) {
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 6);
+          assert.equal(spys.link.callCount, 3);
+        } else {
+          assert.equal(spys.dir.callCount, 7);
+          assert.equal(spys.file.callCount, 8);
+          assert.equal(spys.link.callCount, 0);
+        }
         done();
       }
     );
