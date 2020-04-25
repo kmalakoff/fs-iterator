@@ -22,7 +22,7 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-var statsSpys = require('../utils').statsSpys;
+var statsSpys = require('../statsSpys');
 
 describe('legacy', function () {
   after(function (done) {
