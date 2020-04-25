@@ -8,7 +8,7 @@ var rimraf = require('rimraf');
 var path = require('path');
 
 var Iterator = require('../..');
-var statsSpys = require('../utils').statsSpys;
+var statsSpys = require('../statsSpys');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {

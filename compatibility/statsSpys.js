@@ -1,6 +1,6 @@
 var sinon = require('sinon');
 
-module.exports.statsSpys = function statsSpys() {
+module.exports = function statsSpys() {
   function spys(stats) {
     if (stats.isSymbolicLink()) spys.link(stats);
     else if (stats.isDirectory()) spys.dir(stats);

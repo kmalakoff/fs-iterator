@@ -18,6 +18,7 @@ function Iterator(root, options) {
 
   // use dirent vs stat each file
   if (fs.Dirent && !options.alwaysStat) {
+    if (options.lstat) console.log('Using fs.Dirent. Skipping lstat');
     var readdirOptions = { encoding: 'utf8', withFileTypes: true };
     this.options.readdir = function readdir(fullPath, callback) {
       fs.readdir(fullPath, readdirOptions, callback);
