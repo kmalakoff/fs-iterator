@@ -71,11 +71,7 @@ describe('forEach', function () {
       var iterator = new Iterator(DIR, { lstat: true });
       iterator.forEach(
         function (entry) {
-          try {
-            spys(entry.stats, entry.path);
-          } catch (err) {
-            return err;
-          }
+          spys(entry.stats, entry.path);
         },
         function (err) {
           assert.ok(!err);
