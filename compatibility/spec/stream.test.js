@@ -6,11 +6,8 @@ var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 
-var stream = require('stream');
-var inherits = require('inherits');
-
-var Iterator = require('../..');
-var statsSpys = require('../utils').statsSpys;
+var statsSpys = require('../statsSpys');
+var IteratorStream = require('../IteratorStream');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -25,38 +22,6 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-function IteratorStream(iterator, options) {
-  if (!(this instanceof IteratorStream)) throw new Error('Create IteratorStream using new');
-  options = options || {};
-  stream.Readable.call(this, { objectMode: true, autoDestroy: true, highWaterMark: options.highWaterMark || 4096 });
-  this.iterator = iterator;
-  this.options = options;
-}
-inherits(IteratorStream, stream.Readable);
-
-IteratorStream.prototype._read = function (batch) {
-  if (this.reading) return;
-  this.reading = true;
-
-  var self = this;
-  this.iterator.forEach(
-    function (entry) {
-      if (self.destroyed) return;
-      self.push(entry);
-    },
-    { limit: batch, concurrency: this.highWaterMark || 4096 },
-    function (err, done) {
-      self.reading = false;
-      if (err) return self.destroy(err);
-      if (done) self.push(null);
-    }
-  );
-};
-IteratorStream.prototype.destroy = function (err) {
-  stream.Readable.prototype.destroy.call(this, err);
-  if (!this.iterator.destroyed) this.iterator.destroy();
-};
-
 describe('stream', function () {
   beforeEach(function (done) {
     rimraf(DIR, function () {
@@ -67,10 +32,10 @@ describe('stream', function () {
     rimraf(DIR, done);
   });
 
-  it('simple forEach (async)', function (done) {
+  it('default', function (done) {
     var spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(new Iterator(DIR, { lstat: true }));
+    var iteratorStream = new IteratorStream(DIR);
     iteratorStream.on('data', function (entry) {
       spys(entry.stats, entry.path);
     });
@@ -79,6 +44,50 @@ describe('stream', function () {
     });
     iteratorStream.on('end', function () {
       assert.equal(spys.dir.callCount, 5);
+      assert.equal(spys.file.callCount, 5);
+      assert.equal(spys.link.callCount, 2);
+      done();
+    });
+  });
+
+  it('directories only (highWaterMark: 1)', function (done) {
+    var spys = statsSpys();
+
+    var iteratorStream = new IteratorStream(DIR, {
+      highWaterMark: 1,
+      filter: function filter(entry) {
+        return entry.stats.isDirectory();
+      },
+    });
+    iteratorStream.on('data', function (entry) {
+      spys(entry.stats, entry.path);
+    });
+    iteratorStream.on('error', function (err) {
+      assert.ok(!err);
+    });
+    iteratorStream.on('end', function () {
+      assert.equal(spys.dir.callCount, 5);
+      assert.equal(spys.file.callCount, 0);
+      assert.equal(spys.link.callCount, 0);
+      done();
+    });
+  });
+
+  it('skip directories (highWaterMark: 1)', function (done) {
+    var spys = statsSpys();
+
+    var iteratorStream = new IteratorStream(DIR, {
+      highWaterMark: 1,
+    });
+    iteratorStream.on('data', function (entry) {
+      if (entry.stats.isDirectory()) return;
+      spys(entry.stats, entry.path);
+    });
+    iteratorStream.on('error', function (err) {
+      assert.ok(!err);
+    });
+    iteratorStream.on('end', function () {
+      assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
       done();
