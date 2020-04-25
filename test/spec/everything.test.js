@@ -21,6 +21,7 @@ var STRUCTURE = {
   link1: '~dir3/dir4/file1',
   'dir3/link2': '~dir2/file1',
 };
+var DELETE_PATH = 'dir2' + path.sep + 'file1';
 
 describe('everything', function () {
   beforeEach(function (done) {
@@ -81,13 +82,9 @@ describe('everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        try {
-          spys(entry.stats, entry.path);
-        } catch (err) {
-          return err;
-        }
+        spys(entry.stats, entry.path);
 
-        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -117,13 +114,9 @@ describe('everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        try {
-          spys(entry.stats, entry.path);
-        } catch (err) {
-          return err;
-        }
+        spys(entry.stats, entry.path);
 
-        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -154,13 +147,9 @@ describe('everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        try {
-          spys(entry.stats, entry.path);
-        } catch (err) {
-          return err;
-        }
+        spys(entry.stats, entry.path);
 
-        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -195,13 +184,9 @@ describe('everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        try {
-          spys(entry.stats, entry.path);
-        } catch (err) {
-          return err;
-        }
+        spys(entry.stats, entry.path);
 
-        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -237,13 +222,9 @@ describe('everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        try {
-          spys(entry.stats, entry.path);
-        } catch (err) {
-          return err;
-        }
+        spys(entry.stats, entry.path);
 
-        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -278,13 +259,9 @@ describe('everything', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        try {
-          spys(entry.stats, entry.path);
-        } catch (err) {
-          return err;
-        }
+        spys(entry.stats, entry.path);
 
-        if (entry.path === 'dir2/file1') rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
