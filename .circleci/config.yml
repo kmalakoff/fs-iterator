@@ -1,43 +1,19 @@
 version: 2.1
-
-executors:
-  windows: win/default
-  node: node/default
-  # linux:
-  #   docker:
-  #     - image: cimg/base:2020.01
-  # macos:
-  #   macos:
-  #     xcode: 11.4
-
 orbs:
   node: circleci/node@2.0.3
   win: circleci/windows@2.4.0
-
 jobs:
-  test:
-    parameters:
-      os:
-        type: executor
-      node-version:
-        type: string
-    executor: << parameters.os >>
+  node:
+    executor:
+      name: node/default
     steps:
       - checkout
-      - node/install:
-          node-version: '<< parameters.node-version >>'
-          install-yarn: false
-          install-npm: false
       - run: npm install --production
       - run: cd compatibility && npm install
       - run: cd compatibility && npm run test-all
-  test-windows:
-    parameters:
-      os:
-        type: executor
-      node-version:
-        type: string
-    executor: << parameters.os >>
+  windows:
+    executor:
+      name: win/default
     steps:
       - checkout
       - run: npm install
@@ -46,13 +22,63 @@ jobs:
 workflows:
   all-tests:
     jobs:
-      - test:
-          matrix:
-            parameters:
-              os: [node]
-              node-version: ['latest']
-      # - test-windows:
-      #     matrix:
-      #       parameters:
-      #         os: [windows]
-      #         node-version: ['latest']
+      - node
+      # - windows
+# version: 2.1
+
+# executors:
+#   windows: win/default
+#   node: node/default
+#   # linux:
+#   #   docker:
+#   #     - image: cimg/base:2020.01
+#   # macos:
+#   #   macos:
+#   #     xcode: 11.4
+
+# orbs:
+#   node: circleci/node@2.0.3
+#   win: circleci/windows@2.4.0
+
+# jobs:
+#   test:
+#     parameters:
+#       os:
+#         type: executor
+#       node-version:
+#         type: string
+#     executor: << parameters.os >>
+#     steps:
+#       - checkout
+#       - node/install:
+#           node-version: '<< parameters.node-version >>'
+#           install-yarn: false
+#           install-npm: false
+#       - run: npm install --production
+#       - run: cd compatibility && npm install
+#       - run: cd compatibility && npm run test-all
+#   test-windows:
+#     parameters:
+#       os:
+#         type: executor
+#       node-version:
+#         type: string
+#     executor: << parameters.os >>
+#     steps:
+#       - checkout
+#       - run: npm install
+#       - run: npm test
+
+# workflows:
+#   all-tests:
+#     jobs:
+#       - test:
+#           matrix:
+#             parameters:
+#               os: [node]
+#               node-version: ['latest']
+#       # - test-windows:
+#       #     matrix:
+#       #       parameters:
+#       #         os: [windows]
+#       #         node-version: ['latest']
