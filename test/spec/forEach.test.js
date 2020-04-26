@@ -5,8 +5,8 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
-
 var isPromise = require('is-promise');
+var nextTick = require('next-tick');
 
 var Iterator = require('../..');
 var statsSpys = require('../statsSpys');
@@ -92,7 +92,7 @@ describe('forEach', function () {
           spys(entry.stats, entry.path);
           assert.ok(entry);
           assert.ok(callback);
-          setTimeout(callback, 10);
+          nextTick(callback);
         },
         { callbacks: true },
         function (err) {
@@ -189,9 +189,9 @@ describe('forEach', function () {
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          setImmediate(function () {
+          nextTick(function () {
             callback(null, new Error('Failed'));
-          }, 10);
+          });
         },
         callbacks: true,
       });
@@ -208,9 +208,9 @@ describe('forEach', function () {
     it('should propagate errors (concurency: 1)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          setImmediate(function () {
+          nextTick(function () {
             callback(null, new Error('Failed'));
-          }, 10);
+          });
         },
         callbacks: true,
       });
@@ -228,9 +228,9 @@ describe('forEach', function () {
     it('should propagate errors (concurency: 5)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          setImmediate(function () {
+          nextTick(function () {
             callback(null, new Error('Failed'));
-          }, 10);
+          });
         },
         callbacks: true,
       });
@@ -248,9 +248,9 @@ describe('forEach', function () {
     it('should propagate errors (concurency: Infinity)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          setImmediate(function () {
+          nextTick(function () {
             callback(null, new Error('Failed'));
-          }, 10);
+          });
         },
         callbacks: true,
       });

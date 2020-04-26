@@ -21,9 +21,9 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-function sleep(timeout) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, timeout);
+function defer() {
+  new Promise(function (resolve) {
+    nextTick(resolve);
   });
 }
 
@@ -234,7 +234,7 @@ describe('errors', function () {
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(10).then(function () {
+          return Promise.resolve().then(function () {
             throw new Error('Failed');
           });
         },
@@ -253,7 +253,7 @@ describe('errors', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(10).then(function () {
+          return Promise.resolve().then(function () {
             throw new Error('Failed');
           });
         },
@@ -280,7 +280,7 @@ describe('errors', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(10).then(function () {
+          return Promise.resolve().then(function () {
             throw new Error('Failed');
           });
         },
