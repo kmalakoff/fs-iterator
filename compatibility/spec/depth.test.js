@@ -5,6 +5,7 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
+var nextTick = require('next-tick');
 
 var Iterator = require('../..');
 var statsSpys = require('../statsSpys');
@@ -136,7 +137,7 @@ describe('depth', function () {
         depth: 0,
         filter: function (entry, callback) {
           spys(entry.stats, entry.path);
-          setTimeout(callback, 10);
+          nextTick(callback);
         },
         callbacks: true,
         lstat: true,
@@ -160,7 +161,7 @@ describe('depth', function () {
         depth: 1,
         filter: function (entry, callback) {
           spys(entry.stats, entry.path);
-          setTimeout(callback, 10);
+          nextTick(callback);
         },
         callbacks: true,
         lstat: true,
@@ -184,7 +185,7 @@ describe('depth', function () {
         depth: 2,
         filter: function (entry, callback) {
           spys(entry.stats, entry.path);
-          setTimeout(callback, 10);
+          nextTick(callback);
         },
         callbacks: true,
         lstat: true,
@@ -208,7 +209,7 @@ describe('depth', function () {
         depth: Infinity,
         filter: function (entry, callback) {
           spys(entry.stats, entry.path);
-          setTimeout(callback, 10);
+          nextTick(callback);
         },
         callbacks: true,
         lstat: true,

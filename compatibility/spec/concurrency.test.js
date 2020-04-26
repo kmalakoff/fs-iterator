@@ -6,6 +6,7 @@ var sinon = require('sinon');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
+var nextTick = require('next-tick');
 
 var Iterator = require('../..');
 
@@ -105,7 +106,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           filterSpy();
-          setTimeout(callback, 10);
+          nextTick(callback);
         },
         callbacks: true,
       });
@@ -126,7 +127,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           filterSpy();
-          setTimeout(callback, 10);
+          nextTick(callback);
         },
         callbacks: true,
       });
@@ -147,7 +148,7 @@ describe('concurrency', function () {
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
           filterSpy();
-          setTimeout(callback, 10);
+          nextTick(callback);
         },
         callbacks: true,
       });

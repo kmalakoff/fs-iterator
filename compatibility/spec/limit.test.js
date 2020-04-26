@@ -5,6 +5,7 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
+var nextTick = require('next-tick');
 
 var Iterator = require('../..');
 var statsSpys = require('../statsSpys');
@@ -150,7 +151,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
-            setTimeout(callback, 10);
+            nextTick(callback);
           },
           callbacks: true,
           lstat: true,
@@ -177,7 +178,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
-            setTimeout(callback, 10);
+            nextTick(callback);
           },
           callbacks: true,
           lstat: true,
@@ -204,7 +205,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
-            setTimeout(callback, 10);
+            nextTick(callback);
           },
           callbacks: true,
           lstat: true,
@@ -228,7 +229,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry, callback) {
-            setTimeout(callback, 10);
+            nextTick(callback);
           },
           callbacks: true,
           lstat: true,
