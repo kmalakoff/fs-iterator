@@ -5,11 +5,10 @@ var createProcesor = require('maximize-iterator/lib/createProcessor');
 var Fifo = require('./lib/Fifo');
 var PathStack = require('./lib/PathStack');
 var processOrQueue = require('./lib/processOrQueue');
-var compareVersions = require('compare-versions');
 
 var readdir = fs.readdir;
 // prior to Node 9, fs.readdir did not return sorted files
-if (compareVersions(process.versions.node, '0.9.0') < 0)
+if (+process.versions.node.split('.')[1] < 9)
   readdir = function readdir(fullPath, callback) {
     fs.readdir(fullPath, function (err, files) {
       err ? callback(err) : callback(null, files.sort());
