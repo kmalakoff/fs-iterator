@@ -1,14 +1,12 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-
-var assert = chai.assert;
-var sinon = require('sinon');
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 var nextTick = require('next-tick');
 
 var Iterator = require('../..');
+var statsSpys = require('../lib/statsSpys');
+var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -23,12 +21,6 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-function sleep(timeout) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, timeout);
-  });
-}
-
 describe('concurrency', function () {
   after(function (done) {
     rimraf(DIR, done);
@@ -41,11 +33,11 @@ describe('concurrency', function () {
 
   describe('synchronous', function () {
     it('should run with concurrency 1', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          filterSpy();
+        filter: function (entry) {
+          spys(entry.stats, entry.path);
         },
       });
 
@@ -54,18 +46,18 @@ describe('concurrency', function () {
         { concurrency: 1 },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );
     });
 
     it('should run with concurrency 5', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          filterSpy();
+        filter: function (entry) {
+          spys(entry.stats, entry.path);
         },
       });
       iterator.forEach(
@@ -73,18 +65,18 @@ describe('concurrency', function () {
         { concurrency: 5 },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );
     });
 
     it('should run with concurrency Infinity', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          filterSpy();
+        filter: function (entry) {
+          spys(entry.stats, entry.path);
         },
       });
       iterator.forEach(
@@ -92,7 +84,7 @@ describe('concurrency', function () {
         { concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );
@@ -101,11 +93,11 @@ describe('concurrency', function () {
 
   describe('callbacks', function () {
     it('should run with concurrency 1', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          filterSpy();
+          spys(entry.stats, entry.path);
           nextTick(callback);
         },
         callbacks: true,
@@ -115,18 +107,18 @@ describe('concurrency', function () {
         { concurrency: 1 },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );
     });
 
     it('should run with concurrency 5', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          filterSpy();
+          spys(entry.stats, entry.path);
           nextTick(callback);
         },
         callbacks: true,
@@ -136,18 +128,18 @@ describe('concurrency', function () {
         { concurrency: 5 },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );
     });
 
     it('should run with concurrency Infinity', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          filterSpy();
+          spys(entry.stats, entry.path);
           nextTick(callback);
         },
         callbacks: true,
@@ -157,7 +149,7 @@ describe('concurrency', function () {
         { concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );
@@ -168,12 +160,12 @@ describe('concurrency', function () {
     if (typeof Promise === 'undefined') return; // no promise support
 
     it('should run with concurrency 1', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          filterSpy();
-          return sleep(10);
+        filter: function (entry) {
+          spys(entry.stats, entry.path);
+          return sleep();
         },
       });
       iterator.forEach(
@@ -181,19 +173,19 @@ describe('concurrency', function () {
         { concurrency: 1 },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );
     });
 
     it('should run with concurrency 5', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          filterSpy();
-          return sleep(10);
+        filter: function (entry) {
+          spys(entry.stats, entry.path);
+          return sleep();
         },
       });
       iterator.forEach(
@@ -201,19 +193,19 @@ describe('concurrency', function () {
         { concurrency: 5 },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );
     });
 
     it('should run with concurrency Infinity', function (done) {
-      var filterSpy = sinon.spy();
+      var spys = statsSpys();
 
       var iterator = new Iterator(DIR, {
-        filter: function () {
-          filterSpy();
-          return sleep(10);
+        filter: function (entry) {
+          spys(entry.stats, entry.path);
+          return sleep();
         },
       });
       iterator.forEach(
@@ -221,7 +213,7 @@ describe('concurrency', function () {
         { concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.ok(filterSpy.callCount, 13);
+          assert.ok(spys.callCount, 13);
           done();
         }
       );

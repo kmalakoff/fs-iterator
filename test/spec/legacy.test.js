@@ -1,8 +1,4 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-
-var assert = chai.assert;
-var sinon = require('sinon');
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
@@ -23,7 +19,7 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-var statsSpys = require('../statsSpys');
+var statsSpys = require('../lib/statsSpys');
 
 describe('legacy', function () {
   after(function (done) {
@@ -36,11 +32,11 @@ describe('legacy', function () {
   });
 
   it('Iterator async renamed to callbacks', function (done) {
-    var filterSpy = sinon.spy();
+    var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
       filter: function (entry, callback) {
-        filterSpy();
+        spys(entry.stats, entry.path);
         nextTick(callback);
       },
       async: true,
@@ -51,7 +47,7 @@ describe('legacy', function () {
       { concurrency: 1 },
       function (err) {
         assert.ok(!err);
-        assert.ok(filterSpy.callCount, 13);
+        assert.ok(spys.callCount, 13);
         done();
       }
     );
