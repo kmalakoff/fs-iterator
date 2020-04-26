@@ -1,4 +1,5 @@
 const path = require('path');
+var assign = require('object.assign');
 
 const tests = require('./tests');
 
@@ -10,7 +11,7 @@ const ITERATION_COUNT = 3;
 (async () => {
   for (const options of VERSIONS) {
     for (let i = 0; i < ITERATION_COUNT; i++) {
-      await tests(Object.assign({}, options, { testOptions: TESTS_OPTIONS }), DATA_DIR);
+      await tests(assign({}, options, { testOptions: TESTS_OPTIONS }), DATA_DIR);
     }
   }
 })();

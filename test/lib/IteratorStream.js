@@ -2,7 +2,7 @@ var ReadableStream = require('stream').Readable;
 var inherits = require('util').inherits;
 var assign = require('object.assign');
 
-var Iterator = require('..');
+var Iterator = require('../..');
 
 function IteratorStream(root, options) {
   if (!(this instanceof IteratorStream)) return new IteratorStream(root, options);

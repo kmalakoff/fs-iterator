@@ -1,14 +1,11 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-var sinon = require('sinon');
-
-var assert = chai.assert;
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 
 var Iterator = require('../..');
-var statsSpys = require('../statsSpys');
+var statsSpys = require('../lib/statsSpys');
+var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -23,12 +20,6 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-function sleep(timeout) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, timeout);
-  });
-}
-
 describe('promise', function () {
   if (typeof Promise === 'undefined') return; // no promise support
 
@@ -42,21 +33,18 @@ describe('promise', function () {
   });
 
   it('should be default false', function (done) {
-    var statsSpy = sinon.spy();
+    var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
-      filter: function () {
-        statsSpy();
+      filter: function (entry) {
+        spys(entry.stats, entry.path);
       },
     });
 
     function consume() {
       iterator.next().then(function (value) {
         if (value === null) {
-          assert.ok(statsSpy.callCount, 13);
-          statsSpy.args.forEach(function (args) {
-            assert.isUndefined(args[0]);
-          });
+          assert.ok(spys.callCount, 13);
           done();
         } else consume();
       });
@@ -73,7 +61,7 @@ describe('promise', function () {
         spys(entry.stats, entry.path);
         assert.ok(entry);
         assert.ok(!callback);
-        return sleep(10);
+        return sleep();
       },
       function (err) {
         assert.ok(!err);
@@ -85,7 +73,7 @@ describe('promise', function () {
     );
   });
 
-  it('simple forEach (async, stop)', function (done) {
+  it('simple forEach (stop)', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, { lstat: true });
@@ -94,15 +82,16 @@ describe('promise', function () {
         spys(entry.stats, entry.path);
         assert.ok(entry);
         assert.ok(!callback);
-        return sleep(10).then(function () {
+        return sleep().then(function () {
           return false;
         });
       },
+      { concurrency: 1 },
       function (err) {
         assert.ok(!err);
-        assert.equal(spys.dir.callCount, 5);
-        assert.equal(spys.file.callCount, 5);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.dir.callCount, 1);
+        assert.equal(spys.file.callCount, 0);
+        assert.equal(spys.link.callCount, 0);
         done();
       }
     );
@@ -158,7 +147,7 @@ describe('promise', function () {
   it('should propagate errors', function (done) {
     var iterator = new Iterator(DIR, {
       filter: function () {
-        return sleep(10).then(function () {
+        return sleep().then(function () {
           throw new Error('Failed');
         });
       },

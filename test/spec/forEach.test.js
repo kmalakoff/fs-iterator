@@ -1,7 +1,4 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-
-var assert = chai.assert;
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
@@ -9,7 +6,8 @@ var isPromise = require('is-promise');
 var nextTick = require('next-tick');
 
 var Iterator = require('../..');
-var statsSpys = require('../statsSpys');
+var statsSpys = require('../lib/statsSpys');
+var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -23,12 +21,6 @@ var STRUCTURE = {
   link1: '~dir3/dir4/file1',
   'dir3/link2': '~dir2/file1',
 };
-
-function sleep(timeout) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, timeout);
-  });
-}
 
 describe('forEach', function () {
   beforeEach(function (done) {
@@ -118,12 +110,12 @@ describe('forEach', function () {
             callback(null, false);
           }, 10);
         },
-        { callbacks: true },
+        { callbacks: true, concurrency: 1 },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
+          assert.equal(spys.dir.callCount, 1);
+          assert.equal(spys.file.callCount, 0);
+          assert.equal(spys.link.callCount, 0);
           done();
         }
       );
@@ -374,7 +366,7 @@ describe('forEach', function () {
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(10).then(function () {
+          return sleep().then(function () {
             throw new Error('Failed');
           });
         },
@@ -396,7 +388,7 @@ describe('forEach', function () {
     it('should propagate errors (concurrency: 1)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(10).then(function () {
+          return sleep().then(function () {
             throw new Error('Failed');
           });
         },
@@ -421,7 +413,7 @@ describe('forEach', function () {
     it('should propagate errors (concurrency: 5)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(10).then(function () {
+          return sleep().then(function () {
             throw new Error('Failed');
           });
         },
@@ -446,7 +438,7 @@ describe('forEach', function () {
     it('should propagate errors (concurrency: Infinity)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return sleep(10).then(function () {
+          return sleep().then(function () {
             throw new Error('Failed');
           });
         },
