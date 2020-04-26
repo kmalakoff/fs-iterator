@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "test": "node --version && mocha spec/**/*.test.js",
-    "compatibility": "nvs 0.10 0.12 4 6 8 10 12 14 -- npm test"
+    "compatibility": "nvs 14 12 10 8 6 4 0.12 0.10 0.8 -- npm test"
   },
   "dependencies": {},
   "devDependencies": {

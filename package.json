@@ -4,7 +4,7 @@
   "description": "A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above",
   "main": "index.js",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.8.0"
   },
   "scripts": {
     "test": "mocha test/spec/**/*.test.js",
@@ -30,6 +30,7 @@
   "homepage": "https://github.com/kmalakoff/fs-iterator",
   "dependencies": {
     "async-compat": "^1.4.3",
+    "compare-versions": "^3.6.0",
     "fifo": "^2.3.0",
     "maximize-iterator": "^2.6.2"
   },
