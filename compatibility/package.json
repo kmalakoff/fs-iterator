@@ -16,7 +16,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "end-of-stream": "^1.4.4",
-    "fs-generate": "^1.1.0",
+    "fs-generate": "^1.5.0",
     "is-promise": "^2.2.2",
     "mocha": "^3.5.3",
     "next-tick": "^1.1.0",
