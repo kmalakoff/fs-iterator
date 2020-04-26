@@ -1,37 +1,58 @@
-var stream = require('stream');
+var ReadableStream = require('stream').Readable;
 var inherits = require('inherits');
+var assign = require('object.assign');
 
 var Iterator = require('..');
 
 function IteratorStream(root, options) {
   if (!(this instanceof IteratorStream)) return new IteratorStream(root, options);
-  options = options || {};
-  stream.Readable.call(this, { objectMode: true, autoDestroy: true, highWaterMark: options.highWaterMark || 4096 });
-  this.iterator = new Iterator(root, options);
+  options = assign({}, options || {});
+  ReadableStream.call(this, { objectMode: true, autoDestroy: true, highWaterMark: options.highWaterMark || 4096 });
+
+  var self = this;
+  var error = options.error;
+  options.error = function (err) {
+    if (!this.destroyed) return;
+    if (~Iterator.EXPECTED_ERRORS.indexOf(err.code)) self.emit('warn', err);
+    else self.emit('error', err);
+    return !error || error(err);
+  };
   this.options = options;
+  this.processing = 0;
+  this.iterator = new Iterator(root, options);
 }
-inherits(IteratorStream, stream.Readable);
+inherits(IteratorStream, ReadableStream);
 
 IteratorStream.prototype.destroy = function (err) {
-  stream.Readable.prototype.destroy.call(this, err);
-  if (!this.iterator.destroyed) this.iterator.destroy();
+  ReadableStream.prototype.destroy.call(this, err);
+  if (this.iterator) {
+    this.iterator.destroy();
+    this.iterator = null;
+  }
 };
 
 IteratorStream.prototype._read = function (batch) {
-  if (this.reading) return;
-  this.reading = true;
-
   var self = this;
+  this.processing++;
   this.iterator.forEach(
     function (entry) {
-      if (self.destroyed) return;
+      if (self.destroyed || self.done) return;
+      batch--;
       self.push(entry);
     },
-    { limit: batch, concurrency: this.options.concurrency },
+    {
+      limit: batch,
+    },
     function (err, done) {
-      self.reading = false;
-      if (err) return self.destroy(err);
-      if (done) self.push(null);
+      self.processing--;
+      if (self.destroyed || self.done) return;
+      if (err) self.destroy(err);
+      else if (done) {
+        if (self.processing <= 0) {
+          self.done = true;
+          self.push(null);
+        }
+      } else if (batch) self._read(batch);
     }
   );
 };

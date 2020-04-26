@@ -5,6 +5,7 @@ var assert = chai.assert;
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
+var eos = require('end-of-stream');
 
 var statsSpys = require('../statsSpys');
 var IteratorStream = require('../IteratorStream');
@@ -35,14 +36,12 @@ describe('stream', function () {
   it('default', function (done) {
     var spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(DIR);
+    var iteratorStream = new IteratorStream(DIR, { lstat: true });
     iteratorStream.on('data', function (entry) {
       spys(entry.stats, entry.path);
     });
-    iteratorStream.on('error', function (err) {
+    eos(iteratorStream, function (err) {
       assert.ok(!err);
-    });
-    iteratorStream.on('end', function () {
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
@@ -54,6 +53,7 @@ describe('stream', function () {
     var spys = statsSpys();
 
     var iteratorStream = new IteratorStream(DIR, {
+      lstat: true,
       highWaterMark: 1,
       filter: function filter(entry) {
         return entry.stats.isDirectory();
@@ -62,10 +62,8 @@ describe('stream', function () {
     iteratorStream.on('data', function (entry) {
       spys(entry.stats, entry.path);
     });
-    iteratorStream.on('error', function (err) {
+    eos(iteratorStream, function (err) {
       assert.ok(!err);
-    });
-    iteratorStream.on('end', function () {
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
       assert.equal(spys.link.callCount, 0);
@@ -77,16 +75,15 @@ describe('stream', function () {
     var spys = statsSpys();
 
     var iteratorStream = new IteratorStream(DIR, {
+      lstat: true,
       highWaterMark: 1,
     });
     iteratorStream.on('data', function (entry) {
       if (entry.stats.isDirectory()) return;
       spys(entry.stats, entry.path);
     });
-    iteratorStream.on('error', function (err) {
+    eos(iteratorStream, function (err) {
       assert.ok(!err);
-    });
-    iteratorStream.on('end', function () {
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
