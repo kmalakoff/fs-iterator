@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+const meow = require('meow');
+var execa = require('execa');
+
+const cli = meow(
+  `
+Usage
+  $ run-node-version [version ...] -- <command>
+Examples
+  $ run-node-version 0.10 4 6 14 -- npm test
+  `,
+  {
+    flags: {
+      help: {
+        alias: 'h',
+      },
+      version: {
+        alias: 'v',
+      },
+      '--': true,
+    },
+  }
+);
+
+(async () => {
+  var command = cli.flags['--'];
+  if (!command || command.length === 0) return console.log('Error: command missing');
+
+  try {
+    if (process.platform === 'win32') {
+      console.log('Windows versions not supported. Using system');
+      var resultW = await execa(command.shift(), command, { stdio: 'inherit' });
+      if (resultW.exitCode !== 0) return process.exit(resultW.exitCode);
+    } else {
+      for (var version of cli.input) {
+        var result = await execa('nave', ['use', version].concat(command), { stdio: 'inherit' });
+        if (result.exitCode !== 0) return process.exit(result.exitCode);
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    return process.exit(-1);
+  }
+  process.exit(0);
+})(cli);
