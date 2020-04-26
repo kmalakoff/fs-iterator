@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "mocha test/spec/**/*.test.js",
+    "compat": "nvs 14,12,10,8,6,4,0.12,0.10,0.8 mocha-compat test/spec/**/*.test.js",
     "lint": "eslint .",
     "format": "prettier --write '**/*.js'"
   },
@@ -29,8 +30,7 @@
   "license": "MIT",
   "homepage": "https://github.com/kmalakoff/fs-iterator",
   "dependencies": {
-    "async-compat": "^1.4.3",
-    "compare-versions": "^3.6.0",
+    "async-compat": "^1.4.5",
     "fifo": "^2.3.0",
     "maximize-iterator": "^2.6.2"
   },
@@ -47,13 +47,15 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "fs-generate": "^1.5.0",
-    "is-promise": "^2.2.2",
-    "mocha": "^7.1.1",
+    "is-promise": "^3.0.0",
+    "mocha": "^7.1.2",
+    "mocha-compat": "^3.5.5",
     "next-tick": "^1.1.0",
+    "nvs": "^0.1.5",
     "object.assign": "^4.1.0",
     "prettier": "^2.0.5",
-    "rimraf": "^3.0.2",
-    "sinon": "^9.0.2",
-    "sinon-chai": "^3.5.0"
+    "rimraf": "^2.7.1",
+    "sinon": "^2.4.1",
+    "sinon-chai": "^2.14.0"
   }
 }
