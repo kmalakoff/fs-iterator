@@ -1,14 +1,12 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-
-var assert = chai.assert;
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 var nextTick = require('next-tick');
 
 var Iterator = require('../..');
-var statsSpys = require('../statsSpys');
+var statsSpys = require('../lib/statsSpys');
+var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -22,12 +20,6 @@ var STRUCTURE = {
   link1: '~dir3/dir4/file1',
   'dir3/link2': '~dir2/file1',
 };
-
-function sleep(timeout) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, timeout);
-  });
-}
 
 describe('forEach', function () {
   describe('limit', function () {
@@ -73,7 +65,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
             assert.equal(spys.file.callCount, 1);
             assert.equal(spys.link.callCount, 0);
@@ -94,7 +86,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             done();
           }
         );
@@ -112,7 +104,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             done();
           }
         );
@@ -135,7 +127,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);
@@ -191,7 +183,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
             assert.equal(spys.file.callCount, 1);
             assert.equal(spys.link.callCount, 0);
@@ -218,7 +210,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             done();
           }
         );
@@ -242,7 +234,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             done();
           }
         );
@@ -267,7 +259,7 @@ describe('forEach', function () {
           function (err, empty) {
             assert.ok(!err);
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);
@@ -285,7 +277,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(10);
+            return sleep();
           },
           lstat: true,
         });
@@ -314,7 +306,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(10);
+            return sleep();
           },
           lstat: true,
         });
@@ -327,7 +319,7 @@ describe('forEach', function () {
           )
           .then(function (empty) {
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
             assert.equal(spys.file.callCount, 1);
             assert.equal(spys.link.callCount, 0);
@@ -343,7 +335,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(10);
+            return sleep();
           },
           lstat: true,
         });
@@ -356,7 +348,7 @@ describe('forEach', function () {
           )
           .then(function (empty) {
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             done();
           })
           .catch(function (err) {
@@ -369,7 +361,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(10);
+            return sleep();
           },
           lstat: true,
         });
@@ -382,7 +374,7 @@ describe('forEach', function () {
           )
           .then(function (empty) {
             assert.ok(!empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             done();
           })
           .catch(function (err) {
@@ -394,7 +386,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep(10).then(function () {
+            return sleep().then(function () {
               return !entry.stats.isDirectory();
             });
           },
@@ -409,7 +401,7 @@ describe('forEach', function () {
           )
           .then(function (empty) {
             assert.ok(empty);
-            assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 3);
+            assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
             assert.equal(spys.file.callCount, 2);
             assert.equal(spys.link.callCount, 1);

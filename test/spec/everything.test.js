@@ -1,13 +1,10 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-
-var assert = chai.assert;
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 
 var Iterator = require('../..');
-var statsSpys = require('../statsSpys');
+var statsSpys = require('../lib/statsSpys');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {

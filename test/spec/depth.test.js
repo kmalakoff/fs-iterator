@@ -1,14 +1,12 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-
-var assert = chai.assert;
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 var nextTick = require('next-tick');
 
 var Iterator = require('../..');
-var statsSpys = require('../statsSpys');
+var statsSpys = require('../lib/statsSpys');
+var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -22,12 +20,6 @@ var STRUCTURE = {
   link1: '~dir3/dir4/file1',
   'dir3/link2': '~dir2/file1',
 };
-
-function sleep(timeout) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, timeout);
-  });
-}
 
 describe('depth', function () {
   after(function (done) {
@@ -237,7 +229,7 @@ describe('depth', function () {
         depth: 0,
         filter: function (entry, callback) {
           spys(entry.stats, entry.path);
-          return sleep(10);
+          return sleep();
         },
         lstat: true,
       });
@@ -260,7 +252,7 @@ describe('depth', function () {
         depth: 1,
         filter: function (entry, callback) {
           spys(entry.stats, entry.path);
-          return sleep(10);
+          return sleep();
         },
         lstat: true,
       });
@@ -283,7 +275,7 @@ describe('depth', function () {
         depth: 2,
         filter: function (entry, callback) {
           spys(entry.stats, entry.path);
-          return sleep(10);
+          return sleep();
         },
         lstat: true,
       });
@@ -306,7 +298,7 @@ describe('depth', function () {
         depth: Infinity,
         filter: function (entry, callback) {
           spys(entry.stats, entry.path);
-          return sleep(10);
+          return sleep();
         },
         lstat: true,
       });

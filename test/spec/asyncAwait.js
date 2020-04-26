@@ -1,14 +1,11 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-var sinon = require('sinon');
-
-var assert = chai.assert;
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 
 var Iterator = require('../..');
-var statsSpys = require('../statsSpys');
+var statsSpys = require('../lib/statsSpys');
+var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -23,12 +20,6 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-function sleep(timeout) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, timeout);
-  });
-}
-
 describe('async await', function () {
   beforeEach(function (done) {
     rimraf(DIR, function () {
@@ -40,11 +31,11 @@ describe('async await', function () {
   });
 
   it('should be default false', async function () {
-    var statsSpy = sinon.spy();
+    var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
-      filter: function () {
-        statsSpy();
+      filter: function (entry) {
+        spys(entry.stats, entry.path);
       },
     });
 
@@ -57,10 +48,7 @@ describe('async await', function () {
       value = await iterator.next();
     }
 
-    assert.ok(statsSpy.callCount, 13);
-    statsSpy.args.forEach(function (args) {
-      assert.isUndefined(args[0]);
-    });
+    assert.ok(spys.callCount, 13);
   });
 
   it('Should find everything with no return', async function () {
@@ -115,7 +103,7 @@ describe('async await', function () {
   it('should propagate errors', async function () {
     var iterator = new Iterator(DIR, {
       filter: function () {
-        return sleep(10).then(function () {
+        return sleep().then(function () {
           throw new Error('Failed');
         });
       },

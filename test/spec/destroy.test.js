@@ -1,13 +1,10 @@
-var chai = require('chai');
-chai.use(require('sinon-chai'));
-
-var assert = chai.assert;
+var assert = require('assert');
 var generate = require('fs-generate');
 var rimraf = require('rimraf');
 var path = require('path');
 
 var Iterator = require('../..');
-var statsSpys = require('../statsSpys');
+var statsSpys = require('../lib/statsSpys');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -93,7 +90,7 @@ describe('destroy', function () {
         { concurrency: 1 },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+          assert.equal(spys.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 0);
@@ -119,7 +116,7 @@ describe('destroy', function () {
         { concurrency: Infinity },
         function (err) {
           assert.ok(!err);
-          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+          assert.equal(spys.callCount, 4);
           done();
         }
       );
@@ -188,7 +185,7 @@ describe('destroy', function () {
       iterator
         .forEach(function () {}, { concurrency: 1 })
         .then(function () {
-          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+          assert.equal(spys.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 0);
@@ -214,7 +211,7 @@ describe('destroy', function () {
       iterator
         .forEach(function () {}, { concurrency: Infinity })
         .then(function () {
-          assert.equal(spys.dir.callCount + spys.file.callCount + spys.link.callCount, 4);
+          assert.equal(spys.callCount, 4);
           done();
         })
         .catch(function (err) {
