@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+
+const assert = require("assert");
+const fs = require("fs");
+const path = require("path");
+const rimraf = require("rimraf");
+const readdirp = require("readdirp");
+const Iterator = require("fs-iterator");
+const generate = require("fs-generate");
+const statsSpys = require("fs-stats-spys");
+
+var DIR = path.resolve(path.join(__dirname, "..", "data"));
+var STRUCTURE = {
+  file1: "a",
+  file2: "b",
+  dir1: null,
+  "dir2/file1": "c",
+  "dir2/file2": "d",
+  "dir3/dir4/file1": "e",
+  "dir3/dir4/dir5": null,
+  link1: "~dir3/dir4/file1",
+  "dir3/link2": "~dir2/file1",
+};
+
+function assertSpys(spys, options) {
+  if (options.lstat) {
+    assert.equal(spys.file.callCount, 5, JSON.stringify(options));
+    assert.equal(spys.link.callCount, 2, JSON.stringify(options));
+  } else {
+    assert.equal(spys.file.callCount, 7, JSON.stringify(options));
+    assert.equal(spys.link.callCount, 0, JSON.stringify(options));
+  }
+}
+
+async function testReaddirp(options) {
+  const spys = statsSpys();
+  for await (const entry of readdirp(DIR, options)) {
+    spys(fs.Dirent && !options.alwaysStat ? entry.dirent : entry.stats);
+  }
+  assertSpys(spys, options);
+}
+
+async function testIterator(options) {
+  const spys = statsSpys();
+  for await (const entry of new Iterator(DIR, options)) {
+    spys(entry.stats);
+  }
+  assertSpys(spys, options);
+}
+
+(async () => {
+  await new Promise((resolve) => rimraf(DIR, (err) => resolve()));
+  await generate(DIR, STRUCTURE);
+
+  await testReaddirp({ lstat: true });
+  // await testReaddirp({ lstat: false });
+  await testReaddirp({ lstat: true, alwaysStat: true });
+  await testReaddirp({ lstat: false, alwaysStat: true });
+  await testIterator({ lstat: true });
+  // await testIterator({ lstat: false });
+  await testIterator({ lstat: true, alwaysStat: true });
+  await testIterator({ lstat: false, alwaysStat: true });
+})();
