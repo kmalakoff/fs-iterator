@@ -1,6 +1,6 @@
 var assert = require('assert');
 var path = require('path');
-var rimraf = require('rimraf');
+var rimraf = require('rimraf2');
 var generate = require('fs-generate');
 var statsSpys = require('fs-stats-spys');
 var nextTick = require('next-tick');
@@ -21,14 +21,12 @@ var STRUCTURE = {
 };
 
 describe('concurrency', function () {
-  after(function (done) {
-    rimraf(DIR, done);
-  });
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);
     });
   });
+  after(rimraf.bind(null, DIR));
 
   describe('synchronous', function () {
     it('should run with concurrency 1', function (done) {

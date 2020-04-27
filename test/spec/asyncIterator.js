@@ -1,6 +1,6 @@
 var assert = require('assert');
 var path = require('path');
-var rimraf = require('rimraf');
+var rimraf = require('rimraf2');
 var generate = require('fs-generate');
 var statsSpys = require('fs-stats-spys');
 
@@ -20,14 +20,12 @@ var STRUCTURE = {
 };
 
 describe('asyncIterator', function () {
-  after(function (done) {
-    rimraf(DIR, done);
-  });
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);
     });
   });
+  after(rimraf.bind(null, DIR));
 
   it('should be default false', async function () {
     var spys = statsSpys();
