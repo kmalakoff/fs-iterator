@@ -1,11 +1,10 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
-var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -37,7 +36,7 @@ describe('promise', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
       },
     });
 
@@ -58,10 +57,10 @@ describe('promise', function () {
     var iterator = new Iterator(DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
         assert.ok(entry);
         assert.ok(!callback);
-        return sleep();
+        return Promise.resolve();
       },
       function (err) {
         assert.ok(!err);
@@ -79,12 +78,10 @@ describe('promise', function () {
     var iterator = new Iterator(DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
         assert.ok(entry);
         assert.ok(!callback);
-        return sleep().then(function () {
-          return false;
-        });
+        return Promise.resolve(false);
       },
       { concurrency: 1 },
       function (err) {
@@ -102,7 +99,7 @@ describe('promise', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
       },
       lstat: true,
     });
@@ -125,7 +122,7 @@ describe('promise', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
         return true;
       },
       lstat: true,
@@ -147,9 +144,7 @@ describe('promise', function () {
   it('should propagate errors', function (done) {
     var iterator = new Iterator(DIR, {
       filter: function () {
-        return sleep().then(function () {
-          throw new Error('Failed');
-        });
+        return Promise.reject(new Error('Failed'));
       },
     });
 

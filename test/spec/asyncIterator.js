@@ -1,11 +1,10 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
-var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -35,7 +34,7 @@ describe('asyncIterator', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
       },
     });
 
@@ -54,7 +53,7 @@ describe('asyncIterator', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
       },
       lstat: true,
     });
@@ -76,7 +75,7 @@ describe('asyncIterator', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
         return true;
       },
       lstat: true,
@@ -97,9 +96,7 @@ describe('asyncIterator', function () {
   it('should propagate errors', async function () {
     var iterator = new Iterator(DIR, {
       filter: function () {
-        return sleep().then(function () {
-          throw new Error('Failed');
-        });
+        return Promise.reject(new Error('Failed'));
       },
     });
 

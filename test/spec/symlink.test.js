@@ -1,11 +1,11 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
 var fs = require('fs');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -36,7 +36,7 @@ describe('symlink', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
       },
       lstat: true,
     });
@@ -63,7 +63,7 @@ describe('symlink', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
       },
       lstat: false,
     });

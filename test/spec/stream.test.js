@@ -1,10 +1,9 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 var eos = require('end-of-stream');
-
-var statsSpys = require('../lib/statsSpys');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -37,7 +36,7 @@ describe('stream', function () {
 
     var iteratorStream = new IteratorStream(DIR, { lstat: true });
     iteratorStream.on('data', function (entry) {
-      spys(entry.stats, entry.path);
+      spys(entry.stats);
     });
     eos(iteratorStream, function (err) {
       assert.ok(!err);
@@ -59,7 +58,7 @@ describe('stream', function () {
       },
     });
     iteratorStream.on('data', function (entry) {
-      spys(entry.stats, entry.path);
+      spys(entry.stats);
     });
     eos(iteratorStream, function (err) {
       assert.ok(!err);
@@ -79,7 +78,7 @@ describe('stream', function () {
     });
     iteratorStream.on('data', function (entry) {
       if (entry.stats.isDirectory()) return;
-      spys(entry.stats, entry.path);
+      spys(entry.stats);
     });
     eos(iteratorStream, function (err) {
       assert.ok(!err);

@@ -1,10 +1,10 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -35,7 +35,7 @@ describe('destroy', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
       });
@@ -57,7 +57,7 @@ describe('destroy', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
       });
       iterator.destroy();
@@ -79,7 +79,7 @@ describe('destroy', function () {
       var count = 0;
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           if (++count === 4) iterator.destroy();
           callback();
         },
@@ -105,7 +105,7 @@ describe('destroy', function () {
       var count = 0;
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           if (++count === 4) iterator.destroy();
           callback();
         },
@@ -131,7 +131,7 @@ describe('destroy', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
       });
@@ -154,7 +154,7 @@ describe('destroy', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
       });
       iterator.destroy();
@@ -177,7 +177,7 @@ describe('destroy', function () {
       var count = 0;
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           if (++count === 4) return iterator.destroy();
         },
         lstat: true,
@@ -202,7 +202,7 @@ describe('destroy', function () {
       var count = 0;
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           if (++count === 4) iterator.destroy();
           callback();
         },
