@@ -1,7 +1,7 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
 
 var Iterator = require('../..');
 
@@ -225,9 +225,7 @@ describe('errors', function () {
     it('should propagate errors (default)', function (done) {
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return Promise.resolve().then(function () {
-            throw new Error('Failed');
-          });
+          return Promise.reject(new Error('Failed'));
         },
       });
       iterator.forEach(
@@ -244,9 +242,7 @@ describe('errors', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return Promise.resolve().then(function () {
-            throw new Error('Failed');
-          });
+          return Promise.reject(new Error('Failed'));
         },
       });
       iterator.forEach(
@@ -271,9 +267,7 @@ describe('errors', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function () {
-          return Promise.resolve().then(function () {
-            throw new Error('Failed');
-          });
+          return Promise.reject(new Error('Failed'));
         },
       });
       iterator.forEach(

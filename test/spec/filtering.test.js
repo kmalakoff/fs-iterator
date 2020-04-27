@@ -1,12 +1,11 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 var startsWith = require('starts-with');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
-var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -38,7 +37,7 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           return false;
         },
       });
@@ -57,7 +56,7 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           return path !== 'dir2';
         },
       });
@@ -76,7 +75,7 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           return entry.stats.isDirectory() || startsWith(entry.path, DIR_PATH);
         },
       });
@@ -97,7 +96,7 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           setTimeout(function () {
             callback(null, false);
           }, 10);
@@ -119,7 +118,7 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           setTimeout(function () {
             callback(null, entry.path !== 'dir2');
           }, 10);
@@ -141,7 +140,7 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           setTimeout(function () {
             callback(null, !entry.stats.isDirectory() || startsWith(entry.path, DIR_PATH));
           }, 10);
@@ -167,10 +166,8 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
-          return sleep().then(function () {
-            return false;
-          });
+          spys(entry.stats);
+          return Promise.resolve(false);
         },
       });
       iterator.forEach(
@@ -188,10 +185,8 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
-          return sleep().then(function () {
-            return path !== 'dir2';
-          });
+          spys(entry.stats);
+          return Promise.resolve(path !== 'dir2');
         },
       });
       iterator.forEach(
@@ -209,10 +204,8 @@ describe('filtering', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
-          return sleep().then(function () {
-            return !entry.stats.isDirectory() || startsWith(entry.path, DIR_PATH);
-          });
+          spys(entry.stats);
+          return Promise.resolve(!entry.stats.isDirectory() || startsWith(entry.path, DIR_PATH));
         },
       });
       iterator.forEach(

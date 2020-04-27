@@ -1,11 +1,11 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
 var fs = require('fs');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -38,7 +38,7 @@ describe('alwaysStat', function () {
         depth: 0,
         filter: function (entry) {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
       });
@@ -61,7 +61,7 @@ describe('alwaysStat', function () {
         depth: Infinity,
         filter: function (entry) {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
       });
@@ -86,7 +86,7 @@ describe('alwaysStat', function () {
         depth: 0,
         filter: function (entry) {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
         alwaysStat: false,
@@ -110,7 +110,7 @@ describe('alwaysStat', function () {
         depth: Infinity,
         filter: function (entry) {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
         alwaysStat: false,
@@ -136,7 +136,7 @@ describe('alwaysStat', function () {
         depth: 0,
         filter: function (entry) {
           assert.ok(entry.stats instanceof fs.Stats);
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
         alwaysStat: true,
@@ -160,7 +160,7 @@ describe('alwaysStat', function () {
         depth: Infinity,
         filter: function (entry) {
           assert.ok(entry.stats instanceof fs.Stats);
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
         alwaysStat: true,
