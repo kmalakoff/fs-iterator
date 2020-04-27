@@ -1,12 +1,11 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 var nextTick = require('next-tick');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
-var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -39,7 +38,7 @@ describe('forEach', function () {
         var iterator = new Iterator(DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { limit: Infinity, concurrency: 1 },
           function (err, empty) {
@@ -59,7 +58,7 @@ describe('forEach', function () {
         var iterator = new Iterator(DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { limit: 3, concurrency: 1 },
           function (err, empty) {
@@ -80,7 +79,7 @@ describe('forEach', function () {
         var iterator = new Iterator(DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { limit: 3, concurrency: 5 },
           function (err, empty) {
@@ -98,7 +97,7 @@ describe('forEach', function () {
         var iterator = new Iterator(DIR, { lstat: true });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { limit: 3, concurrency: Infinity },
           function (err, empty) {
@@ -121,7 +120,7 @@ describe('forEach', function () {
         });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { limit: 100, concurrency: 1 },
           function (err, empty) {
@@ -151,7 +150,7 @@ describe('forEach', function () {
 
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { limit: Infinity, concurrency: 1 },
           function (err, empty) {
@@ -177,7 +176,7 @@ describe('forEach', function () {
         });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { lstat: true, limit: 3, concurrency: 1 },
           function (err, empty) {
@@ -204,7 +203,7 @@ describe('forEach', function () {
         });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { lstat: true, limit: 3, concurrency: 5 },
           function (err, empty) {
@@ -228,7 +227,7 @@ describe('forEach', function () {
         });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { limit: 3, concurrency: Infinity },
           function (err, empty) {
@@ -253,7 +252,7 @@ describe('forEach', function () {
         });
         iterator.forEach(
           function (entry) {
-            spys(entry.stats, entry.path);
+            spys(entry.stats);
           },
           { limit: 100, concurrency: 1 },
           function (err, empty) {
@@ -277,7 +276,7 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep();
+            return Promise.resolve();
           },
           lstat: true,
         });
@@ -285,7 +284,7 @@ describe('forEach', function () {
         iterator
           .forEach(
             function (entry) {
-              spys(entry.stats, entry.path);
+              spys(entry.stats);
             },
             { limit: Infinity, concurrency: 1 }
           )
@@ -306,14 +305,14 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep();
+            return Promise.resolve();
           },
           lstat: true,
         });
         iterator
           .forEach(
             function (entry) {
-              spys(entry.stats, entry.path);
+              spys(entry.stats);
             },
             { limit: 3, concurrency: 1 }
           )
@@ -335,14 +334,14 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep();
+            return Promise.resolve();
           },
           lstat: true,
         });
         iterator
           .forEach(
             function (entry) {
-              spys(entry.stats, entry.path);
+              spys(entry.stats);
             },
             { limit: 3, concurrency: 5 }
           )
@@ -361,14 +360,14 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep();
+            return Promise.resolve();
           },
           lstat: true,
         });
         iterator
           .forEach(
             function (entry) {
-              spys(entry.stats, entry.path);
+              spys(entry.stats);
             },
             { limit: 3, concurrency: Infinity }
           )
@@ -386,16 +385,14 @@ describe('forEach', function () {
 
         var iterator = new Iterator(DIR, {
           filter: function (entry) {
-            return sleep().then(function () {
-              return !entry.stats.isDirectory();
-            });
+            return Promise.resolve(!entry.stats.isDirectory());
           },
           lstat: true,
         });
         iterator
           .forEach(
             function (entry) {
-              spys(entry.stats, entry.path);
+              spys(entry.stats);
             },
             { limit: 100, concurrency: 1 }
           )

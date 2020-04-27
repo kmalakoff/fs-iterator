@@ -1,7 +1,8 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 var nextTick = require('next-tick');
 
 var Iterator = require('../..');
@@ -19,8 +20,6 @@ var STRUCTURE = {
   'dir3/link2': '~dir2/file1',
 };
 
-var statsSpys = require('../lib/statsSpys');
-
 describe('legacy', function () {
   after(function (done) {
     rimraf(DIR, done);
@@ -36,7 +35,7 @@ describe('legacy', function () {
 
     var iterator = new Iterator(DIR, {
       filter: function (entry, callback) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
         nextTick(callback);
       },
       async: true,
@@ -59,7 +58,7 @@ describe('legacy', function () {
     var iterator = new Iterator(DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
-        spys(entry.stats, entry.path);
+        spys(entry.stats);
         assert.ok(entry);
         assert.ok(callback);
         setTimeout(function () {

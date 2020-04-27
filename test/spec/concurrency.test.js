@@ -1,12 +1,11 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 var nextTick = require('next-tick');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
-var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -37,7 +36,7 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
       });
 
@@ -57,7 +56,7 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
       });
       iterator.forEach(
@@ -76,7 +75,7 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
       });
       iterator.forEach(
@@ -97,7 +96,7 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -118,7 +117,7 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -139,7 +138,7 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -164,8 +163,8 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
-          return sleep();
+          spys(entry.stats);
+          return Promise.resolve();
         },
       });
       iterator.forEach(
@@ -184,8 +183,8 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
-          return sleep();
+          spys(entry.stats);
+          return Promise.resolve();
         },
       });
       iterator.forEach(
@@ -204,8 +203,8 @@ describe('concurrency', function () {
 
       var iterator = new Iterator(DIR, {
         filter: function (entry) {
-          spys(entry.stats, entry.path);
-          return sleep();
+          spys(entry.stats);
+          return Promise.resolve();
         },
       });
       iterator.forEach(

@@ -1,12 +1,11 @@
 var assert = require('assert');
-var generate = require('fs-generate');
-var rimraf = require('rimraf');
 var path = require('path');
+var rimraf = require('rimraf');
+var generate = require('fs-generate');
+var statsSpys = require('fs-stats-spys');
 var nextTick = require('next-tick');
 
 var Iterator = require('../..');
-var statsSpys = require('../lib/statsSpys');
-var sleep = require('../lib/sleep');
 
 var DIR = path.resolve(path.join(__dirname, '..', 'data'));
 var STRUCTURE = {
@@ -38,7 +37,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
       });
@@ -60,7 +59,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
       });
@@ -82,7 +81,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
       });
@@ -104,7 +103,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
         },
         lstat: true,
       });
@@ -128,7 +127,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -152,7 +151,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -176,7 +175,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -200,7 +199,7 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
+          spys(entry.stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -228,8 +227,8 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 0,
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
-          return sleep();
+          spys(entry.stats);
+          return Promise.resolve();
         },
         lstat: true,
       });
@@ -251,8 +250,8 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 1,
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
-          return sleep();
+          spys(entry.stats);
+          return Promise.resolve();
         },
         lstat: true,
       });
@@ -274,8 +273,8 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: 2,
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
-          return sleep();
+          spys(entry.stats);
+          return Promise.resolve();
         },
         lstat: true,
       });
@@ -297,8 +296,8 @@ describe('depth', function () {
       var iterator = new Iterator(DIR, {
         depth: Infinity,
         filter: function (entry, callback) {
-          spys(entry.stats, entry.path);
-          return sleep();
+          spys(entry.stats);
+          return Promise.resolve();
         },
         lstat: true,
       });
