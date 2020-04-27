@@ -1,6 +1,6 @@
 var assert = require('assert');
 var path = require('path');
-var rimraf = require('rimraf');
+var rimraf = require('rimraf2');
 var generate = require('fs-generate');
 
 var Iterator = require('../..');
@@ -19,14 +19,12 @@ var STRUCTURE = {
 };
 
 describe('errors', function () {
-  after(function (done) {
-    rimraf(DIR, done);
-  });
   beforeEach(function (done) {
     rimraf(DIR, function () {
       generate(DIR, STRUCTURE, done);
     });
   });
+  after(rimraf.bind(null, DIR));
 
   describe('synchronous', function () {
     it('should propagate errors (default)', function (done) {
