@@ -35,7 +35,7 @@ function Iterator(root, options) {
   } else this.options.readdir = readdir;
 
   // platform compatibility
-  if (process.platform === 'win32' && fs.stat.length === 3) {
+  if (process.platform === 'win32' && fs.stat.length === 4) {
     var stat = fs[options.lstat ? 'lstat' : 'stat'];
     this.options.stat = function windowsStat(path) {
       stat(path, { bigint: true });
