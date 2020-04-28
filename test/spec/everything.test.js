@@ -15,8 +15,8 @@ var STRUCTURE = {
   'dir2/file2': 'd',
   'dir3/dir4/file1': 'e',
   'dir3/dir4/dir5': null,
-  link1: '~dir3/dir4/file1',
-  'dir3/link2': '~dir2/file1',
+  filelink1: '~dir3/dir4/file1',
+  'dir3/filelink2': '~dir2/file1',
 };
 var DELETE_PATH = 'dir2' + path.sep + 'file1';
 
@@ -71,7 +71,7 @@ describe('everything', function () {
     );
   });
 
-  it('Should handle a delete (error in forEach custom error handler)', function (done) {
+  it('Should handle a delete (error in forEach custom error handler - no return)', function (done) {
     var spys = statsSpys();
     var errors = [];
 
@@ -95,16 +95,16 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 1);
+        assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );
   });
 
-  it('Should handle a delete (error in forEach custom error handler)', function (done) {
+  it('Should handle a delete (error in forEach custom error handler - return false)', function (done) {
     var spys = statsSpys();
 
     var iterator = new Iterator(DIR, {
@@ -136,7 +136,7 @@ describe('everything', function () {
     );
   });
 
-  it('Should handle a delete (error in forEach custom error handler)', function (done) {
+  it('Should handle a delete (error in forEach custom error handler - return true)', function (done) {
     var spys = statsSpys();
     var errors = [];
 
@@ -151,7 +151,7 @@ describe('everything', function () {
       lstat: true,
       error: function (err) {
         assert.ok(!!err);
-        return false;
+        return true;
       },
     });
     iterator.forEach(
@@ -164,10 +164,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 1);
+        assert.equal(errors.length, 0);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );
@@ -202,10 +202,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 1);
+        assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );
@@ -276,10 +276,10 @@ describe('everything', function () {
       },
       function (err) {
         assert.ok(!err);
-        assert.equal(errors.length, 1);
+        assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
-        assert.equal(spys.link.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
         done();
       }
     );

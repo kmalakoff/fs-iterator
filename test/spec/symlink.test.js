@@ -16,9 +16,9 @@ var STRUCTURE = {
   'dir2/file2': 'd',
   'dir3/dir4/file1': 'e',
   'dir3/dir4/dir5': null,
-  link1: '~dir3/dir4/file1',
-  'dir3/link2': '~dir2/file1',
-  link2: '~dir3/dir4',
+  filelink1: '~dir3/dir4/file1',
+  'dir3/filelink2': '~dir2/file1',
+  'dir3/dir4/dirlink1': '~dir2',
 };
 
 describe('symlink', function () {
@@ -44,15 +44,10 @@ describe('symlink', function () {
       function () {},
       function (err) {
         assert.ok(!err);
-        if (fs.Dirent) {
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 6);
-          assert.equal(spys.link.callCount, 3);
-        } else {
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 3);
-        }
+        assert.equal(spys.callCount, 15);
+        assert.equal(spys.dir.callCount, 5);
+        assert.equal(spys.file.callCount, 7);
+        assert.equal(spys.link.callCount, 3);
         done();
       }
     );
@@ -71,13 +66,14 @@ describe('symlink', function () {
       function () {},
       function (err) {
         assert.ok(!err);
+        assert.equal(spys.callCount, 15);
         if (fs.Dirent) {
-          assert.equal(spys.dir.callCount, 6);
-          assert.equal(spys.file.callCount, 6);
+          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.file.callCount, 7);
           assert.equal(spys.link.callCount, 3);
         } else {
-          assert.equal(spys.dir.callCount, 7);
-          assert.equal(spys.file.callCount, 8);
+          assert.equal(spys.dir.callCount, 6);
+          assert.equal(spys.file.callCount, 9);
           assert.equal(spys.link.callCount, 0);
         }
         done();
