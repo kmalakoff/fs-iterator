@@ -15,16 +15,10 @@ function Iterator(root, options) {
     depth: options.depth === undefined ? Infinity : options.depth,
     filter: options.filter || null,
     callbacks: options.callbacks || options.async || false,
-    readdirOptions: { encoding: 'utf8', withFileTypes: fs.Dirent && !options.alwaysStat },
+    lstat: options.lstat,
+    readdir: { encoding: 'utf8', withFileTypes: fs.Dirent && !options.alwaysStat },
+    stat: { bigint: process.platform === 'win32' },
   };
-
-  // platform compatibility
-  if (process.platform === 'win32' && fs.stat.length === 4) {
-    var stat = fs[options.lstat ? 'lstat' : 'stat'];
-    this.options.stat = function windowsStat(path) {
-      stat(path, { bigint: true });
-    };
-  } else this.options.stat = fs[options.lstat ? 'lstat' : 'stat'];
 
   this.options.error =
     options.error ||
@@ -38,7 +32,7 @@ function Iterator(root, options) {
   this.stack = new PathStack(this);
 
   this.processing = 1; // fetch first
-  fsCompat.readdir(this.root, this.options.readdirOptions, function (err, files) {
+  fsCompat.readdir(this.root, this.options.readdir, function (err, files) {
     self.processing--;
     if (self.done) return;
 
@@ -53,7 +47,6 @@ Iterator.prototype.destroy = function destroy() {
   if (this.destroyed) throw new Error('Already destroyed');
   this.destroyed = true;
 
-  // iterator
   this.done = true;
   this.options = null;
   this.root = null;
