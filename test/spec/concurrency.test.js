@@ -7,7 +7,7 @@ var nextTick = require('next-tick');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -22,17 +22,17 @@ var STRUCTURE = {
 
 describe('concurrency', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   describe('synchronous', function () {
     it('should run with concurrency 1', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
         },
@@ -52,7 +52,7 @@ describe('concurrency', function () {
     it('should run with concurrency 5', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
         },
@@ -71,7 +71,7 @@ describe('concurrency', function () {
     it('should run with concurrency Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
         },
@@ -92,7 +92,7 @@ describe('concurrency', function () {
     it('should run with concurrency 1', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           nextTick(callback);
@@ -113,7 +113,7 @@ describe('concurrency', function () {
     it('should run with concurrency 5', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           nextTick(callback);
@@ -134,7 +134,7 @@ describe('concurrency', function () {
     it('should run with concurrency Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           nextTick(callback);
@@ -159,7 +159,7 @@ describe('concurrency', function () {
     it('should run with concurrency 1', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
           return Promise.resolve();
@@ -179,7 +179,7 @@ describe('concurrency', function () {
     it('should run with concurrency 5', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
           return Promise.resolve();
@@ -199,7 +199,7 @@ describe('concurrency', function () {
     it('should run with concurrency Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
           return Promise.resolve();

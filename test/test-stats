@@ -9,7 +9,7 @@ const Iterator = require('fs-iterator');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -34,7 +34,7 @@ function assertSpys(spys, options) {
 
 async function testReaddirp(options) {
   const spys = statsSpys();
-  for await (const entry of readdirp(DIR, options)) {
+  for await (const entry of readdirp(TEST_DIR, options)) {
     spys(fs.Dirent && !options.alwaysStat ? entry.dirent : entry.stats);
   }
   assertSpys(spys, options);
@@ -42,15 +42,15 @@ async function testReaddirp(options) {
 
 async function testIterator(options) {
   const spys = statsSpys();
-  for await (const entry of new Iterator(DIR, options)) {
+  for await (const entry of new Iterator(TEST_DIR, options)) {
     spys(entry.stats);
   }
   assertSpys(spys, options);
 }
 
 (async () => {
-  await new Promise((resolve) => rimraf(DIR, (err) => resolve()));
-  await generate(DIR, STRUCTURE);
+  await new Promise((resolve) => rimraf(TEST_DIR, (err) => resolve()));
+  await generate(TEST_DIR, STRUCTURE);
 
   await testReaddirp({ lstat: true });
   // await testReaddirp({ lstat: false });

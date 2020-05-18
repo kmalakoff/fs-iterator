@@ -6,7 +6,7 @@ var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -21,17 +21,17 @@ var STRUCTURE = {
 
 describe('destroy', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   describe('callback interface', function () {
     it('destroys after iteration', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
         },
@@ -53,7 +53,7 @@ describe('destroy', function () {
     it('destroys before iteration', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
         },
@@ -75,7 +75,7 @@ describe('destroy', function () {
       var spys = statsSpys();
 
       var count = 0;
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           if (++count === 4) iterator.destroy();
@@ -101,7 +101,7 @@ describe('destroy', function () {
       var spys = statsSpys();
 
       var count = 0;
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           if (++count === 4) iterator.destroy();
@@ -127,7 +127,7 @@ describe('destroy', function () {
     it('destroys after iteration', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
         },
@@ -150,7 +150,7 @@ describe('destroy', function () {
     it('destroys before iteration', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
         },
@@ -173,7 +173,7 @@ describe('destroy', function () {
       var spys = statsSpys();
 
       var count = 0;
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
           if (++count === 4) return iterator.destroy();
@@ -198,7 +198,7 @@ describe('destroy', function () {
       var spys = statsSpys();
 
       var count = 0;
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           if (++count === 4) iterator.destroy();

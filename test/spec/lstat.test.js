@@ -7,7 +7,7 @@ var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -22,11 +22,11 @@ var STRUCTURE = {
 
 describe('lstat', function () {
   after(function (done) {
-    rimraf(DIR, done);
+    rimraf(TEST_DIR, done);
   });
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
 
@@ -34,7 +34,7 @@ describe('lstat', function () {
     it('depth 0', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: 0,
         filter: function (entry) {
           spys(entry.stats);
@@ -61,7 +61,7 @@ describe('lstat', function () {
     it('depth Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
         filter: function (entry) {
           spys(entry.stats);
@@ -90,7 +90,7 @@ describe('lstat', function () {
     it('depth 0', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: 0,
         filter: function (entry) {
           spys(entry.stats);
@@ -118,7 +118,7 @@ describe('lstat', function () {
     it('depth Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
         filter: function (entry) {
           spys(entry.stats);
@@ -148,7 +148,7 @@ describe('lstat', function () {
     it('depth 0', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: 0,
         filter: function (entry) {
           spys(entry.stats);
@@ -170,7 +170,7 @@ describe('lstat', function () {
     it('depth Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
         filter: function (entry) {
           spys(entry.stats);

@@ -7,7 +7,7 @@ var startsWith = require('starts-with');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -19,21 +19,21 @@ var STRUCTURE = {
   filelink1: '~dir3/dir4/file1',
   'dir3/filelink2': '~dir2/file1',
 };
-var DIR_PATH = 'dir3' + path.sep + 'dir4';
+var TEST_DIR_PATH = 'dir3' + path.sep + 'dir4';
 
 describe('filtering', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   describe('synchronous', function () {
     it('Should filter everything under the root directory', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
           return false;
@@ -52,7 +52,7 @@ describe('filtering', function () {
     it('Should filter everything under specific directories by relative path', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
           return path !== 'dir2';
@@ -71,10 +71,10 @@ describe('filtering', function () {
     it('Should filter everything under specific directories by stats and relative path', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
-          return entry.stats.isDirectory() || startsWith(entry.path, DIR_PATH);
+          return entry.stats.isDirectory() || startsWith(entry.path, TEST_DIR_PATH);
         },
       });
       iterator.forEach(
@@ -92,7 +92,7 @@ describe('filtering', function () {
     it('Should filter everything under the root directory', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           setTimeout(function () {
@@ -114,7 +114,7 @@ describe('filtering', function () {
     it('Should filter everything under specific directories by relative path', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           setTimeout(function () {
@@ -136,11 +136,11 @@ describe('filtering', function () {
     it('Should filter everything under specific directories by stats and relative path', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           spys(entry.stats);
           setTimeout(function () {
-            callback(null, !entry.stats.isDirectory() || startsWith(entry.path, DIR_PATH));
+            callback(null, !entry.stats.isDirectory() || startsWith(entry.path, TEST_DIR_PATH));
           }, 10);
         },
         callbacks: true,
@@ -162,7 +162,7 @@ describe('filtering', function () {
     it('Should filter everything under the root directory', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
           return Promise.resolve(false);
@@ -181,7 +181,7 @@ describe('filtering', function () {
     it('Should filter everything under specific directories by relative path', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
           return Promise.resolve(path !== 'dir2');
@@ -200,10 +200,10 @@ describe('filtering', function () {
     it('Should filter everything under specific directories by stats and relative path', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry) {
           spys(entry.stats);
-          return Promise.resolve(!entry.stats.isDirectory() || startsWith(entry.path, DIR_PATH));
+          return Promise.resolve(!entry.stats.isDirectory() || startsWith(entry.path, TEST_DIR_PATH));
         },
       });
       iterator.forEach(
