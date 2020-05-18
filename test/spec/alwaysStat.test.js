@@ -7,7 +7,7 @@ var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -22,17 +22,17 @@ var STRUCTURE = {
 
 describe('alwaysStat', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   describe('default', function () {
     it('depth 0', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: 0,
         filter: function (entry) {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
@@ -55,7 +55,7 @@ describe('alwaysStat', function () {
     it('depth Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
         filter: function (entry) {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
@@ -80,7 +80,7 @@ describe('alwaysStat', function () {
     it('depth 0', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: 0,
         filter: function (entry) {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
@@ -104,7 +104,7 @@ describe('alwaysStat', function () {
     it('depth Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
         filter: function (entry) {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
@@ -130,7 +130,7 @@ describe('alwaysStat', function () {
     it('depth 0', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: 0,
         filter: function (entry) {
           assert.ok(entry.stats instanceof fs.Stats);
@@ -154,7 +154,7 @@ describe('alwaysStat', function () {
     it('depth Infinity', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
         filter: function (entry) {
           assert.ok(entry.stats instanceof fs.Stats);

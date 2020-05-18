@@ -5,7 +5,7 @@ var generate = require('fs-generate');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -20,15 +20,15 @@ var STRUCTURE = {
 
 describe('errors', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   describe('synchronous', function () {
     it('should propagate errors (default)', function (done) {
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function () {
           return new Error('Failed');
         },
@@ -45,7 +45,7 @@ describe('errors', function () {
     it('should propagate errors (true)', function (done) {
       var errors = [];
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function () {
           return new Error('Failed');
         },
@@ -70,7 +70,7 @@ describe('errors', function () {
     it('should not propagate errors (false)', function (done) {
       var errors = [];
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function () {
           return new Error('Failed');
         },
@@ -94,7 +94,7 @@ describe('errors', function () {
 
   describe('callbacks', function () {
     it('handle invalid root (next)', function (done) {
-      var iterator = new Iterator(DIR + 'does-not-exist');
+      var iterator = new Iterator(TEST_DIR + 'does-not-exist');
 
       iterator.next(function (err, value) {
         assert.ok(err);
@@ -105,7 +105,7 @@ describe('errors', function () {
     });
 
     it('handle invalid root (forEach)', function (done) {
-      var iterator = new Iterator(DIR + 'does-not-exist');
+      var iterator = new Iterator(TEST_DIR + 'does-not-exist');
       iterator.forEach(
         function () {},
         function (err) {
@@ -117,7 +117,7 @@ describe('errors', function () {
     });
 
     it('should propagate errors (default)', function (done) {
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           setTimeout(function () {
             callback(new Error('Failed'));
@@ -137,7 +137,7 @@ describe('errors', function () {
     it('should propagate errors (true)', function (done) {
       var errors = [];
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           setTimeout(function () {
             callback(new Error('Failed'));
@@ -165,7 +165,7 @@ describe('errors', function () {
     it('should not propagate errors (false)', function (done) {
       var errors = [];
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function (entry, callback) {
           setTimeout(function () {
             callback(new Error('Failed'));
@@ -194,7 +194,7 @@ describe('errors', function () {
     if (typeof Promise === 'undefined') return; // no promise support
 
     it('handle invalid root (next)', function (done) {
-      var iterator = new Iterator(DIR + 'does-not-exist');
+      var iterator = new Iterator(TEST_DIR + 'does-not-exist');
 
       iterator
         .next()
@@ -209,7 +209,7 @@ describe('errors', function () {
     });
 
     it('handle invalid root (forEach)', function (done) {
-      var iterator = new Iterator(DIR + 'does-not-exist');
+      var iterator = new Iterator(TEST_DIR + 'does-not-exist');
       iterator.forEach(
         function () {},
         function (err) {
@@ -221,7 +221,7 @@ describe('errors', function () {
     });
 
     it('should propagate errors (default)', function (done) {
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function () {
           return Promise.reject(new Error('Failed'));
         },
@@ -238,7 +238,7 @@ describe('errors', function () {
     it('should propagate errors (true)', function (done) {
       var errors = [];
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function () {
           return Promise.reject(new Error('Failed'));
         },
@@ -263,7 +263,7 @@ describe('errors', function () {
     it('should not propagate errors (false)', function (done) {
       var errors = [];
 
-      var iterator = new Iterator(DIR, {
+      var iterator = new Iterator(TEST_DIR, {
         filter: function () {
           return Promise.reject(new Error('Failed'));
         },

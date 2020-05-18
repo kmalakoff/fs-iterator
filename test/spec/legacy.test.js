@@ -7,7 +7,7 @@ var nextTick = require('next-tick');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -22,16 +22,16 @@ var STRUCTURE = {
 
 describe('legacy', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   it('Iterator async renamed to callbacks', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry, callback) {
         spys(entry.stats);
         nextTick(callback);
@@ -53,7 +53,7 @@ describe('legacy', function () {
   it('forEach async renamed to callbacks', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, { lstat: true });
+    var iterator = new Iterator(TEST_DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
         spys(entry.stats);

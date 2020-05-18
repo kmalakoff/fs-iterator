@@ -5,7 +5,7 @@ var generate = require('fs-generate');
 var statsSpys = require('fs-stats-spys');
 var eos = require('end-of-stream');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -23,18 +23,18 @@ describe('stream', function () {
   var IteratorStream = require('../lib/IteratorStream');
 
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
   after(function (done) {
-    rimraf(DIR, done);
+    rimraf(TEST_DIR, done);
   });
 
   it('default', function (done) {
     var spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(DIR, { lstat: true });
+    var iteratorStream = new IteratorStream(TEST_DIR, { lstat: true });
     iteratorStream.on('data', function (entry) {
       spys(entry.stats);
     });
@@ -50,7 +50,7 @@ describe('stream', function () {
   it('directories only (highWaterMark: 1)', function (done) {
     var spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(DIR, {
+    var iteratorStream = new IteratorStream(TEST_DIR, {
       lstat: true,
       highWaterMark: 1,
       filter: function filter(entry) {
@@ -72,7 +72,7 @@ describe('stream', function () {
   it('skip directories (highWaterMark: 1)', function (done) {
     var spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(DIR, {
+    var iteratorStream = new IteratorStream(TEST_DIR, {
       lstat: true,
       highWaterMark: 1,
     });

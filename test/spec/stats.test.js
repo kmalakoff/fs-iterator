@@ -7,7 +7,7 @@ var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -22,11 +22,11 @@ var STRUCTURE = {
 
 describe('stats compatibility', function () {
   after(function (done) {
-    rimraf(DIR, done);
+    rimraf(TEST_DIR, done);
   });
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
 
@@ -34,7 +34,7 @@ describe('stats compatibility', function () {
     it('stat', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, { alwaysStat: true, lstat: false });
+      var iterator = new Iterator(TEST_DIR, { alwaysStat: true, lstat: false });
       iterator.forEach(
         function (entry) {
           spys(entry.stats);
@@ -52,7 +52,7 @@ describe('stats compatibility', function () {
     it('lstat', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, { alwaysStat: true, lstat: true });
+      var iterator = new Iterator(TEST_DIR, { alwaysStat: true, lstat: true });
       iterator.forEach(
         function (entry) {
           spys(entry.stats);
@@ -72,7 +72,7 @@ describe('stats compatibility', function () {
     it('stat', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, { lstat: false });
+      var iterator = new Iterator(TEST_DIR, { lstat: false });
       iterator.forEach(
         function (entry) {
           spys(entry.stats);
@@ -96,7 +96,7 @@ describe('stats compatibility', function () {
     it('lstat', function (done) {
       var spys = statsSpys();
 
-      var iterator = new Iterator(DIR, { lstat: true });
+      var iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
         function (entry) {
           spys(entry.stats);

@@ -6,7 +6,7 @@ var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -21,16 +21,16 @@ var STRUCTURE = {
 
 describe('async await', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   it('should be default false', async function () {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
       },
@@ -51,7 +51,7 @@ describe('async await', function () {
   it('Should find everything with no return', async function () {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
       },
@@ -75,7 +75,7 @@ describe('async await', function () {
   it('Should find everything with return true', async function () {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
         return true;
@@ -98,7 +98,7 @@ describe('async await', function () {
   });
 
   it('should propagate errors', async function () {
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function () {
         return Promise.reject(new Error('Failed'));
       },

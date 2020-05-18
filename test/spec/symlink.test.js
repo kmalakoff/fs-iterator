@@ -7,7 +7,7 @@ var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -23,18 +23,18 @@ var STRUCTURE = {
 
 describe('symlink', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
   after(function (done) {
-    rimraf(DIR, done);
+    rimraf(TEST_DIR, done);
   });
 
   it('Should find everything with no return (lstat)', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
       },
@@ -56,7 +56,7 @@ describe('symlink', function () {
   it('Should find everything with no return (stat)', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
       },

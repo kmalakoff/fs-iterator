@@ -6,7 +6,7 @@ var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -23,18 +23,18 @@ describe('promise', function () {
   if (typeof Promise === 'undefined') return; // no promise support
 
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
   after(function (done) {
-    rimraf(DIR, done);
+    rimraf(TEST_DIR, done);
   });
 
   it('should be default false', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
       },
@@ -54,7 +54,7 @@ describe('promise', function () {
   it('simple forEach (async)', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, { lstat: true });
+    var iterator = new Iterator(TEST_DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
         spys(entry.stats);
@@ -75,7 +75,7 @@ describe('promise', function () {
   it('simple forEach (stop)', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, { lstat: true });
+    var iterator = new Iterator(TEST_DIR, { lstat: true });
     iterator.forEach(
       function (entry, callback) {
         spys(entry.stats);
@@ -97,7 +97,7 @@ describe('promise', function () {
   it('Should find everything with no return', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
       },
@@ -120,7 +120,7 @@ describe('promise', function () {
   it('Should find everything with return true', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
         return true;
@@ -142,7 +142,7 @@ describe('promise', function () {
   });
 
   it('should propagate errors', function (done) {
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function () {
         return Promise.reject(new Error('Failed'));
       },
