@@ -6,7 +6,7 @@ var statsSpys = require('fs-stats-spys');
 
 var Iterator = require('../..');
 
-var DIR = path.resolve(path.join(__dirname, '..', 'data'));
+var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',
   file2: 'b',
@@ -22,16 +22,16 @@ var DELETE_PATH = 'dir2' + path.sep + 'file1';
 
 describe('everything', function () {
   beforeEach(function (done) {
-    rimraf(DIR, function () {
-      generate(DIR, STRUCTURE, done);
+    rimraf(TEST_DIR, function () {
+      generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, DIR));
+  after(rimraf.bind(null, TEST_DIR));
 
   it('Should find everything with no return', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
       },
@@ -52,7 +52,7 @@ describe('everything', function () {
   it('Should find everything with return true', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
         return true;
@@ -75,11 +75,11 @@ describe('everything', function () {
     var spys = statsSpys();
     var errors = [];
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -107,11 +107,11 @@ describe('everything', function () {
   it('Should handle a delete (error in forEach custom error handler - return false)', function (done) {
     var spys = statsSpys();
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -140,11 +140,11 @@ describe('everything', function () {
     var spys = statsSpys();
     var errors = [];
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -177,11 +177,11 @@ describe('everything', function () {
     var spys = statsSpys();
     var errors = [];
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -215,11 +215,11 @@ describe('everything', function () {
     var spys = statsSpys();
     var errors = [];
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
@@ -252,11 +252,11 @@ describe('everything', function () {
     var spys = statsSpys();
     var errors = [];
 
-    var iterator = new Iterator(DIR, {
+    var iterator = new Iterator(TEST_DIR, {
       filter: function (entry) {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
         return true;
       },
       alwaysStat: true,
