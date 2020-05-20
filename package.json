@@ -21,7 +21,6 @@
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
   "main": "index.js",
   "scripts": {
-    "compat": "nvs --engines mocha-compat test/spec/**/*.test.js",
     "format": "prettier --write '**/*.js'",
     "lint": "eslint .",
     "test": "mocha-compat test/spec/**/*.test.js"
