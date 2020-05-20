@@ -50,7 +50,7 @@
     "mocha-compat": "^3.5.5",
     "next-tick": "^1.1.0",
     "nvs": "^0.4.2",
-    "object.assign": "^4.1.0",
+    "object-assign": "^4.1.1",
     "prettier": "^2.0.5",
     "rimraf": "^2.7.1",
     "starts-with": "^1.0.2"
