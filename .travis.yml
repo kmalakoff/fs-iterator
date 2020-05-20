@@ -6,4 +6,5 @@ os:
   - osx
   - windows
 script:
-  - npm run compat
+  - npm install nvs -g
+  - nvs --engines npm test
