@@ -1,0 +1,8 @@
+language: node_js
+os:
+  - linux
+  - osx
+  - windows
+  script:
+    - npm install
+    - npm run compat
