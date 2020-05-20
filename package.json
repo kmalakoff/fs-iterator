@@ -1,6 +1,6 @@
 {
   "name": "fs-iterator",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above",
   "keywords": [
     "recursive",
@@ -31,7 +31,8 @@
     "fifo": "^2.3.0",
     "fs-stats-spys": "^1.0.1",
     "fs.realpath": "^1.0.0",
-    "maximize-iterator": "^2.6.2"
+    "maximize-iterator": "^2.6.2",
+    "next-tick": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
@@ -48,7 +49,6 @@
     "fs-generate": "^1.8.0",
     "is-promise": "^4.0.0",
     "mocha-compat": "^3.5.5",
-    "next-tick": "^1.1.0",
     "nvs": "^0.4.4",
     "object-assign": "^4.1.1",
     "prettier": "^2.0.5",
