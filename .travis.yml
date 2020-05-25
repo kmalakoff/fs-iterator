@@ -6,5 +6,5 @@ os:
   - osx
   - windows
 script:
-  - npm install nvs -g
-  - nvs --engines npm test
+  - npm install nvs
+  - node ./bin/nvs --engines npm test
