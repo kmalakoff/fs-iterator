@@ -7,4 +7,4 @@ os:
   - windows
 script:
   - npm install nvs
-  - node ./bin/nvs --engines npm test
+  - node ./node_modules/.bin/nvs --engines npm test
