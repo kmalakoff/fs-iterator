@@ -26,8 +26,8 @@
     "test": "mocha-compat test/spec/**/*.test.js --no-timeouts"
   },
   "dependencies": {
-    "async-compat": "^1.4.5",
-    "fifo": "^2.3.0",
+    "async-compat": "1.4.5",
+    "fifo": "2.3.0",
     "fs-stats-spys": "^1.0.1",
     "fs.realpath": "^1.0.0",
     "maximize-iterator": "^2.6.2",
