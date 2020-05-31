@@ -85,7 +85,7 @@ Iterator.prototype.forEach = function forEach(fn, options, callback) {
     options = options || {};
     options = {
       each: fn,
-      callbacks: options.callbacks || options.async,
+      callbacks: options.callbacks || options.async || false,
       concurrency: options.concurrency || Infinity,
       limit: options.limit || Infinity,
       error:

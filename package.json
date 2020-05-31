@@ -23,7 +23,7 @@
   "scripts": {
     "format": "eslint . --fix",
     "lint": "eslint .",
-    "test": "mocha-compat test/spec/**/*.test.js"
+    "test": "mocha-compat test/spec/**/*.test.js --no-timeouts"
   },
   "dependencies": {
     "async-compat": "^1.4.5",
