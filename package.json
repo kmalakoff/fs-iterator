@@ -27,7 +27,7 @@
     "prepublish": "dtd \"npm run lint\" \"depcheck --ignores='depcheck'\""
   },
   "dependencies": {
-    "async-compat": "^1.4.5",
+    "async-compat": "^1.4.6",
     "fifo": "^2.3.0",
     "fs-stats-spys": "^1.0.1",
     "fs.realpath": "^1.0.0",
@@ -46,7 +46,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "fs-generate": "^1.8.1",
+    "fs-generate": "^1.8.2",
     "is-promise": "^4.0.0",
     "mocha-compat": "^3.5.5",
     "object-assign": "^4.1.1",
