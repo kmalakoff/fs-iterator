@@ -8,6 +8,7 @@ var processOrQueue = require('./lib/processOrQueue');
 var fsCompat = require('./lib/fs-compat');
 
 function Iterator(root, options) {
+  if (!(this instanceof Iterator)) return new Iterator(root, options);
   var self = this;
 
   options = options || {};
@@ -54,22 +55,19 @@ Iterator.prototype.destroy = function destroy() {
   this.processors = null;
   while (this.queued.length) this.queued.pop()(null, null);
   this.queued = null;
-  this.processMore = null;
   this.stack.destroy();
   this.stack = null;
 };
 
 Iterator.prototype.next = function next(callback) {
-  if (typeof callback === 'function') {
-    processOrQueue(this, callback);
-  } else {
-    var self = this;
-    return new Promise(function nextPromise(resolve, reject) {
-      self.next(function nextCallback(err, result) {
-        err ? reject(err) : resolve(result);
-      });
+  if (typeof callback === 'function') return processOrQueue(this, callback);
+
+  var self = this;
+  return new Promise(function nextPromise(resolve, reject) {
+    self.next(function nextCallback(err, result) {
+      err ? reject(err) : resolve(result);
     });
-  }
+  });
 };
 
 Iterator.prototype.forEach = function forEach(fn, options, callback) {
@@ -108,13 +106,14 @@ Iterator.prototype.forEach = function forEach(fn, options, callback) {
     });
     this.processors.push(processor);
     processor();
-  } else {
-    return new Promise(function forEachPromise(resolve, reject) {
-      self.forEach(fn, options, function forEachCallback(err, done) {
-        err ? reject(err) : resolve(done);
-      });
-    });
+    return;
   }
+
+  return new Promise(function forEachPromise(resolve, reject) {
+    self.forEach(fn, options, function forEachCallback(err, done) {
+      err ? reject(err) : resolve(done);
+    });
+  });
 };
 
 if (typeof Symbol !== 'undefined' && Symbol.asyncIterator) {
