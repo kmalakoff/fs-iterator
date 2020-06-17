@@ -31,7 +31,7 @@
     "fifo": "^2.3.0",
     "fs-stats-spys": "^1.0.1",
     "fs.realpath": "^1.0.0",
-    "maximize-iterator": "^2.6.2",
+    "maximize-iterator": "^2.6.4",
     "next-tick": "^1.1.0"
   },
   "devDependencies": {
@@ -46,7 +46,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "fs-generate": "^1.8.2",
+    "fs-generate": "^1.8.4",
     "is-promise": "^4.0.0",
     "mocha-compat": "^3.5.5",
     "object-assign": "^4.1.1",

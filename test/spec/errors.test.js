@@ -24,7 +24,6 @@ describe('errors', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   describe('synchronous', function () {
     it('should propagate errors (default)', function (done) {

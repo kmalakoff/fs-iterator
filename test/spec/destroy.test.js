@@ -25,7 +25,6 @@ describe('destroy', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   describe('callback interface', function () {
     it('destroys after iteration', function (done) {

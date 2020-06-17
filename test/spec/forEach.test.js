@@ -27,7 +27,6 @@ describe('forEach', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   describe('callback interface', function () {
     it('forEach function is mandatory', function (done) {

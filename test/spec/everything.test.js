@@ -26,7 +26,6 @@ describe('everything', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   it('Should find everything with no return', function (done) {
     var spys = statsSpys();

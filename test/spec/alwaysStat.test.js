@@ -26,7 +26,6 @@ describe('alwaysStat', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   describe('default', function () {
     it('depth 0', function (done) {
