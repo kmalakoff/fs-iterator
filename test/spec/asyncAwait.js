@@ -25,7 +25,6 @@ describe('async await', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   it('should be default false', async function () {
     var spys = statsSpys();

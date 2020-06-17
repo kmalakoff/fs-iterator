@@ -26,7 +26,6 @@ describe('legacy', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   it('Iterator async renamed to callbacks', function (done) {
     var spys = statsSpys();

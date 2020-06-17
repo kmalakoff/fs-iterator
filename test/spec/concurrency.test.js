@@ -26,7 +26,6 @@ describe('concurrency', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   describe('synchronous', function () {
     it('should run with concurrency 1', function (done) {
