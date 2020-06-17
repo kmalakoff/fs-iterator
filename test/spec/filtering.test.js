@@ -27,7 +27,6 @@ describe('filtering', function () {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(rimraf.bind(null, TEST_DIR));
 
   describe('synchronous', function () {
     it('Should filter everything under the root directory', function (done) {
