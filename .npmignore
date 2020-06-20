@@ -1,4 +1,5 @@
 .vscode/
+.tmp/
 compatibility/
 performance/
 test/
