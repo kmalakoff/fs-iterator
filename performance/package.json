@@ -18,5 +18,8 @@
     "benchmark-suite": "^0.1.6",
     "fs-iterator-3.0.0": "npm:fs-iterator@4.1.0",
     "object-assign": "^4.1.1"
+  },
+  "engines": {
+    "node": "lts"
   }
 }
