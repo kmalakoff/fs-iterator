@@ -1,5 +1,5 @@
 const path = require('path');
-var assign = require('object-assign');
+var assign = require('just-extend');
 
 const tests = require('./tests');
 
