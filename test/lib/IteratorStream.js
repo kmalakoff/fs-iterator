@@ -1,6 +1,6 @@
 var ReadableStream = require('stream').Readable;
 var inherits = require('util').inherits;
-var assign = require('object-assign');
+var assign = require('just-extend');
 
 var Iterator = require('../..');
 
