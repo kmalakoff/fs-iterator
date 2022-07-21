@@ -54,7 +54,7 @@
     "mocha-compat": "^3.5.5",
     "next-tick": "^1.1.0",
     "prettier": "^2.7.1",
-    "rimraf": "^2.7.1",
+    "rimraf": "^3.0.2",
     "starts-with": "^1.0.2"
   },
   "engines": {
