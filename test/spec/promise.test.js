@@ -1,13 +1,13 @@
-var assert = require('assert');
-var path = require('path');
-var rimraf = require('rimraf');
-var generate = require('fs-generate');
-var statsSpys = require('fs-stats-spys');
+const assert = require('assert');
+const path = require('path');
+const rimraf = require('rimraf');
+const generate = require('fs-generate');
+const statsSpys = require('fs-stats-spys');
 
-var Iterator = require('../..');
+const Iterator = require('fs-iterator');
 
-var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
-var STRUCTURE = {
+const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -19,29 +19,29 @@ var STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('promise', function () {
+describe('promise', () => {
   if (typeof Promise === 'undefined') return; // no promise support
 
-  beforeEach(function (done) {
-    rimraf(TEST_DIR, function () {
+  beforeEach((done) => {
+    rimraf(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(function (done) {
+  after((done) => {
     rimraf(TEST_DIR, done);
   });
 
-  it('should be default false', function (done) {
-    var spys = statsSpys();
+  it('should be default false', (done) => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function (entry) {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: (entry) => {
         spys(entry.stats);
       },
     });
 
     function consume() {
-      iterator.next().then(function (value) {
+      iterator.next().then((value) => {
         if (value === null) {
           assert.ok(spys.callCount, 13);
           done();
@@ -51,18 +51,18 @@ describe('promise', function () {
     consume();
   });
 
-  it('simple forEach (async)', function (done) {
-    var spys = statsSpys();
+  it('simple forEach (async)', (done) => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, { lstat: true });
+    const iterator = new Iterator(TEST_DIR, { lstat: true });
     iterator.forEach(
-      function (entry, callback) {
+      (entry, callback) => {
         spys(entry.stats);
         assert.ok(entry);
         assert.ok(!callback);
         return Promise.resolve();
       },
-      function (err) {
+      (err) => {
         assert.ok(!err);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
@@ -72,19 +72,19 @@ describe('promise', function () {
     );
   });
 
-  it('simple forEach (stop)', function (done) {
-    var spys = statsSpys();
+  it('simple forEach (stop)', (done) => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, { lstat: true });
+    const iterator = new Iterator(TEST_DIR, { lstat: true });
     iterator.forEach(
-      function (entry, callback) {
+      (entry, callback) => {
         spys(entry.stats);
         assert.ok(entry);
         assert.ok(!callback);
         return Promise.resolve(false);
       },
       { concurrency: 1 },
-      function (err) {
+      (err) => {
         assert.ok(!err);
         assert.equal(spys.dir.callCount, 1);
         assert.equal(spys.file.callCount, 0);
@@ -94,18 +94,18 @@ describe('promise', function () {
     );
   });
 
-  it('Should find everything with no return', function (done) {
-    var spys = statsSpys();
+  it('Should find everything with no return', (done) => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function (entry) {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: (entry) => {
         spys(entry.stats);
       },
       lstat: true,
     });
 
     function consume() {
-      iterator.next().then(function (value) {
+      iterator.next().then((value) => {
         if (value === null) {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -117,11 +117,11 @@ describe('promise', function () {
     consume();
   });
 
-  it('Should find everything with return true', function (done) {
-    var spys = statsSpys();
+  it('Should find everything with return true', (done) => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function (entry) {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: (entry) => {
         spys(entry.stats);
         return true;
       },
@@ -129,7 +129,7 @@ describe('promise', function () {
     });
 
     function consume() {
-      iterator.next().then(function (value) {
+      iterator.next().then((value) => {
         if (value === null) {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -141,15 +141,13 @@ describe('promise', function () {
     consume();
   });
 
-  it('should propagate errors', function (done) {
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function () {
-        return Promise.reject(new Error('Failed'));
-      },
+  it('should propagate errors', (done) => {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: () => Promise.reject(new Error('Failed')),
     });
 
     function consume() {
-      iterator.next().catch(function (err) {
+      iterator.next().catch((err) => {
         assert.ok(!!err);
         done();
       });

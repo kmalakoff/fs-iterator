@@ -1,14 +1,14 @@
-var assert = require('assert');
-var path = require('path');
-var rimraf = require('rimraf');
-var generate = require('fs-generate');
-var statsSpys = require('fs-stats-spys');
-var nextTick = require('next-tick');
+const assert = require('assert');
+const path = require('path');
+const rimraf = require('rimraf');
+const generate = require('fs-generate');
+const statsSpys = require('fs-stats-spys');
+const nextTick = require('next-tick');
 
-var Iterator = require('../..');
+const Iterator = require('fs-iterator');
 
-var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
-var STRUCTURE = {
+const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -20,28 +20,28 @@ var STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('forEach', function () {
-  describe('limit', function () {
-    after(function (done) {
+describe('forEach', () => {
+  describe('limit', () => {
+    after((done) => {
       rimraf(TEST_DIR, done);
     });
-    beforeEach(function (done) {
-      rimraf(TEST_DIR, function () {
+    beforeEach((done) => {
+      rimraf(TEST_DIR, () => {
         generate(TEST_DIR, STRUCTURE, done);
       });
     });
 
-    describe('synchronous', function () {
-      it('infinite limit to get all', function (done) {
-        var spys = statsSpys();
+    describe('synchronous', () => {
+      it('infinite limit to get all', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, { lstat: true });
+        const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { limit: Infinity, concurrency: 1 },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(empty);
             assert.equal(spys.dir.callCount, 5);
@@ -52,16 +52,16 @@ describe('forEach', function () {
         );
       });
 
-      it('should run with concurrency 1', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency 1', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, { lstat: true });
+        const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: 1 },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
@@ -73,16 +73,16 @@ describe('forEach', function () {
         );
       });
 
-      it('should run with concurrency 5', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency 5', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, { lstat: true });
+        const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: 5 },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
@@ -91,16 +91,16 @@ describe('forEach', function () {
         );
       });
 
-      it('should run with concurrency Infinity', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency Infinity', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, { lstat: true });
+        const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: Infinity },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
@@ -109,21 +109,19 @@ describe('forEach', function () {
         );
       });
 
-      it('should run with concurrency Infinity and only files', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency Infinity and only files', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry) {
-            return !entry.stats.isDirectory();
-          },
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (entry) => !entry.stats.isDirectory(),
           lstat: true,
         });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { limit: 100, concurrency: 1 },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(empty);
             assert.equal(spys.callCount, 3);
@@ -136,12 +134,12 @@ describe('forEach', function () {
       });
     });
 
-    describe('callbacks', function () {
-      it('infinite limit to get all', function (done) {
-        var spys = statsSpys();
+    describe('callbacks', () => {
+      it('infinite limit to get all', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry, callback) {
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (_entry, callback) => {
             nextTick(callback);
           },
           callbacks: true,
@@ -149,11 +147,11 @@ describe('forEach', function () {
         });
 
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { limit: Infinity, concurrency: 1 },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(empty);
             assert.equal(spys.dir.callCount, 5);
@@ -164,22 +162,22 @@ describe('forEach', function () {
         );
       });
 
-      it('should run with concurrency 1', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency 1', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry, callback) {
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (_entry, callback) => {
             nextTick(callback);
           },
           callbacks: true,
           lstat: true,
         });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { lstat: true, limit: 3, concurrency: 1 },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
@@ -191,22 +189,22 @@ describe('forEach', function () {
         );
       });
 
-      it('should run with concurrency 5', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency 5', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry, callback) {
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (_entry, callback) => {
             nextTick(callback);
           },
           callbacks: true,
           lstat: true,
         });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { lstat: true, limit: 3, concurrency: 5 },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
@@ -215,22 +213,22 @@ describe('forEach', function () {
         );
       });
 
-      it('should run with concurrency Infinity', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency Infinity', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry, callback) {
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (_entry, callback) => {
             nextTick(callback);
           },
           callbacks: true,
           lstat: true,
         });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: Infinity },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
@@ -238,12 +236,12 @@ describe('forEach', function () {
           }
         );
       });
-      it('should run with concurrency Infinity and only files', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency Infinity and only files', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry, callback) {
-            setTimeout(function () {
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (entry, callback) => {
+            setTimeout(() => {
               callback(null, !entry.stats.isDirectory());
             }, 10);
           },
@@ -251,11 +249,11 @@ describe('forEach', function () {
           lstat: true,
         });
         iterator.forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { limit: 100, concurrency: 1 },
-          function (err, empty) {
+          (err, empty) => {
             assert.ok(!err);
             assert.ok(empty);
             assert.equal(spys.callCount, 3);
@@ -268,55 +266,51 @@ describe('forEach', function () {
       });
     });
 
-    describe('promise', function () {
+    describe('promise', () => {
       if (typeof Promise === 'undefined') return; // no promise support
 
-      it('infinite limit to get all', function (done) {
-        var spys = statsSpys();
+      it('infinite limit to get all', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry) {
-            return Promise.resolve();
-          },
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (_entry) => Promise.resolve(),
           lstat: true,
         });
 
         iterator
           .forEach(
-            function (entry) {
+            (entry) => {
               spys(entry.stats);
             },
             { limit: Infinity, concurrency: 1 }
           )
-          .then(function (empty) {
+          .then((empty) => {
             assert.ok(empty);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 2);
             done();
           })
-          .catch(function (err) {
+          .catch((err) => {
             assert.ok(!err);
           });
       });
 
-      it('should run with concurrency 1', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency 1', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry) {
-            return Promise.resolve();
-          },
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (_entry) => Promise.resolve(),
           lstat: true,
         });
         iterator
           .forEach(
-            function (entry) {
+            (entry) => {
               spys(entry.stats);
             },
             { limit: 3, concurrency: 1 }
           )
-          .then(function (empty) {
+          .then((empty) => {
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
@@ -324,79 +318,73 @@ describe('forEach', function () {
             assert.equal(spys.link.callCount, 0);
             done();
           })
-          .catch(function (err) {
+          .catch((err) => {
             assert.ok(!err);
           });
       });
 
-      it('should run with concurrency 5', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency 5', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry) {
-            return Promise.resolve();
-          },
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (_entry) => Promise.resolve(),
           lstat: true,
         });
         iterator
           .forEach(
-            function (entry) {
+            (entry) => {
               spys(entry.stats);
             },
             { limit: 3, concurrency: 5 }
           )
-          .then(function (empty) {
+          .then((empty) => {
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
           })
-          .catch(function (err) {
+          .catch((err) => {
             assert.ok(!err);
           });
       });
 
-      it('should run with concurrency Infinity', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency Infinity', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry) {
-            return Promise.resolve();
-          },
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (_entry) => Promise.resolve(),
           lstat: true,
         });
         iterator
           .forEach(
-            function (entry) {
+            (entry) => {
               spys(entry.stats);
             },
             { limit: 3, concurrency: Infinity }
           )
-          .then(function (empty) {
+          .then((empty) => {
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
           })
-          .catch(function (err) {
+          .catch((err) => {
             assert.ok(!err);
           });
       });
-      it('should run with concurrency Infinity and only files', function (done) {
-        var spys = statsSpys();
+      it('should run with concurrency Infinity and only files', (done) => {
+        const spys = statsSpys();
 
-        var iterator = new Iterator(TEST_DIR, {
-          filter: function (entry) {
-            return Promise.resolve(!entry.stats.isDirectory());
-          },
+        const iterator = new Iterator(TEST_DIR, {
+          filter: (entry) => Promise.resolve(!entry.stats.isDirectory()),
           lstat: true,
         });
         iterator
           .forEach(
-            function (entry) {
+            (entry) => {
               spys(entry.stats);
             },
             { limit: 100, concurrency: 1 }
           )
-          .then(function (empty) {
+          .then((empty) => {
             assert.ok(empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
@@ -404,7 +392,7 @@ describe('forEach', function () {
             assert.equal(spys.link.callCount, 1);
             done();
           })
-          .catch(function (err) {
+          .catch((err) => {
             assert.ok(!err);
           });
       });
