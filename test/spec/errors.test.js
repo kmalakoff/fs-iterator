@@ -1,12 +1,12 @@
-var assert = require('assert');
-var path = require('path');
-var rimraf = require('rimraf');
-var generate = require('fs-generate');
+const assert = require('assert');
+const path = require('path');
+const rimraf = require('rimraf');
+const generate = require('fs-generate');
 
-var Iterator = require('../..');
+const Iterator = require('fs-iterator');
 
-var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
-var STRUCTURE = {
+const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -18,47 +18,43 @@ var STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('errors', function () {
-  beforeEach(function (done) {
-    rimraf(TEST_DIR, function () {
+describe('errors', () => {
+  beforeEach((done) => {
+    rimraf(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
 
-  describe('synchronous', function () {
-    it('should propagate errors (default)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return new Error('Failed');
-        },
+  describe('synchronous', () => {
+    it('should propagate errors (default)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        function () {},
-        function (err) {
+        () => {},
+        (err) => {
           assert.ok(!!err);
           done();
         }
       );
     });
 
-    it('should propagate errors (true)', function (done) {
-      var errors = [];
+    it('should propagate errors (true)', (done) => {
+      const errors = [];
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return new Error('Failed');
-        },
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        function () {},
+        () => {},
         {
           concurrency: 1,
-          error: function (err) {
+          error: (err) => {
             errors.push(err);
             return true;
           },
         },
-        function (err) {
+        (err) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -66,23 +62,21 @@ describe('errors', function () {
       );
     });
 
-    it('should not propagate errors (false)', function (done) {
-      var errors = [];
+    it('should not propagate errors (false)', (done) => {
+      const errors = [];
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return new Error('Failed');
-        },
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        function () {},
+        () => {},
         {
-          error: function (err) {
+          error: (err) => {
             errors.push(err);
             return false;
           },
         },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(errors.length, 6);
           done();
@@ -91,11 +85,11 @@ describe('errors', function () {
     });
   });
 
-  describe('callbacks', function () {
-    it('handle invalid root (next)', function (done) {
-      var iterator = new Iterator(TEST_DIR + 'does-not-exist');
+  describe('callbacks', () => {
+    it('handle invalid root (next)', (done) => {
+      const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
 
-      iterator.next(function (err, value) {
+      iterator.next((err, value) => {
         assert.ok(err);
         assert.equal(err.code, 'ENOENT');
         assert.ok(!value);
@@ -103,11 +97,11 @@ describe('errors', function () {
       });
     });
 
-    it('handle invalid root (forEach)', function (done) {
-      var iterator = new Iterator(TEST_DIR + 'does-not-exist');
+    it('handle invalid root (forEach)', (done) => {
+      const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
-        function () {},
-        function (err) {
+        () => {},
+        (err) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
           done();
@@ -115,45 +109,45 @@ describe('errors', function () {
       );
     });
 
-    it('should propagate errors (default)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
-          setTimeout(function () {
+    it('should propagate errors (default)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (_entry, callback) => {
+          setTimeout(() => {
             callback(new Error('Failed'));
           }, 10);
         },
         callbacks: true,
       });
       iterator.forEach(
-        function () {},
-        function (err) {
+        () => {},
+        (err) => {
           assert.ok(!!err);
           done();
         }
       );
     });
 
-    it('should propagate errors (true)', function (done) {
-      var errors = [];
+    it('should propagate errors (true)', (done) => {
+      const errors = [];
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
-          setTimeout(function () {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (_entry, callback) => {
+          setTimeout(() => {
             callback(new Error('Failed'));
           }, 10);
         },
         callbacks: true,
       });
       iterator.forEach(
-        function () {},
+        () => {},
         {
           concurrency: 1,
-          error: function (err) {
+          error: (err) => {
             errors.push(err);
             return true;
           },
         },
-        function (err) {
+        (err) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -161,26 +155,26 @@ describe('errors', function () {
       );
     });
 
-    it('should not propagate errors (false)', function (done) {
-      var errors = [];
+    it('should not propagate errors (false)', (done) => {
+      const errors = [];
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
-          setTimeout(function () {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (_entry, callback) => {
+          setTimeout(() => {
             callback(new Error('Failed'));
           }, 10);
         },
         callbacks: true,
       });
       iterator.forEach(
-        function () {},
+        () => {},
         {
-          error: function (err) {
+          error: (err) => {
             errors.push(err);
             return false;
           },
         },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(errors.length, 6);
           done();
@@ -189,29 +183,29 @@ describe('errors', function () {
     });
   });
 
-  describe('promise', function () {
+  describe('promise', () => {
     if (typeof Promise === 'undefined') return; // no promise support
 
-    it('handle invalid root (next)', function (done) {
-      var iterator = new Iterator(TEST_DIR + 'does-not-exist');
+    it('handle invalid root (next)', (done) => {
+      const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
 
       iterator
         .next()
-        .then(function (value) {
+        .then((value) => {
           assert.ok(!value);
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
           done();
         });
     });
 
-    it('handle invalid root (forEach)', function (done) {
-      var iterator = new Iterator(TEST_DIR + 'does-not-exist');
+    it('handle invalid root (forEach)', (done) => {
+      const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
-        function () {},
-        function (err) {
+        () => {},
+        (err) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
           done();
@@ -219,39 +213,35 @@ describe('errors', function () {
       );
     });
 
-    it('should propagate errors (default)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return Promise.reject(new Error('Failed'));
-        },
+    it('should propagate errors (default)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        function () {},
-        function (err) {
+        () => {},
+        (err) => {
           assert.ok(!!err);
           done();
         }
       );
     });
 
-    it('should propagate errors (true)', function (done) {
-      var errors = [];
+    it('should propagate errors (true)', (done) => {
+      const errors = [];
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return Promise.reject(new Error('Failed'));
-        },
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        function () {},
+        () => {},
         {
           concurrency: 1,
-          error: function (err) {
+          error: (err) => {
             errors.push(err);
             return true;
           },
         },
-        function (err) {
+        (err) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -259,23 +249,21 @@ describe('errors', function () {
       );
     });
 
-    it('should not propagate errors (false)', function (done) {
-      var errors = [];
+    it('should not propagate errors (false)', (done) => {
+      const errors = [];
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return Promise.reject(new Error('Failed'));
-        },
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        function () {},
+        () => {},
         {
-          error: function (err) {
+          error: (err) => {
             errors.push(err);
             return false;
           },
         },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(errors.length, 6);
           done();

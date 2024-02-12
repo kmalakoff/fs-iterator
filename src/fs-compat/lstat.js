@@ -1,6 +1,6 @@
-var fs = require('fs');
+const fs = require('fs');
 
-function lstatAddOptions(path, options, callback) {
+function lstatAddOptions(path, _options, callback) {
   // if (arguments.length === 2) return fs.lstat(path, options);
   return fs.lstat(path, callback);
 }

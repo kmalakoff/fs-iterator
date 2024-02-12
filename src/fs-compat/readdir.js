@@ -1,17 +1,17 @@
-var fs = require('fs');
+const fs = require('fs');
 
 // prior to Node 9, fs.readdir did not return sorted files
-var readdir = fs.readdir;
-var parts = process.versions.node.split('.');
+let readdir = fs.readdir;
+const parts = process.versions.node.split('.');
 if (+parts[0] === 0 && +parts[1] <= 8) {
   readdir = function readdirSort(path, callback) {
-    fs.readdir(path, function (err, files) {
+    fs.readdir(path, (err, files) => {
       err ? callback(err) : callback(null, files.sort());
     });
   };
 }
 
-function readdirAddOptions(path, options, callback) {
+function readdirAddOptions(path, _options, callback) {
   // if (arguments.length === 2) return readdir(path, options);
   // if (options.withFileTypes) return callback(new Error('withFileTypes option not emulated'));
   return readdir(path, callback);
