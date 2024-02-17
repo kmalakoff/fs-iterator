@@ -1,1 +1,1 @@
-ignores: ["depcheck"]
+ignores: ["fs-iterator", "depcheck", "ts-dev-stack", "@types/*"]

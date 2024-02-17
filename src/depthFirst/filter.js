@@ -1,4 +1,4 @@
-var compat = require('async-compat');
+const compat = require('async-compat');
 
 module.exports = function filter(iterator, entry, callback) {
   if (!iterator.options.filter) return callback(null, true);

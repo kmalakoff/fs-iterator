@@ -15,11 +15,17 @@
     "test": "npm run ops && npm run mem"
   },
   "dependencies": {
-    "benchmark-suite": "^0.1.7",
-    "fs-iterator-3.0.0": "npm:fs-iterator@4.1.0",
-    "just-extend": "^6.0.1"
+    "benchmark-suite": "^0.1.8",
+    "fs-iterator-3.0.0": "npm:fs-iterator@4.1.1",
+    "just-extend": "^6.2.0"
   },
   "engines": {
-    "node": "lts"
+    "node": ">=8"
+  },
+  "tsds": {
+    "source": "src/index.js",
+    "targets": [
+      "cjs"
+    ]
   }
 }

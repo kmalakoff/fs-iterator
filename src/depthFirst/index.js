@@ -1,8 +1,8 @@
-var createEntry = require('./createEntry');
-var filter = require('./filter');
-var stat = require('./stat');
-var fsCompat = require('../fs-compat');
-var lifoFromArray = require('../lifoFromArray');
+const createEntry = require('./createEntry');
+const filter = require('./filter');
+const stat = require('./stat');
+const fsCompat = require('../fs-compat');
+const lifoFromArray = require('../lifoFromArray');
 
 function isDirectory(entry) {
   if (entry.realStats) return entry.realStats.isDirectory();
@@ -10,8 +10,8 @@ function isDirectory(entry) {
 }
 
 module.exports = function path(item, iterator, callback) {
-  var depth = item.depth;
-  var entry = createEntry(iterator, item);
+  const depth = item.depth;
+  const entry = createEntry(iterator, item);
   item = null; // release reference
 
   stat(iterator, entry, function statCallback(err) {
