@@ -1,15 +1,15 @@
-var assert = require('assert');
-var path = require('path');
-var rimraf = require('rimraf');
-var generate = require('fs-generate');
-var statsSpys = require('fs-stats-spys');
-var isPromise = require('is-promise');
-var nextTick = require('next-tick');
+const assert = require('assert');
+const path = require('path');
+const rimraf = require('rimraf');
+const generate = require('fs-generate');
+const statsSpys = require('fs-stats-spys');
+const isPromise = require('is-promise');
+const nextTick = require('next-tick');
 
-var Iterator = require('../..');
+const Iterator = require('fs-iterator');
 
-var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
-var STRUCTURE = {
+const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -21,47 +21,47 @@ var STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('forEach', function () {
-  beforeEach(function (done) {
-    rimraf(TEST_DIR, function () {
+describe('forEach', () => {
+  beforeEach((done) => {
+    rimraf(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
 
-  describe('callback interface', function () {
-    it('forEach function is mandatory', function (done) {
+  describe('callback interface', () => {
+    it('forEach function is mandatory', (done) => {
       if (typeof Promise === 'undefined') return done(); // no promise support
 
-      var iterator = new Iterator(TEST_DIR);
-      var promise = iterator.forEach(function () {});
+      const iterator = new Iterator(TEST_DIR);
+      const promise = iterator.forEach(() => {});
       assert.ok(isPromise(promise));
       promise
-        .then(function () {
-          var iterator2 = new Iterator(TEST_DIR);
+        .then(() => {
+          const iterator2 = new Iterator(TEST_DIR);
 
-          var nothing = iterator2.forEach(
-            function () {},
-            function (err) {
+          const nothing = iterator2.forEach(
+            () => {},
+            (err) => {
               assert.ok(!err);
               done();
             }
           );
           assert.ok(nothing === undefined);
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
 
-    it('simple forEach (default)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (default)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        function (entry) {
+        (entry) => {
           spys(entry.stats);
         },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -71,19 +71,19 @@ describe('forEach', function () {
       );
     });
 
-    it('simple forEach (callbacks)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (callbacks)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        function (entry, callback) {
+        (entry, callback) => {
           spys(entry.stats);
           assert.ok(entry);
           assert.ok(callback);
           nextTick(callback);
         },
         { callbacks: true },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -93,21 +93,21 @@ describe('forEach', function () {
       );
     });
 
-    it('simple forEach (callbacks, stop)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (callbacks, stop)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        function (entry, callback) {
+        (entry, callback) => {
           spys(entry.stats);
           assert.ok(entry);
           assert.ok(callback);
-          setTimeout(function () {
+          setTimeout(() => {
             callback(null, false);
           }, 10);
         },
         { callbacks: true, concurrency: 1 },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
@@ -117,16 +117,16 @@ describe('forEach', function () {
       );
     });
 
-    it('simple forEach (concurency: 1)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (concurency: 1)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        function (entry) {
+        (entry) => {
           spys(entry.stats);
         },
         { concurrency: 1 },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -136,16 +136,16 @@ describe('forEach', function () {
       );
     });
 
-    it('simple forEach (concurency: 5)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (concurency: 5)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        function (entry) {
+        (entry) => {
           spys(entry.stats);
         },
         { concurrency: 5 },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -155,16 +155,16 @@ describe('forEach', function () {
       );
     });
 
-    it('simple forEach (concurency: Infinity)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (concurency: Infinity)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        function (entry) {
+        (entry) => {
           spys(entry.stats);
         },
         { concurrency: Infinity },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -174,10 +174,10 @@ describe('forEach', function () {
       );
     });
 
-    it('should propagate errors (default)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
-          nextTick(function () {
+    it('should propagate errors (default)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (_entry, callback) => {
+          nextTick(() => {
             callback(null, new Error('Failed'));
           });
         },
@@ -185,18 +185,18 @@ describe('forEach', function () {
       });
 
       iterator.forEach(
-        function () {},
-        function (err) {
+        () => {},
+        (err) => {
           assert.ok(!!err);
           done();
         }
       );
     });
 
-    it('should propagate errors (concurency: 1)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
-          nextTick(function () {
+    it('should propagate errors (concurency: 1)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (_entry, callback) => {
+          nextTick(() => {
             callback(null, new Error('Failed'));
           });
         },
@@ -204,19 +204,19 @@ describe('forEach', function () {
       });
 
       iterator.forEach(
-        function () {},
+        () => {},
         { concurrency: 1 },
-        function (err) {
+        (err) => {
           assert.ok(!!err);
           done();
         }
       );
     });
 
-    it('should propagate errors (concurency: 5)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
-          nextTick(function () {
+    it('should propagate errors (concurency: 5)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (_entry, callback) => {
+          nextTick(() => {
             callback(null, new Error('Failed'));
           });
         },
@@ -224,19 +224,19 @@ describe('forEach', function () {
       });
 
       iterator.forEach(
-        function () {},
+        () => {},
         { concurrency: 5 },
-        function (err) {
+        (err) => {
           assert.ok(!!err);
           done();
         }
       );
     });
 
-    it('should propagate errors (concurency: Infinity)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
-          nextTick(function () {
+    it('should propagate errors (concurency: Infinity)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (_entry, callback) => {
+          nextTick(() => {
             callback(null, new Error('Failed'));
           });
         },
@@ -244,9 +244,9 @@ describe('forEach', function () {
       });
 
       iterator.forEach(
-        function () {},
+        () => {},
         { concurrency: Infinity },
-        function (err) {
+        (err) => {
           assert.ok(!!err);
           done();
         }
@@ -254,18 +254,18 @@ describe('forEach', function () {
     });
   });
 
-  describe('promise interface', function () {
+  describe('promise interface', () => {
     if (typeof Promise === 'undefined') return; // no promise support
 
-    it('forEach function is mandatory', function (done) {
+    it('forEach function is mandatory', (done) => {
       try {
-        var iterator = new Iterator(TEST_DIR);
+        const iterator = new Iterator(TEST_DIR);
         iterator
           .forEach()
-          .then(function () {
+          .then(() => {
             assert.ok(false);
           })
-          .catch(function () {
+          .catch(() => {
             assert.ok(false);
           });
       } catch (err) {
@@ -274,175 +274,167 @@ describe('forEach', function () {
       }
     });
 
-    it('simple forEach (default)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (default)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator
-        .forEach(function (entry) {
+        .forEach((entry) => {
           spys(entry.stats);
         })
-        .then(function () {
+        .then(() => {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
 
-    it('simple forEach (concurrency: 1)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (concurrency: 1)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator
         .forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { concurrency: 1 }
         )
-        .then(function () {
+        .then(() => {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
 
-    it('simple forEach (concurrency: 5)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (concurrency: 5)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator
         .forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { concurrency: 5 }
         )
-        .then(function () {
+        .then(() => {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
 
-    it('simple forEach (concurrency: Infinity)', function (done) {
-      var spys = statsSpys();
+    it('simple forEach (concurrency: Infinity)', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, { lstat: true });
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator
         .forEach(
-          function (entry) {
+          (entry) => {
             spys(entry.stats);
           },
           { concurrency: Infinity }
         )
-        .then(function () {
+        .then(() => {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           done();
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
 
-    it('should propagate errors (default)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return Promise.reject(new Error('Failed'));
-        },
+    it('should propagate errors (default)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => Promise.reject(new Error('Failed')),
       });
 
       iterator
-        .forEach(function (err) {
+        .forEach((err) => {
           if (err) throw err;
         })
-        .then(function () {
+        .then(() => {
           assert.ok(false);
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!!err);
           done();
         });
     });
 
-    it('should propagate errors (concurrency: 1)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return Promise.reject(new Error('Failed'));
-        },
+    it('should propagate errors (concurrency: 1)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => Promise.reject(new Error('Failed')),
       });
 
       iterator
         .forEach(
-          function (err) {
+          (err) => {
             if (err) throw err;
           },
           { concurrency: 1 }
         )
-        .then(function () {
+        .then(() => {
           assert.ok(false);
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!!err);
           done();
         });
     });
 
-    it('should propagate errors (concurrency: 5)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return Promise.reject(new Error('Failed'));
-        },
+    it('should propagate errors (concurrency: 5)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => Promise.reject(new Error('Failed')),
       });
 
       iterator
         .forEach(
-          function (err) {
+          (err) => {
             if (err) throw err;
           },
           { concurrency: 5 }
         )
-        .then(function () {
+        .then(() => {
           assert.ok(false);
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!!err);
           done();
         });
     });
 
-    it('should propagate errors (concurrency: Infinity)', function (done) {
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function () {
-          return Promise.reject(new Error('Failed'));
-        },
+    it('should propagate errors (concurrency: Infinity)', (done) => {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: () => Promise.reject(new Error('Failed')),
       });
 
       iterator
         .forEach(
-          function (err) {
+          (err) => {
             if (err) throw err;
           },
           { concurrency: Infinity }
         )
-        .then(function () {
+        .then(() => {
           assert.ok(false);
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!!err);
           done();
         });

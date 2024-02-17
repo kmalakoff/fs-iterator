@@ -1,13 +1,13 @@
-var assert = require('assert');
-var path = require('path');
-var rimraf = require('rimraf');
-var generate = require('fs-generate');
-var statsSpys = require('fs-stats-spys');
+const assert = require('assert');
+const path = require('path');
+const rimraf = require('rimraf');
+const generate = require('fs-generate');
+const statsSpys = require('fs-stats-spys');
 
-var Iterator = require('../..');
+const Iterator = require('fs-iterator');
 
-var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
-var STRUCTURE = {
+const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -19,18 +19,18 @@ var STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('asyncIterator', function () {
-  beforeEach(function (done) {
-    rimraf(TEST_DIR, function () {
+describe('asyncIterator', () => {
+  beforeEach((done) => {
+    rimraf(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
 
-  it('should be default false', async function () {
-    var spys = statsSpys();
+  it('should be default false', async () => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function (entry) {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: (entry) => {
         spys(entry.stats);
       },
     });
@@ -45,11 +45,11 @@ describe('asyncIterator', function () {
     assert.ok(spys.callCount, 13);
   });
 
-  it('Should find everything with no return', async function () {
-    var spys = statsSpys();
+  it('Should find everything with no return', async () => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function (entry) {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: (entry) => {
         spys(entry.stats);
       },
       lstat: true,
@@ -67,11 +67,11 @@ describe('asyncIterator', function () {
     assert.equal(spys.link.callCount, 2);
   });
 
-  it('Should find everything with return true', async function () {
-    var spys = statsSpys();
+  it('Should find everything with return true', async () => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function (entry) {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: (entry) => {
         spys(entry.stats);
         return true;
       },
@@ -90,11 +90,9 @@ describe('asyncIterator', function () {
     assert.equal(spys.link.callCount, 2);
   });
 
-  it('should propagate errors', async function () {
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function () {
-        return Promise.reject(new Error('Failed'));
-      },
+  it('should propagate errors', async () => {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: () => Promise.reject(new Error('Failed')),
     });
 
     try {

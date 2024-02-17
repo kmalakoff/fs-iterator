@@ -1,16 +1,16 @@
-var ReadableStream = require('stream').Readable;
-var inherits = require('util').inherits;
-var assign = require('just-extend');
+const ReadableStream = require('stream').Readable;
+const inherits = require('util').inherits;
+const assign = require('just-extend');
 
-var Iterator = require('../..');
+const Iterator = require('fs-iterator');
 
 function IteratorStream(root, options) {
   if (!(this instanceof IteratorStream)) return new IteratorStream(root, options);
   options = assign({}, options || {});
   ReadableStream.call(this, { objectMode: true, autoDestroy: true, highWaterMark: options.highWaterMark || 4096 });
 
-  var self = this;
-  var error = options.error;
+  const self = this;
+  const error = options.error;
   options.error = function (err) {
     if (!this.destroyed) return;
     if (~Iterator.EXPECTED_ERRORS.indexOf(err.code)) self.emit('warn', err);
@@ -32,27 +32,26 @@ IteratorStream.prototype.destroy = function (err) {
 };
 
 IteratorStream.prototype._read = function (batch) {
-  var self = this;
   this.processing++;
   this.iterator.forEach(
-    function (entry) {
-      if (self.destroyed || self.done) return;
+    (entry) => {
+      if (this.destroyed || this.done) return;
       batch--;
-      self.push(entry);
+      this.push(entry);
     },
     {
       limit: batch,
     },
-    function (err, done) {
-      self.processing--;
-      if (self.destroyed || self.done) return;
-      if (err) self.destroy(err);
+    (err, done) => {
+      this.processing--;
+      if (this.destroyed || this.done) return;
+      if (err) this.destroy(err);
       else if (done) {
-        if (self.processing <= 0) {
-          self.done = true;
-          self.push(null);
+        if (this.processing <= 0) {
+          this.done = true;
+          this.push(null);
         }
-      } else if (batch) self._read(batch);
+      } else if (batch) this._read(batch);
     }
   );
 };
