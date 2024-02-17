@@ -1,14 +1,14 @@
-var assert = require('assert');
-var path = require('path');
-var fs = require('fs');
-var rimraf = require('rimraf');
-var generate = require('fs-generate');
-var statsSpys = require('fs-stats-spys');
+const assert = require('assert');
+const path = require('path');
+const fs = require('fs');
+const rimraf = require('rimraf');
+const generate = require('fs-generate');
+const statsSpys = require('fs-stats-spys');
 
-var Iterator = require('../..');
+const Iterator = require('fs-iterator');
 
-var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
-var STRUCTURE = {
+const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -21,28 +21,28 @@ var STRUCTURE = {
   'dir3/dir4/dirlink1': '~dir2',
 };
 
-describe('symlink', function () {
-  beforeEach(function (done) {
-    rimraf(TEST_DIR, function () {
+describe('symlink', () => {
+  beforeEach((done) => {
+    rimraf(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(function (done) {
+  after((done) => {
     rimraf(TEST_DIR, done);
   });
 
-  it('Should find everything with no return (lstat)', function (done) {
-    var spys = statsSpys();
+  it('Should find everything with no return (lstat)', (done) => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function (entry) {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: (entry) => {
         spys(entry.stats);
       },
       lstat: true,
     });
     iterator.forEach(
-      function () {},
-      function (err) {
+      () => {},
+      (err) => {
         assert.ok(!err);
         assert.equal(spys.callCount, 15);
         assert.equal(spys.dir.callCount, 5);
@@ -53,18 +53,18 @@ describe('symlink', function () {
     );
   });
 
-  it('Should find everything with no return (stat)', function (done) {
-    var spys = statsSpys();
+  it('Should find everything with no return (stat)', (done) => {
+    const spys = statsSpys();
 
-    var iterator = new Iterator(TEST_DIR, {
-      filter: function (entry) {
+    const iterator = new Iterator(TEST_DIR, {
+      filter: (entry) => {
         spys(entry.stats);
       },
       lstat: false,
     });
     iterator.forEach(
-      function () {},
-      function (err) {
+      () => {},
+      (err) => {
         assert.ok(!err);
         assert.equal(spys.callCount, 15);
         if (fs.Dirent) {

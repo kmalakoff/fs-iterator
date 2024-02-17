@@ -1,9 +1,9 @@
-var fsCompat = require('../fs-compat');
+const fsCompat = require('../fs-compat');
 
 function ensureStat(iterator, entry, callback) {
   if (entry.stats) return callback();
 
-  var stat = iterator.options.lstat ? fsCompat.lstat : fsCompat.stat;
+  const stat = iterator.options.lstat ? fsCompat.lstat : fsCompat.stat;
   return stat(entry.fullPath, iterator.options.stat, function statCallback(err, stats) {
     if (err) return callback(err);
     entry.stats = stats;

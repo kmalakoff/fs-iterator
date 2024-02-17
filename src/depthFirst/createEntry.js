@@ -1,4 +1,4 @@
-var sep = require('path').sep;
+const sep = require('path').sep;
 
 function join(left, right) {
   if (!left) return right || '';
@@ -7,7 +7,7 @@ function join(left, right) {
 }
 
 module.exports = function createEntry(iterator, item) {
-  var entry = {};
+  const entry = {};
   if (item.basename.name) {
     entry.basename = item.basename.name;
     entry.stats = item.basename;

@@ -1,13 +1,13 @@
-var assert = require('assert');
-var path = require('path');
-var rimraf = require('rimraf');
-var generate = require('fs-generate');
-var statsSpys = require('fs-stats-spys');
+const assert = require('assert');
+const path = require('path');
+const rimraf = require('rimraf');
+const generate = require('fs-generate');
+const statsSpys = require('fs-stats-spys');
 
-var Iterator = require('../..');
+const Iterator = require('fs-iterator');
 
-var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
-var STRUCTURE = {
+const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -19,26 +19,26 @@ var STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('destroy', function () {
-  beforeEach(function (done) {
-    rimraf(TEST_DIR, function () {
+describe('destroy', () => {
+  beforeEach((done) => {
+    rimraf(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
 
-  describe('callback interface', function () {
-    it('destroys after iteration', function (done) {
-      var spys = statsSpys();
+  describe('callback interface', () => {
+    it('destroys after iteration', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry) {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (entry) => {
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        function () {},
-        function (err) {
+        () => {},
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -49,18 +49,18 @@ describe('destroy', function () {
       );
     });
 
-    it('destroys before iteration', function (done) {
-      var spys = statsSpys();
+    it('destroys before iteration', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry) {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (entry) => {
           spys(entry.stats);
         },
       });
       iterator.destroy();
       iterator.forEach(
-        function () {},
-        function (err) {
+        () => {},
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 0);
@@ -70,12 +70,12 @@ describe('destroy', function () {
       );
     });
 
-    it('handle mid-iterator destroy (concurrency 1)', function (done) {
-      var spys = statsSpys();
+    it('handle mid-iterator destroy (concurrency 1)', (done) => {
+      const spys = statsSpys();
 
-      var count = 0;
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
+      let count = 0;
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (entry, callback) => {
           spys(entry.stats);
           if (++count === 4) iterator.destroy();
           callback();
@@ -83,9 +83,9 @@ describe('destroy', function () {
         callbacks: true,
       });
       iterator.forEach(
-        function () {},
+        () => {},
         { concurrency: 1 },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
@@ -96,12 +96,12 @@ describe('destroy', function () {
       );
     });
 
-    it('handle mid-iterator destroy (concurrency Infinity)', function (done) {
-      var spys = statsSpys();
+    it('handle mid-iterator destroy (concurrency Infinity)', (done) => {
+      const spys = statsSpys();
 
-      var count = 0;
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
+      let count = 0;
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (entry, callback) => {
           spys(entry.stats);
           if (++count === 4) iterator.destroy();
           callback();
@@ -109,9 +109,9 @@ describe('destroy', function () {
         callbacks: true,
       });
       iterator.forEach(
-        function () {},
+        () => {},
         { concurrency: Infinity },
-        function (err) {
+        (err) => {
           assert.ok(!err);
           assert.equal(spys.callCount, 4);
           done();
@@ -120,85 +120,85 @@ describe('destroy', function () {
     });
   });
 
-  describe('promise interface', function () {
+  describe('promise interface', () => {
     if (typeof Promise === 'undefined') return; // no promise support
 
-    it('destroys after iteration', function (done) {
-      var spys = statsSpys();
+    it('destroys after iteration', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry) {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (entry) => {
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator
-        .forEach(function () {})
-        .then(function () {
+        .forEach(() => {})
+        .then(() => {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
           iterator.destroy();
           done();
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
 
-    it('destroys before iteration', function (done) {
-      var spys = statsSpys();
+    it('destroys before iteration', (done) => {
+      const spys = statsSpys();
 
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry) {
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (entry) => {
           spys(entry.stats);
         },
       });
       iterator.destroy();
       iterator
-        .forEach(function () {})
-        .then(function () {
+        .forEach(() => {})
+        .then(() => {
           assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
           done();
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
 
-    it('handle mid-iterator destroy (concurrency 1)', function (done) {
-      var spys = statsSpys();
+    it('handle mid-iterator destroy (concurrency 1)', (done) => {
+      const spys = statsSpys();
 
-      var count = 0;
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry) {
+      let count = 0;
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (entry) => {
           spys(entry.stats);
           if (++count === 4) return iterator.destroy();
         },
         lstat: true,
       });
       iterator
-        .forEach(function () {}, { concurrency: 1 })
-        .then(function () {
+        .forEach(() => {}, { concurrency: 1 })
+        .then(() => {
           assert.equal(spys.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 0);
           done();
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });
 
-    it('handle mid-iterator destroy (concurrency Infinity)', function (done) {
-      var spys = statsSpys();
+    it('handle mid-iterator destroy (concurrency Infinity)', (done) => {
+      const spys = statsSpys();
 
-      var count = 0;
-      var iterator = new Iterator(TEST_DIR, {
-        filter: function (entry, callback) {
+      let count = 0;
+      const iterator = new Iterator(TEST_DIR, {
+        filter: (entry, callback) => {
           spys(entry.stats);
           if (++count === 4) iterator.destroy();
           callback();
@@ -206,12 +206,12 @@ describe('destroy', function () {
         callbacks: true,
       });
       iterator
-        .forEach(function () {}, { concurrency: Infinity })
-        .then(function () {
+        .forEach(() => {}, { concurrency: Infinity })
+        .then(() => {
           assert.equal(spys.callCount, 4);
           done();
         })
-        .catch(function (err) {
+        .catch((err) => {
           assert.ok(!err);
         });
     });

@@ -1,12 +1,12 @@
-var assert = require('assert');
-var path = require('path');
-var rimraf = require('rimraf');
-var generate = require('fs-generate');
-var statsSpys = require('fs-stats-spys');
-var eos = require('end-of-stream');
+const assert = require('assert');
+const path = require('path');
+const rimraf = require('rimraf');
+const generate = require('fs-generate');
+const statsSpys = require('fs-stats-spys');
+const eos = require('end-of-stream');
 
-var TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
-var STRUCTURE = {
+const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const STRUCTURE = {
   file1: 'a',
   file2: 'b',
   dir1: null,
@@ -18,27 +18,27 @@ var STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('stream', function () {
+describe('stream', () => {
   if (!require('stream').Readable) return; // no readable streams
-  var IteratorStream = require('../lib/IteratorStream');
+  const IteratorStream = require('../lib/IteratorStream');
 
-  beforeEach(function (done) {
-    rimraf(TEST_DIR, function () {
+  beforeEach((done) => {
+    rimraf(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
-  after(function (done) {
+  after((done) => {
     rimraf(TEST_DIR, done);
   });
 
-  it('default', function (done) {
-    var spys = statsSpys();
+  it('default', (done) => {
+    const spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(TEST_DIR, { lstat: true });
-    iteratorStream.on('data', function (entry) {
+    const iteratorStream = new IteratorStream(TEST_DIR, { lstat: true });
+    iteratorStream.on('data', (entry) => {
       spys(entry.stats);
     });
-    eos(iteratorStream, function (err) {
+    eos(iteratorStream, (err) => {
       assert.ok(!err);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
@@ -47,20 +47,20 @@ describe('stream', function () {
     });
   });
 
-  it('directories only (highWaterMark: 1)', function (done) {
-    var spys = statsSpys();
+  it('directories only (highWaterMark: 1)', (done) => {
+    const spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(TEST_DIR, {
+    const iteratorStream = new IteratorStream(TEST_DIR, {
       lstat: true,
       highWaterMark: 1,
       filter: function filter(entry) {
         return entry.stats.isDirectory();
       },
     });
-    iteratorStream.on('data', function (entry) {
+    iteratorStream.on('data', (entry) => {
       spys(entry.stats);
     });
-    eos(iteratorStream, function (err) {
+    eos(iteratorStream, (err) => {
       assert.ok(!err);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
@@ -69,18 +69,18 @@ describe('stream', function () {
     });
   });
 
-  it('skip directories (highWaterMark: 1)', function (done) {
-    var spys = statsSpys();
+  it('skip directories (highWaterMark: 1)', (done) => {
+    const spys = statsSpys();
 
-    var iteratorStream = new IteratorStream(TEST_DIR, {
+    const iteratorStream = new IteratorStream(TEST_DIR, {
       lstat: true,
       highWaterMark: 1,
     });
-    iteratorStream.on('data', function (entry) {
+    iteratorStream.on('data', (entry) => {
       if (entry.stats.isDirectory()) return;
       spys(entry.stats);
     });
-    eos(iteratorStream, function (err) {
+    eos(iteratorStream, (err) => {
       assert.ok(!err);
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);

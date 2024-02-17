@@ -1,6 +1,6 @@
-var FIFO = require('fifo');
+const FIFO = require('fifo');
 
-var depthFirst = require('./depthFirst');
+const depthFirst = require('./depthFirst');
 
 function PathStack() {
   this.stack = new FIFO();
@@ -17,7 +17,7 @@ PathStack.prototype.push = function push(item) {
 
 PathStack.prototype.pop = function pop() {
   if (!this.stack.length) throw new Error('Stack is empty');
-  var item = this.stack.last();
+  const item = this.stack.last();
   this.length--;
 
   // just a simple item
