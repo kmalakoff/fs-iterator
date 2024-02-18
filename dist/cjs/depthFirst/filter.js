@@ -1,16 +1,25 @@
 "use strict";
-var compat = require("async-compat");
-module.exports = function filter(iterator, entry, callback) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function() {
+        return filter;
+    }
+});
+var _asynccompat = /*#__PURE__*/ _interop_require_default(require("async-compat"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function filter(iterator, entry, callback) {
     if (!iterator.options.filter) return callback(null, true);
-    compat.asyncFunction(iterator.options.filter, iterator.options.callbacks, entry, function filterCallback(err, keep) {
+    _asynccompat.default.asyncFunction(iterator.options.filter, iterator.options.callbacks, entry, function filterCallback(err, keep) {
         if (err) return callback(err);
-        if (!compat.defaultValue(keep, true)) return callback();
+        if (!_asynccompat.default.defaultValue(keep, true)) return callback();
         callback(null, true);
     });
-};
-
-if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-  Object.defineProperty(exports.default, '__esModule', { value: true });
-  for (var key in exports) exports.default[key] = exports[key];
-  module.exports = exports.default;
 }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { module.exports = exports.default; for (var key in exports) module.exports[key] = exports[key]; }

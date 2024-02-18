@@ -1,8 +1,22 @@
 "use strict";
-var FIFO = require("fifo");
-var depthFirst = require("./depthFirst");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function() {
+        return _default;
+    }
+});
+var _fifo = /*#__PURE__*/ _interop_require_default(require("fifo"));
+var _index = /*#__PURE__*/ _interop_require_default(require("./depthFirst/index.js"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function PathStack() {
-    this.stack = new FIFO();
+    this.stack = new _fifo.default();
     this.length = 0;
 }
 PathStack.prototype.push = function push(item) {
@@ -17,24 +31,19 @@ PathStack.prototype.pop = function pop() {
     var item = this.stack.last();
     this.length--;
     // just a simple item
-    if (!item.files) return depthFirst.bind(null, this.stack.pop());
+    if (!item.files) return _index.default.bind(null, this.stack.pop());
     // resuse this item
-    if (item.files.length > 1) return depthFirst.bind(null, {
+    if (item.files.length > 1) return _index.default.bind(null, {
         path: item.path,
         basename: item.files.pop(),
         depth: item.depth
     });
     // done with this item
     item.basename = item.files.pop();
-    return depthFirst.bind(null, this.stack.pop());
+    return _index.default.bind(null, this.stack.pop());
 };
 PathStack.prototype.last = function last() {
     return this.stack.last();
 };
-module.exports = PathStack;
-
-if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-  Object.defineProperty(exports.default, '__esModule', { value: true });
-  for (var key in exports) exports.default[key] = exports[key];
-  module.exports = exports.default;
-}
+var _default = PathStack;
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { module.exports = exports.default; for (var key in exports) module.exports[key] = exports[key]; }

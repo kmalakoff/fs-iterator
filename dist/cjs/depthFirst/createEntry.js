@@ -1,11 +1,20 @@
 "use strict";
-var sep = require("path").sep;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function() {
+        return createEntry;
+    }
+});
+var _path = require("path");
 function join(left, right) {
     if (!left) return right || "";
     if (!right) return left;
-    return left + sep + right;
+    return left + _path.sep + right;
 }
-module.exports = function createEntry(iterator, item) {
+function createEntry(iterator, item) {
     var entry = {};
     if (item.basename.name) {
         entry.basename = item.basename.name;
@@ -16,10 +25,5 @@ module.exports = function createEntry(iterator, item) {
     entry.path = join(item.path, entry.basename);
     entry.fullPath = join(iterator.root, entry.path);
     return entry;
-};
-
-if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-  Object.defineProperty(exports.default, '__esModule', { value: true });
-  for (var key in exports) exports.default[key] = exports[key];
-  module.exports = exports.default;
 }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { module.exports = exports.default; for (var key in exports) module.exports[key] = exports[key]; }
