@@ -19,7 +19,9 @@ const STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('asyncIterator', () => {
+describe('async await', () => {
+  if (typeof Symbol === 'undefined' || !Symbol.asyncIterator) return;
+
   beforeEach((done) => {
     rimraf(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, done);
@@ -35,11 +37,13 @@ describe('asyncIterator', () => {
       },
     });
 
-    for await (const value of iterator) {
+    let value = await iterator.next();
+    while (value) {
       assert.ok(typeof value.basename === 'string');
       assert.ok(typeof value.path === 'string');
       assert.ok(typeof value.fullPath === 'string');
       assert.ok(typeof value.stats === 'object');
+      value = await iterator.next();
     }
 
     assert.ok(spys.callCount, 13);
@@ -55,11 +59,13 @@ describe('asyncIterator', () => {
       lstat: true,
     });
 
-    for await (const value of iterator) {
+    let value = await iterator.next();
+    while (value) {
       assert.ok(typeof value.basename === 'string');
       assert.ok(typeof value.path === 'string');
       assert.ok(typeof value.fullPath === 'string');
       assert.ok(typeof value.stats === 'object');
+      value = await iterator.next();
     }
 
     assert.equal(spys.dir.callCount, 5);
@@ -78,11 +84,13 @@ describe('asyncIterator', () => {
       lstat: true,
     });
 
-    for await (const value of iterator) {
+    let value = await iterator.next();
+    while (value) {
       assert.ok(typeof value.basename === 'string');
       assert.ok(typeof value.path === 'string');
       assert.ok(typeof value.fullPath === 'string');
       assert.ok(typeof value.stats === 'object');
+      value = await iterator.next();
     }
 
     assert.equal(spys.dir.callCount, 5);
@@ -96,11 +104,13 @@ describe('asyncIterator', () => {
     });
 
     try {
-      for await (const value of iterator) {
+      let value = await iterator.next();
+      while (value) {
         assert.ok(typeof value.basename === 'string');
         assert.ok(typeof value.path === 'string');
         assert.ok(typeof value.fullPath === 'string');
         assert.ok(typeof value.stats === 'object');
+        value = await iterator.next();
       }
     } catch (err) {
       assert.ok(!!err);

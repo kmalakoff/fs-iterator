@@ -16,8 +16,7 @@
   },
   "dependencies": {
     "benchmark-suite": "^0.1.8",
-    "fs-iterator-3.0.0": "npm:fs-iterator@4.1.1",
-    "just-extend": "^6.2.0"
+    "fs-iterator-3.0.0": "npm:fs-iterator@4.1.1"
   },
   "engines": {
     "node": ">=8"

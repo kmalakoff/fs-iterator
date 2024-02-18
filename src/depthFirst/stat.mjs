@@ -1,4 +1,4 @@
-const fsCompat = require('../fs-compat');
+import fsCompat from '../fs-compat/index.mjs';
 
 function ensureStat(iterator, entry, callback) {
   if (entry.stats) return callback();
@@ -11,7 +11,7 @@ function ensureStat(iterator, entry, callback) {
   });
 }
 
-module.exports = function stat(iterator, entry, callback) {
+export default function stat(iterator, entry, callback) {
   ensureStat(iterator, entry, function ensureStatCallback(err) {
     if (err) return callback(err);
     if (!entry.stats.isSymbolicLink()) return callback();
@@ -21,4 +21,4 @@ module.exports = function stat(iterator, entry, callback) {
       callback();
     });
   });
-};
+}

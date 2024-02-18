@@ -1,4 +1,4 @@
-module.exports = function fifoRemove(fifo, value) {
+export default function fifoRemove(fifo, value) {
   for (let node = fifo.node; node; node = fifo.next(node)) {
     if (node.value === value) {
       fifo.remove(node);
@@ -6,4 +6,4 @@ module.exports = function fifoRemove(fifo, value) {
     }
   }
   return false;
-};
+}

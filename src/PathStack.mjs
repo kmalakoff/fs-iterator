@@ -1,6 +1,6 @@
-const FIFO = require('fifo');
+import FIFO from 'fifo';
 
-const depthFirst = require('./depthFirst');
+import depthFirst from './depthFirst/index.mjs';
 
 function PathStack() {
   this.stack = new FIFO();
@@ -35,4 +35,4 @@ PathStack.prototype.last = function last() {
   return this.stack.last();
 };
 
-module.exports = PathStack;
+export default PathStack;
