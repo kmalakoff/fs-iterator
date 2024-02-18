@@ -1,15 +1,15 @@
-const createEntry = require('./createEntry');
-const filter = require('./filter');
-const stat = require('./stat');
-const fsCompat = require('../fs-compat');
-const lifoFromArray = require('../lifoFromArray');
+import fsCompat from '../fs-compat/index.mjs';
+import lifoFromArray from '../lifoFromArray.mjs';
+import createEntry from './createEntry.mjs';
+import filter from './filter.mjs';
+import stat from './stat.mjs';
 
 function isDirectory(entry) {
   if (entry.realStats) return entry.realStats.isDirectory();
   return entry.stats.isDirectory();
 }
 
-module.exports = function path(item, iterator, callback) {
+export default function path(item, iterator, callback) {
   const depth = item.depth;
   const entry = createEntry(iterator, item);
   item = null; // release reference
@@ -31,4 +31,4 @@ module.exports = function path(item, iterator, callback) {
       });
     });
   });
-};
+}

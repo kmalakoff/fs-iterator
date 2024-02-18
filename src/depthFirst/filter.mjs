@@ -1,6 +1,6 @@
-const compat = require('async-compat');
+import compat from 'async-compat';
 
-module.exports = function filter(iterator, entry, callback) {
+export default function filter(iterator, entry, callback) {
   if (!iterator.options.filter) return callback(null, true);
 
   compat.asyncFunction(iterator.options.filter, iterator.options.callbacks, entry, function filterCallback(err, keep) {
@@ -8,4 +8,4 @@ module.exports = function filter(iterator, entry, callback) {
     if (!compat.defaultValue(keep, true)) return callback();
     callback(null, true);
   });
-};
+}
