@@ -60,7 +60,7 @@
     "next-tick": "^1.1.0",
     "rimraf": "^2.7.1",
     "starts-with": "^1.0.2",
-    "ts-dev-stack": "^0.14.0"
+    "ts-dev-stack": "^0.14.1"
   },
   "engines": {
     "node": ">=0.8"
