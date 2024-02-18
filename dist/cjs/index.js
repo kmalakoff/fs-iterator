@@ -16,8 +16,8 @@ _export(exports, {
         return _default;
     }
 });
-var _FSIterator = /*#__PURE__*/ _interop_require_default(require("./FSIterator"));
-var _PathStack = /*#__PURE__*/ _interop_require_default(require("./PathStack"));
+var _FSIterator = /*#__PURE__*/ _interop_require_default(require("./FSIterator.js"));
+var _PathStack = /*#__PURE__*/ _interop_require_default(require("./PathStack.js"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
