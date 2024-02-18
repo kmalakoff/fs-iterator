@@ -19,7 +19,17 @@
   },
   "license": "MIT",
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./*": "./*"
+  },
   "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.mjs",
   "types": "dist/types/index.d.ts",
   "files": [
     "dist"
@@ -36,8 +46,7 @@
     "async-compat": "^1.4.7",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
-    "inherits": "^2.0.4",
-    "stack-base-iterator": "^1.0.0"
+    "stack-base-iterator": "^1.1.0"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
@@ -51,15 +60,16 @@
     "next-tick": "^1.1.0",
     "rimraf": "^2.7.1",
     "starts-with": "^1.0.2",
-    "ts-dev-stack": "^0.13.0"
+    "ts-dev-stack": "^0.14.0"
   },
   "engines": {
     "node": ">=0.8"
   },
   "tsds": {
-    "source": "src/index.js",
+    "source": "src/index.mjs",
     "targets": [
-      "cjs"
+      "cjs",
+      "esm"
     ]
   }
 }

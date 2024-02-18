@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 // prior to Node 9, fs.readdir did not return sorted files
 let readdir = fs.readdir;
@@ -15,4 +15,4 @@ function readdirAddOptions(path, _options, callback) {
   return readdir(path, callback);
 }
 
-module.exports = fs.readdir.length === 3 ? fs.readdir : readdirAddOptions;
+export default fs.readdir.length === 3 ? fs.readdir : readdirAddOptions;

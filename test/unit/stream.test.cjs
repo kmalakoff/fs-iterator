@@ -20,7 +20,7 @@ const STRUCTURE = {
 
 describe('stream', () => {
   if (!require('stream').Readable) return; // no readable streams
-  const IteratorStream = require('../lib/IteratorStream');
+  const IteratorStream = require('../lib/IteratorStream.cjs');
 
   beforeEach((done) => {
     rimraf(TEST_DIR, () => {
