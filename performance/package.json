@@ -20,11 +20,5 @@
   },
   "engines": {
     "node": ">=8"
-  },
-  "tsds": {
-    "source": "src/index.js",
-    "targets": [
-      "cjs"
-    ]
   }
 }
