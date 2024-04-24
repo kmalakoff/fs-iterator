@@ -1,12 +1,11 @@
 const ReadableStream = require('stream').Readable;
 const inherits = require('util').inherits;
-const assign = require('just-extend');
 
 const Iterator = require('fs-iterator');
 
 function IteratorStream(root, options) {
   if (!(this instanceof IteratorStream)) return new IteratorStream(root, options);
-  options = assign({}, options || {});
+  options = Object.assign({}, options || {});
   ReadableStream.call(this, { objectMode: true, autoDestroy: true, highWaterMark: options.highWaterMark || 4096 });
 
   const self = this;
