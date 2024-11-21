@@ -46,11 +46,11 @@
     "async-compat": "^1.4.7",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^1.1.1"
+    "stack-base-iterator": "^1.1.2"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.7",
-    "@types/node": "^20.14.9",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.9.1",
     "depcheck": "^1.4.7",
     "end-of-stream": "^1.4.4",
     "fs-generate": "^1.8.6",
