@@ -10,7 +10,7 @@ Object.defineProperty(exports, "default", {
 });
 var _path = require("path");
 function join(left, right) {
-    if (!left) return right || "";
+    if (!left) return right || '';
     if (!right) return left;
     return left + _path.sep + right;
 }

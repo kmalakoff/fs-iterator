@@ -16,7 +16,7 @@ function _interop_require_default(obj) {
 }
 // prior to Node 9, fs.readdir did not return sorted files
 var readdir = _fs.default.readdir;
-var parts = process.versions.node.split(".");
+var parts = process.versions.node.split('.');
 if (+parts[0] === 0 && +parts[1] <= 8) {
     readdir = function readdirSort(path, callback) {
         _fs.default.readdir(path, function(err, files) {

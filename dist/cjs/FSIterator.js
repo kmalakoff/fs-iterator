@@ -21,6 +21,10 @@ function _assert_this_initialized(self) {
     }
     return self;
 }
+function _call_super(_this, derived, args) {
+    derived = _get_prototype_of(derived);
+    return _possible_constructor_return(_this, _is_native_reflect_construct() ? Reflect.construct(derived, args || [], _get_prototype_of(_this).constructor) : derived.apply(_this, args));
+}
 function _class_call_check(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -68,48 +72,33 @@ function _type_of(obj) {
     return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
 }
 function _is_native_reflect_construct() {
-    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-    if (Reflect.construct.sham) return false;
-    if (typeof Proxy === "function") return true;
     try {
-        Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
-        return true;
-    } catch (e) {
-        return false;
-    }
-}
-function _create_super(Derived) {
-    var hasNativeReflectConstruct = _is_native_reflect_construct();
-    return function _createSuperInternal() {
-        var Super = _get_prototype_of(Derived), result;
-        if (hasNativeReflectConstruct) {
-            var NewTarget = _get_prototype_of(this).constructor;
-            result = Reflect.construct(Super, arguments, NewTarget);
-        } else {
-            result = Super.apply(this, arguments);
-        }
-        return _possible_constructor_return(this, result);
-    };
+        var result = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+    } catch (_) {}
+    return (_is_native_reflect_construct = function() {
+        return !!result;
+    })();
 }
 var FSIterator = /*#__PURE__*/ function(StackBaseIterator) {
     "use strict";
     _inherits(FSIterator, StackBaseIterator);
-    var _super = _create_super(FSIterator);
     function FSIterator(root, options) {
         _class_call_check(this, FSIterator);
         var _this;
         var setup = function setup() {
             cancelled = true;
         };
-        _this = _super.call(this, options);
+        _this = _call_super(this, FSIterator, [
+            options
+        ]);
         options = options || {};
         if (_this.options.depth === undefined) _this.options.depth = Infinity;
         _this.options.readdir = {
-            encoding: "utf8",
+            encoding: 'utf8',
             withFileTypes: _fs.default.Dirent && !options.alwaysStat
         };
         _this.options.stat = {
-            bigint: process.platform === "win32"
+            bigint: process.platform === 'win32'
         };
         _this.options.error = options.error || function defaultError(err) {
             return ~FSIterator.EXPECTED_ERRORS.indexOf(err.code); // skip known issues
@@ -133,9 +122,9 @@ var FSIterator = /*#__PURE__*/ function(StackBaseIterator) {
     return FSIterator;
 }(_stackbaseiterator.default);
 FSIterator.EXPECTED_ERRORS = [
-    "ENOENT",
-    "EPERM",
-    "EACCES",
-    "ELOOP"
+    'ENOENT',
+    'EPERM',
+    'EACCES',
+    'ELOOP'
 ];
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }
