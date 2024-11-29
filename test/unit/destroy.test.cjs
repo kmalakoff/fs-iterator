@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
@@ -21,7 +21,7 @@ const STRUCTURE = {
 
 describe('destroy', () => {
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
@@ -39,7 +39,7 @@ describe('destroy', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -61,7 +61,7 @@ describe('destroy', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
@@ -86,7 +86,7 @@ describe('destroy', () => {
         () => {},
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
@@ -112,7 +112,7 @@ describe('destroy', () => {
         () => {},
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.callCount, 4);
           done();
         }
@@ -142,7 +142,7 @@ describe('destroy', () => {
           done();
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
 
@@ -164,7 +164,7 @@ describe('destroy', () => {
           done();
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
 
@@ -189,7 +189,7 @@ describe('destroy', () => {
           done();
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
 
@@ -212,7 +212,7 @@ describe('destroy', () => {
           done();
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
   });

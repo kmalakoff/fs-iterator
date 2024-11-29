@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 
 const Iterator = require('fs-iterator');
@@ -20,7 +20,7 @@ const STRUCTURE = {
 
 describe('errors', () => {
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
@@ -77,7 +77,7 @@ describe('errors', () => {
           },
         },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(errors.length, 6);
           done();
         }
@@ -175,7 +175,7 @@ describe('errors', () => {
           },
         },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(errors.length, 6);
           done();
         }
@@ -264,7 +264,7 @@ describe('errors', () => {
           },
         },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(errors.length, 6);
           done();
         }

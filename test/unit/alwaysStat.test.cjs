@@ -1,7 +1,7 @@
 const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
@@ -22,7 +22,7 @@ const STRUCTURE = {
 
 describe('alwaysStat', () => {
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
@@ -42,7 +42,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -65,7 +65,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -91,7 +91,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -115,7 +115,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -141,7 +141,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -165,7 +165,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);

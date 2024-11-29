@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 const nextTick = require('next-tick');
@@ -23,10 +23,10 @@ const STRUCTURE = {
 describe('forEach', () => {
   describe('limit', () => {
     after((done) => {
-      rimraf(TEST_DIR, done);
+      rimraf2(TEST_DIR, { disableGlob: true }, done);
     });
     beforeEach((done) => {
-      rimraf(TEST_DIR, () => {
+      rimraf2(TEST_DIR, { disableGlob: true }, () => {
         generate(TEST_DIR, STRUCTURE, done);
       });
     });
@@ -42,7 +42,7 @@ describe('forEach', () => {
           },
           { limit: Infinity, concurrency: 1 },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(empty);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -62,7 +62,7 @@ describe('forEach', () => {
           },
           { limit: 3, concurrency: 1 },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
@@ -83,7 +83,7 @@ describe('forEach', () => {
           },
           { limit: 3, concurrency: 5 },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
@@ -101,7 +101,7 @@ describe('forEach', () => {
           },
           { limit: 3, concurrency: Infinity },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
@@ -122,7 +122,7 @@ describe('forEach', () => {
           },
           { limit: 100, concurrency: 1 },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
@@ -152,7 +152,7 @@ describe('forEach', () => {
           },
           { limit: Infinity, concurrency: 1 },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(empty);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -178,7 +178,7 @@ describe('forEach', () => {
           },
           { lstat: true, limit: 3, concurrency: 1 },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
@@ -205,7 +205,7 @@ describe('forEach', () => {
           },
           { lstat: true, limit: 3, concurrency: 5 },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
@@ -229,7 +229,7 @@ describe('forEach', () => {
           },
           { limit: 3, concurrency: Infinity },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
@@ -254,7 +254,7 @@ describe('forEach', () => {
           },
           { limit: 100, concurrency: 1 },
           (err, empty) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
             assert.ok(empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
@@ -292,7 +292,7 @@ describe('forEach', () => {
             done();
           })
           .catch((err) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
           });
       });
 
@@ -319,7 +319,7 @@ describe('forEach', () => {
             done();
           })
           .catch((err) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
           });
       });
 
@@ -343,7 +343,7 @@ describe('forEach', () => {
             done();
           })
           .catch((err) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
           });
       });
 
@@ -367,7 +367,7 @@ describe('forEach', () => {
             done();
           })
           .catch((err) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
           });
       });
       it('should run with concurrency Infinity and only files', (done) => {
@@ -393,7 +393,7 @@ describe('forEach', () => {
             done();
           })
           .catch((err) => {
-            assert.ok(!err);
+            assert.ok(!err, err ? err.message : '');
           });
       });
     });
