@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
@@ -22,7 +22,7 @@ const DELETE_PATH = `dir2${path.sep}file1`;
 
 describe('everything', () => {
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
@@ -39,7 +39,7 @@ describe('everything', () => {
     iterator.forEach(
       () => {},
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -61,7 +61,7 @@ describe('everything', () => {
     iterator.forEach(
       () => {},
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -78,7 +78,7 @@ describe('everything', () => {
       filter: (entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
         return true;
       },
       alwaysStat: true,
@@ -93,7 +93,7 @@ describe('everything', () => {
         concurrency: 1,
       },
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -110,7 +110,7 @@ describe('everything', () => {
       filter: (entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
         return true;
       },
       alwaysStat: true,
@@ -143,7 +143,7 @@ describe('everything', () => {
       filter: (entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
         return true;
       },
       alwaysStat: true,
@@ -162,7 +162,7 @@ describe('everything', () => {
         },
       },
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(errors.length, 0);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -180,7 +180,7 @@ describe('everything', () => {
       filter: (entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
         return true;
       },
       alwaysStat: true,
@@ -200,7 +200,7 @@ describe('everything', () => {
         },
       },
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -218,7 +218,7 @@ describe('everything', () => {
       filter: (entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
         return true;
       },
       alwaysStat: true,
@@ -255,7 +255,7 @@ describe('everything', () => {
       filter: (entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf.sync(path.join(TEST_DIR, 'dir2'));
+        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
         return true;
       },
       alwaysStat: true,
@@ -274,7 +274,7 @@ describe('everything', () => {
         },
       },
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);

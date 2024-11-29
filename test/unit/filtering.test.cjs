@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 const startsWith = require('starts-with');
@@ -23,7 +23,7 @@ const TEST_DIR_PATH = `dir3${path.sep}dir4`;
 
 describe('filtering', () => {
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
@@ -41,7 +41,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 1);
           done();
         }
@@ -60,7 +60,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13 - 2);
           done();
         }
@@ -79,7 +79,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13 - 1);
           done();
         }
@@ -103,7 +103,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 1);
           done();
         }
@@ -125,7 +125,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13 - 2);
           done();
         }
@@ -147,7 +147,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13 - 1);
           done();
         }
@@ -170,7 +170,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 1);
           done();
         }
@@ -189,7 +189,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13 - 2);
           done();
         }
@@ -208,7 +208,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13 - 1);
           done();
         }

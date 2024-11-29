@@ -20,14 +20,14 @@ function PathStack() {
     this.length = 0;
 }
 PathStack.prototype.push = function push(item) {
-    if (!item) throw new Error("item is mandatory");
-    if (item.files && !item.files.length) throw new Error("item files must have a length");
+    if (!item) throw new Error('item is mandatory');
+    if (item.files && !item.files.length) throw new Error('item files must have a length');
     this.stack.push(item);
     this.length += item.files ? item.files.length : 1;
     return this;
 };
 PathStack.prototype.pop = function pop() {
-    if (!this.stack.length) throw new Error("Stack is empty");
+    if (!this.stack.length) throw new Error('Stack is empty');
     var item = this.stack.last();
     this.length--;
     // just a simple item

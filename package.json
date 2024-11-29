@@ -50,16 +50,16 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.9.1",
+    "@types/node": "^22.10.1",
     "depcheck": "^1.4.7",
     "end-of-stream": "^1.4.4",
-    "fs-generate": "^1.8.6",
+    "fs-generate": "^1.8.7",
     "fs-stats-spys": "^1.0.2",
     "is-promise": "^4.0.0",
     "next-tick": "^1.1.0",
-    "rimraf": "^2.7.1",
+    "rimraf2": "^2.7.1",
     "starts-with": "^1.0.2",
-    "ts-dev-stack": "^0.15.8"
+    "ts-dev-stack": "^0.16.4"
   },
   "engines": {
     "node": ">=0.8"

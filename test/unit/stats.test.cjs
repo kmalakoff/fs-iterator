@@ -1,7 +1,7 @@
 const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
@@ -22,10 +22,10 @@ const STRUCTURE = {
 
 describe('stats compatibility', () => {
   after((done) => {
-    rimraf(TEST_DIR, done);
+    rimraf2(TEST_DIR, { disableGlob: true }, done);
   });
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
@@ -40,7 +40,7 @@ describe('stats compatibility', () => {
           spys(entry.stats);
         },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 7);
           assert.equal(spys.link.callCount, 0);
@@ -58,7 +58,7 @@ describe('stats compatibility', () => {
           spys(entry.stats);
         },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -78,7 +78,7 @@ describe('stats compatibility', () => {
           spys(entry.stats);
         },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -102,7 +102,7 @@ describe('stats compatibility', () => {
           spys(entry.stats);
         },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
