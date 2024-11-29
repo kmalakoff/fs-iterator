@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 const nextTick = require('next-tick');
@@ -22,7 +22,7 @@ const STRUCTURE = {
 
 describe('concurrency', () => {
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
@@ -41,7 +41,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -60,7 +60,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 5 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -79,7 +79,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -102,7 +102,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -123,7 +123,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 5 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -144,7 +144,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -168,7 +168,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -188,7 +188,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 5 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -208,7 +208,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.ok(spys.callCount, 13);
           done();
         }

@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 const eos = require('end-of-stream');
@@ -23,12 +23,12 @@ describe('stream', () => {
   const IteratorStream = require('../lib/IteratorStream.cjs');
 
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
   after((done) => {
-    rimraf(TEST_DIR, done);
+    rimraf2(TEST_DIR, { disableGlob: true }, done);
   });
 
   it('default', (done) => {
@@ -39,7 +39,7 @@ describe('stream', () => {
       spys(entry.stats);
     });
     eos(iteratorStream, (err) => {
-      assert.ok(!err);
+      assert.ok(!err, err ? err.message : '');
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
@@ -61,7 +61,7 @@ describe('stream', () => {
       spys(entry.stats);
     });
     eos(iteratorStream, (err) => {
-      assert.ok(!err);
+      assert.ok(!err, err ? err.message : '');
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
       assert.equal(spys.link.callCount, 0);
@@ -81,7 +81,7 @@ describe('stream', () => {
       spys(entry.stats);
     });
     eos(iteratorStream, (err) => {
-      assert.ok(!err);
+      assert.ok(!err, err ? err.message : '');
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);

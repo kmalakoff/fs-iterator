@@ -1,7 +1,7 @@
 const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
@@ -23,12 +23,12 @@ const STRUCTURE = {
 
 describe('symlink', () => {
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
   after((done) => {
-    rimraf(TEST_DIR, done);
+    rimraf2(TEST_DIR, { disableGlob: true }, done);
   });
 
   it('Should find everything with no return (lstat)', (done) => {
@@ -43,7 +43,7 @@ describe('symlink', () => {
     iterator.forEach(
       () => {},
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(spys.callCount, 15);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 7);
@@ -65,7 +65,7 @@ describe('symlink', () => {
     iterator.forEach(
       () => {},
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(spys.callCount, 15);
         if (fs.Dirent) {
           assert.equal(spys.dir.callCount, 5);
