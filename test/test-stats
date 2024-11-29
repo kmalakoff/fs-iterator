@@ -3,7 +3,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const readdirp = require('readdirp');
 const Iterator = require('fs-iterator');
 const generate = require('fs-generate');
@@ -49,7 +49,7 @@ async function testIterator(options) {
 }
 
 (async () => {
-  await new Promise((resolve) => rimraf(TEST_DIR, (err) => resolve()));
+  await new Promise((resolve) => rimraf2(TEST_DIR, { disableGlob: true }, (err) => resolve()));
   await generate(TEST_DIR, STRUCTURE);
 
   await testReaddirp({ lstat: true });

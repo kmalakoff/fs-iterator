@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
@@ -23,7 +23,7 @@ describe('async await', () => {
   if (typeof Symbol === 'undefined' || !Symbol.asyncIterator) return;
 
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });

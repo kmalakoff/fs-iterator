@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
@@ -23,12 +23,12 @@ describe('promise', () => {
   if (typeof Promise === 'undefined') return; // no promise support
 
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
   after((done) => {
-    rimraf(TEST_DIR, done);
+    rimraf2(TEST_DIR, { disableGlob: true }, done);
   });
 
   it('should be default false', (done) => {
@@ -63,7 +63,7 @@ describe('promise', () => {
         return Promise.resolve();
       },
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -85,7 +85,7 @@ describe('promise', () => {
       },
       { concurrency: 1 },
       (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         assert.equal(spys.dir.callCount, 1);
         assert.equal(spys.file.callCount, 0);
         assert.equal(spys.link.callCount, 0);

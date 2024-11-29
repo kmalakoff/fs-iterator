@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 const isPromise = require('is-promise');
@@ -23,7 +23,7 @@ const STRUCTURE = {
 
 describe('forEach', () => {
   beforeEach((done) => {
-    rimraf(TEST_DIR, () => {
+    rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
     });
   });
@@ -42,14 +42,14 @@ describe('forEach', () => {
           const nothing = iterator2.forEach(
             () => {},
             (err) => {
-              assert.ok(!err);
+              assert.ok(!err, err ? err.message : '');
               done();
             }
           );
           assert.ok(nothing === undefined);
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
 
@@ -62,7 +62,7 @@ describe('forEach', () => {
           spys(entry.stats);
         },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -84,7 +84,7 @@ describe('forEach', () => {
         },
         { callbacks: true },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -108,7 +108,7 @@ describe('forEach', () => {
         },
         { callbacks: true, concurrency: 1 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
@@ -127,7 +127,7 @@ describe('forEach', () => {
         },
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -146,7 +146,7 @@ describe('forEach', () => {
         },
         { concurrency: 5 },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -165,7 +165,7 @@ describe('forEach', () => {
         },
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -289,7 +289,7 @@ describe('forEach', () => {
           done();
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
 
@@ -311,7 +311,7 @@ describe('forEach', () => {
           done();
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
 
@@ -333,7 +333,7 @@ describe('forEach', () => {
           done();
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
 
@@ -355,7 +355,7 @@ describe('forEach', () => {
           done();
         })
         .catch((err) => {
-          assert.ok(!err);
+          assert.ok(!err, err ? err.message : '');
         });
     });
 
