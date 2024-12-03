@@ -57,9 +57,9 @@
     "fs-stats-spys": "^1.0.2",
     "is-promise": "^4.0.0",
     "next-tick": "^1.1.0",
-    "rimraf2": "^2.7.1",
+    "rimraf2": "^2.8.2",
     "starts-with": "^1.0.2",
-    "ts-dev-stack": "^0.16.4"
+    "ts-dev-stack": "^1.0.4"
   },
   "engines": {
     "node": ">=0.8"
