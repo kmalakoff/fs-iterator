@@ -15,7 +15,7 @@ let FSIterator = class FSIterator extends StackBaseIterator {
             withFileTypes: fs.Dirent && !options.alwaysStat
         };
         this.options.stat = {
-            bigint: process.platform === 'win32'
+            bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE)
         };
         this.options.error = options.error || function defaultError(err) {
             return ~FSIterator.EXPECTED_ERRORS.indexOf(err.code); // skip known issues
