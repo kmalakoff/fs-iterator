@@ -98,7 +98,7 @@ var FSIterator = /*#__PURE__*/ function(StackBaseIterator) {
             withFileTypes: _fs.default.Dirent && !options.alwaysStat
         };
         _this.options.stat = {
-            bigint: process.platform === 'win32'
+            bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE)
         };
         _this.options.error = options.error || function defaultError(err) {
             return ~FSIterator.EXPECTED_ERRORS.indexOf(err.code); // skip known issues
@@ -127,4 +127,4 @@ FSIterator.EXPECTED_ERRORS = [
     'EACCES',
     'ELOOP'
 ];
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; } } catch (_) {}; module.exports = exports.default; }
