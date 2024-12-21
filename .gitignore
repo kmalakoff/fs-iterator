@@ -1,6 +1,8 @@
 .DS_Store
 .tmp/
 node_modules/
+dist/
+docs/
 npm-debug.log
 data/
 *.heapsnapshot
