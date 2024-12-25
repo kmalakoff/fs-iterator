@@ -38,7 +38,7 @@
     "build": "tsds build",
     "deploy": "tsds deploy",
     "format": "biome check --write --unsafe src/ test/",
-    "test": "tsds test:node --timeout=10000",
+    "test": "tsds test:node --no-timeouts",
     "test:engines": "nvu engines npm test",
     "version": "tsds version"
   },
@@ -46,29 +46,28 @@
     "async-compat": "^1.4.7",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^1.1.2"
+    "stack-base-iterator": "^1.1.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "depcheck": "^1.4.7",
     "end-of-stream": "^1.4.4",
     "fs-generate": "^1.8.7",
-    "fs-stats-spys": "^1.0.2",
+    "fs-stats-spys": "^1.1.0",
     "is-promise": "^4.0.0",
     "next-tick": "^1.1.0",
-    "rimraf2": "^2.7.1",
+    "pinkie-promise": "^2.0.1",
+    "rimraf2": "^2.8.2",
     "starts-with": "^1.0.2",
-    "ts-dev-stack": "^0.16.4"
+    "ts-dev-stack": "^1.5.4"
   },
+  "packageManager": "npm@11.0.0+sha512.11dff29565d2297c74e7c594a9762581bde969f0aa5cbe6f5b3644bf008a16c065ece61094d9ffbb81125be38df8e1ba43eb8244b3d30c61eb797e9a2440e3ec",
   "engines": {
     "node": ">=0.8"
   },
   "tsds": {
-    "source": "src/index.mjs",
-    "targets": [
-      "cjs",
-      "esm"
-    ]
+    "source": "src/index.mjs"
   }
 }

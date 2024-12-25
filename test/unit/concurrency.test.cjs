@@ -1,3 +1,5 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
+const Promise = require('pinkie-promise');
 const assert = require('assert');
 const path = require('path');
 const rimraf2 = require('rimraf2');
@@ -153,8 +155,6 @@ describe('concurrency', () => {
   });
 
   describe('promise', () => {
-    if (typeof Promise === 'undefined') return; // no promise support
-
     it('should run with concurrency 1', (done) => {
       const spys = statsSpys();
 

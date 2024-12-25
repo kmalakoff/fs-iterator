@@ -121,8 +121,6 @@ describe('destroy', () => {
   });
 
   describe('promise interface', () => {
-    if (typeof Promise === 'undefined') return; // no promise support
-
     it('destroys after iteration', (done) => {
       const spys = statsSpys();
 

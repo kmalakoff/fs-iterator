@@ -1,3 +1,5 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
+const Promise = require('pinkie-promise');
 const assert = require('assert');
 const path = require('path');
 const rimraf2 = require('rimraf2');
@@ -30,8 +32,6 @@ describe('forEach', () => {
 
   describe('callback interface', () => {
     it('forEach function is mandatory', (done) => {
-      if (typeof Promise === 'undefined') return done(); // no promise support
-
       const iterator = new Iterator(TEST_DIR);
       const promise = iterator.forEach(() => {});
       assert.ok(isPromise(promise));
@@ -255,8 +255,6 @@ describe('forEach', () => {
   });
 
   describe('promise interface', () => {
-    if (typeof Promise === 'undefined') return; // no promise support
-
     it('forEach function is mandatory', (done) => {
       try {
         const iterator = new Iterator(TEST_DIR);

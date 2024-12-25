@@ -21,6 +21,14 @@ const STRUCTURE = {
 
 describe('asyncIterator', () => {
   if (typeof Symbol === 'undefined' || !Symbol.asyncIterator) return;
+  let globalPromise;
+  before(() => {
+    globalPromise = global.Promise;
+    global.Promise = require('pinkie-promise');
+  });
+  after(() => {
+    global.Promise = globalPromise;
+  });
 
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
