@@ -3,9 +3,9 @@ const inherits = require('util').inherits;
 
 const Iterator = require('fs-iterator');
 
-function IteratorStream(root, options) {
+function IteratorStream(root, options = {}) {
   if (!(this instanceof IteratorStream)) return new IteratorStream(root, options);
-  options = Object.assign({}, options || {});
+  options = { ...options };
   ReadableStream.call(this, { objectMode: true, autoDestroy: true, highWaterMark: options.highWaterMark || 4096 });
 
   const self = this;

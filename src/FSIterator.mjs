@@ -14,7 +14,7 @@ export default class FSIterator extends StackBaseIterator {
 
     if (this.options.depth === undefined) this.options.depth = Infinity;
     this.options.readdir = { encoding: 'utf8', withFileTypes: fs.Dirent && !options.alwaysStat };
-    this.options.stat = { bigint: process.platform === 'win32' };
+    this.options.stat = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
     this.options.error =
       options.error ||
       function defaultError(err) {

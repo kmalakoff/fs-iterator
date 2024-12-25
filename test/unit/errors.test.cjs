@@ -1,3 +1,5 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
+const Promise = require('pinkie-promise');
 const assert = require('assert');
 const path = require('path');
 const rimraf2 = require('rimraf2');
@@ -184,8 +186,6 @@ describe('errors', () => {
   });
 
   describe('promise', () => {
-    if (typeof Promise === 'undefined') return; // no promise support
-
     it('handle invalid root (next)', (done) => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
 
