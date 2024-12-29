@@ -269,7 +269,19 @@ describe('forEach', () => {
     });
 
     describe('promise', () => {
-      it('infinite limit to get all', (done) => {
+      (() => {
+        // patch and restore promise
+        const root = typeof global !== 'undefined' ? global : window;
+        let rootPromise;
+        before(() => {
+          rootPromise = root.Promise;
+          root.Promise = require('pinkie-promise');
+        });
+        after(() => {
+          root.Promise = rootPromise;
+        });
+      })();
+      it('infinite limit to get all', async () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
@@ -277,124 +289,89 @@ describe('forEach', () => {
           lstat: true,
         });
 
-        iterator
-          .forEach(
-            (entry) => {
-              spys(entry.stats);
-            },
-            { limit: Infinity, concurrency: 1 }
-          )
-          .then((empty) => {
-            assert.ok(empty);
-            assert.equal(spys.dir.callCount, 5);
-            assert.equal(spys.file.callCount, 5);
-            assert.equal(spys.link.callCount, 2);
-            done();
-          })
-          .catch((err) => {
-            assert.ok(!err, err ? err.message : '');
-          });
+        const empty = await iterator.forEach(
+          (entry) => {
+            spys(entry.stats);
+          },
+          { limit: Infinity, concurrency: 1 }
+        );
+        assert.ok(empty);
+        assert.equal(spys.dir.callCount, 5);
+        assert.equal(spys.file.callCount, 5);
+        assert.equal(spys.link.callCount, 2);
       });
 
-      it('should run with concurrency 1', (done) => {
+      it('should run with concurrency 1', async () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
           filter: (_entry) => Promise.resolve(),
           lstat: true,
         });
-        iterator
-          .forEach(
-            (entry) => {
-              spys(entry.stats);
-            },
-            { limit: 3, concurrency: 1 }
-          )
-          .then((empty) => {
-            assert.ok(!empty);
-            assert.equal(spys.callCount, 3);
-            assert.equal(spys.dir.callCount, 2);
-            assert.equal(spys.file.callCount, 1);
-            assert.equal(spys.link.callCount, 0);
-            done();
-          })
-          .catch((err) => {
-            assert.ok(!err, err ? err.message : '');
-          });
+        const empty = await iterator.forEach(
+          (entry) => {
+            spys(entry.stats);
+          },
+          { limit: 3, concurrency: 1 }
+        );
+        assert.ok(!empty);
+        assert.equal(spys.callCount, 3);
+        assert.equal(spys.dir.callCount, 2);
+        assert.equal(spys.file.callCount, 1);
+        assert.equal(spys.link.callCount, 0);
       });
 
-      it('should run with concurrency 5', (done) => {
+      it('should run with concurrency 5', async () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
           filter: (_entry) => Promise.resolve(),
           lstat: true,
         });
-        iterator
-          .forEach(
-            (entry) => {
-              spys(entry.stats);
-            },
-            { limit: 3, concurrency: 5 }
-          )
-          .then((empty) => {
-            assert.ok(!empty);
-            assert.equal(spys.callCount, 3);
-            done();
-          })
-          .catch((err) => {
-            assert.ok(!err, err ? err.message : '');
-          });
+        const empty = await iterator.forEach(
+          (entry) => {
+            spys(entry.stats);
+          },
+          { limit: 3, concurrency: 5 }
+        );
+        assert.ok(!empty);
+        assert.equal(spys.callCount, 3);
       });
 
-      it('should run with concurrency Infinity', (done) => {
+      it('should run with concurrency Infinity', async () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
           filter: (_entry) => Promise.resolve(),
           lstat: true,
         });
-        iterator
-          .forEach(
-            (entry) => {
-              spys(entry.stats);
-            },
-            { limit: 3, concurrency: Infinity }
-          )
-          .then((empty) => {
-            assert.ok(!empty);
-            assert.equal(spys.callCount, 3);
-            done();
-          })
-          .catch((err) => {
-            assert.ok(!err, err ? err.message : '');
-          });
+        const empty = await iterator.forEach(
+          (entry) => {
+            spys(entry.stats);
+          },
+          { limit: 3, concurrency: Infinity }
+        );
+        assert.ok(!empty);
+        assert.equal(spys.callCount, 3);
       });
-      it('should run with concurrency Infinity and only files', (done) => {
+      it('should run with concurrency Infinity and only files', async () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
           filter: (entry) => Promise.resolve(!entry.stats.isDirectory()),
           lstat: true,
         });
-        iterator
-          .forEach(
-            (entry) => {
-              spys(entry.stats);
-            },
-            { limit: 100, concurrency: 1 }
-          )
-          .then((empty) => {
-            assert.ok(empty);
-            assert.equal(spys.callCount, 3);
-            assert.equal(spys.dir.callCount, 0);
-            assert.equal(spys.file.callCount, 2);
-            assert.equal(spys.link.callCount, 1);
-            done();
-          })
-          .catch((err) => {
-            assert.ok(!err, err ? err.message : '');
-          });
+        const empty = await iterator.forEach(
+          (entry) => {
+            spys(entry.stats);
+          },
+          { limit: 100, concurrency: 1 }
+        );
+        assert.ok(empty);
+        assert.equal(spys.callCount, 3);
+        assert.equal(spys.dir.callCount, 0);
+        assert.equal(spys.file.callCount, 2);
+        assert.equal(spys.link.callCount, 1);
       });
     });
   });

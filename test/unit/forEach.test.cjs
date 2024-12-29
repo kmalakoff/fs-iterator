@@ -31,28 +31,6 @@ describe('forEach', () => {
   });
 
   describe('callback interface', () => {
-    it('forEach function is mandatory', (done) => {
-      const iterator = new Iterator(TEST_DIR);
-      const promise = iterator.forEach(() => {});
-      assert.ok(isPromise(promise));
-      promise
-        .then(() => {
-          const iterator2 = new Iterator(TEST_DIR);
-
-          const nothing = iterator2.forEach(
-            () => {},
-            (err) => {
-              assert.ok(!err, err ? err.message : '');
-              done();
-            }
-          );
-          assert.ok(nothing === undefined);
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
-    });
-
     it('simple forEach (default)', (done) => {
       const spys = statsSpys();
 
@@ -255,187 +233,167 @@ describe('forEach', () => {
   });
 
   describe('promise interface', () => {
-    it('forEach function is mandatory', (done) => {
+    (() => {
+      // patch and restore promise
+      const root = typeof global !== 'undefined' ? global : window;
+      let rootPromise;
+      before(() => {
+        rootPromise = root.Promise;
+        root.Promise = require('pinkie-promise');
+      });
+      after(() => {
+        root.Promise = rootPromise;
+      });
+    })();
+    it('forEach function is mandatory', async () => {
+      const iterator = new Iterator(TEST_DIR);
+      const promise = iterator.forEach(() => {});
+      assert.ok(isPromise(promise));
+      await promise;
+      const iterator2 = new Iterator(TEST_DIR);
+      const nothing = await iterator2.forEach(
+        () => {},
+        (err) => {
+          assert.ok(!err, err ? err.message : '');
+        }
+      );
+      assert.ok(nothing === undefined);
+    });
+
+    it('forEach function is mandatory', async () => {
       try {
         const iterator = new Iterator(TEST_DIR);
-        iterator
-          .forEach()
-          .then(() => {
-            assert.ok(false);
-          })
-          .catch(() => {
-            assert.ok(false);
-          });
+        const promise = iterator.forEach();
+        assert.ok(isPromise(promise));
       } catch (err) {
         assert.ok(!!err);
-        done();
       }
     });
 
-    it('simple forEach (default)', (done) => {
+    it('simple forEach (default)', async () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
-      iterator
-        .forEach((entry) => {
+      await iterator.forEach((entry) => {
+        spys(entry.stats);
+      });
+      assert.equal(spys.dir.callCount, 5);
+      assert.equal(spys.file.callCount, 5);
+      assert.equal(spys.link.callCount, 2);
+    });
+
+    it('simple forEach (concurrency: 1)', async () => {
+      const spys = statsSpys();
+
+      const iterator = new Iterator(TEST_DIR, { lstat: true });
+      await iterator.forEach(
+        (entry) => {
           spys(entry.stats);
-        })
-        .then(() => {
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          done();
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
+        },
+        { concurrency: 1 }
+      );
+      assert.equal(spys.dir.callCount, 5);
+      assert.equal(spys.file.callCount, 5);
+      assert.equal(spys.link.callCount, 2);
     });
 
-    it('simple forEach (concurrency: 1)', (done) => {
+    it('simple forEach (concurrency: 5)', async () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
-      iterator
-        .forEach(
-          (entry) => {
-            spys(entry.stats);
-          },
-          { concurrency: 1 }
-        )
-        .then(() => {
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          done();
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
+      await iterator.forEach(
+        (entry) => {
+          spys(entry.stats);
+        },
+        { concurrency: 5 }
+      );
+      assert.equal(spys.dir.callCount, 5);
+      assert.equal(spys.file.callCount, 5);
+      assert.equal(spys.link.callCount, 2);
     });
 
-    it('simple forEach (concurrency: 5)', (done) => {
+    it('simple forEach (concurrency: Infinity)', async () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
-      iterator
-        .forEach(
-          (entry) => {
-            spys(entry.stats);
-          },
-          { concurrency: 5 }
-        )
-        .then(() => {
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          done();
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
+      await iterator.forEach(
+        (entry) => {
+          spys(entry.stats);
+        },
+        { concurrency: Infinity }
+      );
+      assert.equal(spys.dir.callCount, 5);
+      assert.equal(spys.file.callCount, 5);
+      assert.equal(spys.link.callCount, 2);
     });
 
-    it('simple forEach (concurrency: Infinity)', (done) => {
-      const spys = statsSpys();
-
-      const iterator = new Iterator(TEST_DIR, { lstat: true });
-      iterator
-        .forEach(
-          (entry) => {
-            spys(entry.stats);
-          },
-          { concurrency: Infinity }
-        )
-        .then(() => {
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          done();
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
-    });
-
-    it('should propagate errors (default)', (done) => {
+    it('should propagate errors (default)', async () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: () => Promise.reject(new Error('Failed')),
       });
 
-      iterator
-        .forEach((err) => {
+      try {
+        await iterator.forEach((err) => {
           if (err) throw err;
-        })
-        .then(() => {
-          assert.ok(false);
-        })
-        .catch((err) => {
-          assert.ok(!!err);
-          done();
         });
+        assert.ok(false);
+      } catch (err) {
+        assert.ok(!!err);
+      }
     });
 
-    it('should propagate errors (concurrency: 1)', (done) => {
+    it('should propagate errors (concurrency: 1)', async () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: () => Promise.reject(new Error('Failed')),
       });
 
-      iterator
-        .forEach(
+      try {
+        await iterator.forEach(
           (err) => {
             if (err) throw err;
           },
           { concurrency: 1 }
-        )
-        .then(() => {
-          assert.ok(false);
-        })
-        .catch((err) => {
-          assert.ok(!!err);
-          done();
-        });
+        );
+        assert.ok(false);
+      } catch (err) {
+        assert.ok(!!err);
+      }
     });
 
-    it('should propagate errors (concurrency: 5)', (done) => {
+    it('should propagate errors (concurrency: 5)', async () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: () => Promise.reject(new Error('Failed')),
       });
 
-      iterator
-        .forEach(
+      try {
+        await iterator.forEach(
           (err) => {
             if (err) throw err;
           },
           { concurrency: 5 }
-        )
-        .then(() => {
-          assert.ok(false);
-        })
-        .catch((err) => {
-          assert.ok(!!err);
-          done();
-        });
+        );
+        assert.ok(false);
+      } catch (err) {
+        assert.ok(!!err);
+      }
     });
 
-    it('should propagate errors (concurrency: Infinity)', (done) => {
+    it('should propagate errors (concurrency: Infinity)', async () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: () => Promise.reject(new Error('Failed')),
       });
 
-      iterator
-        .forEach(
+      try {
+        await iterator.forEach(
           (err) => {
             if (err) throw err;
           },
           { concurrency: Infinity }
-        )
-        .then(() => {
-          assert.ok(false);
-        })
-        .catch((err) => {
-          assert.ok(!!err);
-          done();
-        });
+        );
+        assert.ok(false);
+      } catch (err) {
+        assert.ok(!!err);
+      }
     });
   });
 });
