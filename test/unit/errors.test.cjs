@@ -186,19 +186,28 @@ describe('errors', () => {
   });
 
   describe('promise', () => {
-    it('handle invalid root (next)', (done) => {
+    (() => {
+      // patch and restore promise
+      const root = typeof global !== 'undefined' ? global : window;
+      let rootPromise;
+      before(() => {
+        rootPromise = root.Promise;
+        root.Promise = require('pinkie-promise');
+      });
+      after(() => {
+        root.Promise = rootPromise;
+      });
+    })();
+    it('handle invalid root (next)', async () => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
 
-      iterator
-        .next()
-        .then((value) => {
-          assert.ok(!value);
-        })
-        .catch((err) => {
-          assert.ok(err);
-          assert.equal(err.code, 'ENOENT');
-          done();
-        });
+      try {
+        const value = await iterator.next();
+        assert.ok(!value);
+      } catch (err) {
+        assert.ok(err);
+        assert.equal(err.code, 'ENOENT');
+      }
     });
 
     it('handle invalid root (forEach)', (done) => {

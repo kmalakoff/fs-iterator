@@ -121,7 +121,20 @@ describe('destroy', () => {
   });
 
   describe('promise interface', () => {
-    it('destroys after iteration', (done) => {
+    (() => {
+      // patch and restore promise
+      const root = typeof global !== 'undefined' ? global : window;
+      let rootPromise;
+      before(() => {
+        rootPromise = root.Promise;
+        root.Promise = require('pinkie-promise');
+      });
+      after(() => {
+        root.Promise = rootPromise;
+      });
+    })();
+
+    it('destroys after iteration', async () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
@@ -130,21 +143,14 @@ describe('destroy', () => {
         },
         lstat: true,
       });
-      iterator
-        .forEach(() => {})
-        .then(() => {
-          assert.equal(spys.dir.callCount, 5);
-          assert.equal(spys.file.callCount, 5);
-          assert.equal(spys.link.callCount, 2);
-          iterator.destroy();
-          done();
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
+      await iterator.forEach(() => {});
+      assert.equal(spys.dir.callCount, 5);
+      assert.equal(spys.file.callCount, 5);
+      assert.equal(spys.link.callCount, 2);
+      iterator.destroy();
     });
 
-    it('destroys before iteration', (done) => {
+    it('destroys before iteration', async () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
@@ -153,20 +159,13 @@ describe('destroy', () => {
         },
       });
       iterator.destroy();
-      iterator
-        .forEach(() => {})
-        .then(() => {
-          assert.equal(spys.dir.callCount, 0);
-          assert.equal(spys.file.callCount, 0);
-          assert.equal(spys.link.callCount, 0);
-          done();
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
+      await iterator.forEach(() => {});
+      assert.equal(spys.dir.callCount, 0);
+      assert.equal(spys.file.callCount, 0);
+      assert.equal(spys.link.callCount, 0);
     });
 
-    it('handle mid-iterator destroy (concurrency 1)', (done) => {
+    it('handle mid-iterator destroy (concurrency 1)', async () => {
       const spys = statsSpys();
 
       let count = 0;
@@ -177,21 +176,14 @@ describe('destroy', () => {
         },
         lstat: true,
       });
-      iterator
-        .forEach(() => {}, { concurrency: 1 })
-        .then(() => {
-          assert.equal(spys.callCount, 4);
-          assert.equal(spys.dir.callCount, 2);
-          assert.equal(spys.file.callCount, 2);
-          assert.equal(spys.link.callCount, 0);
-          done();
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
+      await iterator.forEach(() => {}, { concurrency: 1 });
+      assert.equal(spys.callCount, 4);
+      assert.equal(spys.dir.callCount, 2);
+      assert.equal(spys.file.callCount, 2);
+      assert.equal(spys.link.callCount, 0);
     });
 
-    it('handle mid-iterator destroy (concurrency Infinity)', (done) => {
+    it('handle mid-iterator destroy (concurrency Infinity)', async () => {
       const spys = statsSpys();
 
       let count = 0;
@@ -203,15 +195,8 @@ describe('destroy', () => {
         },
         callbacks: true,
       });
-      iterator
-        .forEach(() => {}, { concurrency: Infinity })
-        .then(() => {
-          assert.equal(spys.callCount, 4);
-          done();
-        })
-        .catch((err) => {
-          assert.ok(!err, err ? err.message : '');
-        });
+      await iterator.forEach(() => {}, { concurrency: Infinity });
+      assert.equal(spys.callCount, 4);
     });
   });
 });
