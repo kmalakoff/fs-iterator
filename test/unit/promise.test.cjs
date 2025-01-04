@@ -1,5 +1,4 @@
-// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-const Promise = require('pinkie-promise');
+const _Pinkie = require('pinkie-promise');
 const assert = require('assert');
 const path = require('path');
 const rimraf2 = require('rimraf2');
@@ -8,7 +7,7 @@ const statsSpys = require('fs-stats-spys');
 
 const Iterator = require('fs-iterator');
 
-const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
   file2: 'b',

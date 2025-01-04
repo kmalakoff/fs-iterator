@@ -9,7 +9,7 @@ const startsWith = require('starts-with');
 
 const Iterator = require('fs-iterator');
 
-const TEST_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp', 'test'));
+const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
   file2: 'b',
