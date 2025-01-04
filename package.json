@@ -44,7 +44,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "async-compat": "^1.5.3",
+    "async-compat": "^1.5.4",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
     "stack-base-iterator": "^1.1.6"
