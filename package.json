@@ -15,7 +15,7 @@
   "homepage": "https://github.com/kmalakoff/fs-iterator",
   "repository": {
     "type": "git",
-    "url": "git@github.com:kmalakoff/fs-iterator.git"
+    "url": "git+ssh://git@github.com/kmalakoff/fs-iterator.git"
   },
   "license": "MIT",
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
@@ -44,10 +44,10 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "async-compat": "^1.5.4",
+    "async-compat": "^1.5.5",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^1.1.6"
+    "stack-base-iterator": "^1.1.8"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
