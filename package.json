@@ -47,7 +47,7 @@
     "async-compat": "^1.5.2",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^1.1.5"
+    "stack-base-iterator": "^1.1.6"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
