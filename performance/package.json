@@ -5,7 +5,7 @@
   "description": "Tests",
   "repository": {
     "type": "git",
-    "url": "git@github.com:kmalakoff/fs-iterator.git"
+    "url": "git+ssh://git@github.com/kmalakoff/fs-iterator.git"
   },
   "license": "MIT",
   "scripts": {
@@ -15,8 +15,8 @@
     "test": "npm run ops && npm run mem"
   },
   "dependencies": {
-    "benchmark-suite": "^1.1.4",
-    "fs-iterator-3.0.0": "npm:fs-iterator@5.2.3",
+    "benchmark-suite": "^1.1.5",
+    "fs-iterator-3.0.0": "npm:fs-iterator@5.2.5",
     "object-assign": "^4.1.1"
   },
   "engines": {
