@@ -43,7 +43,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -62,7 +62,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 5 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -81,7 +81,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -104,7 +104,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -125,7 +125,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 5 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -146,7 +146,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -168,7 +168,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -188,7 +188,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: 5 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }
@@ -208,7 +208,7 @@ describe('concurrency', () => {
         () => {},
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13);
           done();
         }

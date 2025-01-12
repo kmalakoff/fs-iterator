@@ -43,7 +43,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 1);
           done();
         }
@@ -62,7 +62,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13 - 2);
           done();
         }
@@ -81,7 +81,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13 - 1);
           done();
         }
@@ -105,7 +105,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 1);
           done();
         }
@@ -127,7 +127,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13 - 2);
           done();
         }
@@ -149,7 +149,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13 - 1);
           done();
         }
@@ -170,7 +170,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 1);
           done();
         }
@@ -189,7 +189,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13 - 2);
           done();
         }
@@ -208,7 +208,7 @@ describe('filtering', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.ok(spys.callCount, 13 - 1);
           done();
         }

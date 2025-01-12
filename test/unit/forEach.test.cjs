@@ -39,7 +39,7 @@ describe('forEach', () => {
           spys(entry.stats);
         },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -61,7 +61,7 @@ describe('forEach', () => {
         },
         { callbacks: true },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -85,7 +85,7 @@ describe('forEach', () => {
         },
         { callbacks: true, concurrency: 1 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
@@ -104,7 +104,7 @@ describe('forEach', () => {
         },
         { concurrency: 1 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -123,7 +123,7 @@ describe('forEach', () => {
         },
         { concurrency: 5 },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -142,7 +142,7 @@ describe('forEach', () => {
         },
         { concurrency: Infinity },
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -253,7 +253,7 @@ describe('forEach', () => {
       const nothing = await iterator2.forEach(
         () => {},
         (err) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
         }
       );
       assert.ok(nothing === undefined);

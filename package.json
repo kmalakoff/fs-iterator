@@ -21,12 +21,9 @@
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.cjs",
-      "types": "./dist/types/index.d.ts"
-    },
-    "./*": "./*"
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs",
+    "types": "./dist/types/index.d.ts"
   },
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -36,26 +33,24 @@
   ],
   "scripts": {
     "build": "tsds build",
-    "deploy": "tsds deploy",
-    "docs": "tsds docs",
     "format": "biome check --write --unsafe src/ test/",
     "test": "tsds test:node --no-timeouts",
     "test:engines": "nvu engines npm test",
     "version": "tsds version"
   },
   "dependencies": {
-    "async-compat": "^1.5.8",
+    "async-compat": "^1.6.2",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^1.1.11"
+    "stack-base-iterator": "^1.1.12"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.5",
     "end-of-stream": "^1.4.4",
-    "fs-generate": "^1.9.0",
-    "fs-stats-spys": "^1.1.0",
+    "fs-generate": "^1.9.7",
+    "fs-stats-spys": "^1.1.7",
     "is-promise": "^4.0.0",
     "next-tick": "^1.1.0",
     "pinkie-promise": "^2.0.1",
