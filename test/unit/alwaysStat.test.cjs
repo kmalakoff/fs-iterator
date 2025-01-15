@@ -42,7 +42,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -65,7 +65,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -91,7 +91,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -115,7 +115,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -141,7 +141,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -165,7 +165,7 @@ describe('alwaysStat', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);

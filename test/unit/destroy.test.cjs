@@ -39,7 +39,7 @@ describe('destroy', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -61,7 +61,7 @@ describe('destroy', () => {
       iterator.forEach(
         () => {},
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
@@ -86,7 +86,7 @@ describe('destroy', () => {
         () => {},
         { concurrency: 1 },
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
@@ -112,7 +112,7 @@ describe('destroy', () => {
         () => {},
         { concurrency: Infinity },
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.callCount, 4);
           done();
         }

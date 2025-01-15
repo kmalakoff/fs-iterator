@@ -1,1 +1,1 @@
-ignores: ["@types/*", "fs-iterator", "@biomejs/*"]
+ignores: ["fs-iterator"]
