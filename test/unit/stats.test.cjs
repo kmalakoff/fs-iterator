@@ -40,7 +40,7 @@ describe('stats compatibility', () => {
           spys(entry.stats);
         },
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 7);
           assert.equal(spys.link.callCount, 0);
@@ -58,7 +58,7 @@ describe('stats compatibility', () => {
           spys(entry.stats);
         },
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -78,7 +78,7 @@ describe('stats compatibility', () => {
           spys(entry.stats);
         },
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -102,7 +102,7 @@ describe('stats compatibility', () => {
           spys(entry.stats);
         },
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);

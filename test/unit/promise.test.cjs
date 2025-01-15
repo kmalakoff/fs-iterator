@@ -76,7 +76,7 @@ describe('promise', () => {
           return Promise.resolve();
         },
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -98,7 +98,7 @@ describe('promise', () => {
         },
         { concurrency: 1 },
         (err) => {
-          if (err) return done(err);
+          if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);

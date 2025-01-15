@@ -39,7 +39,7 @@ describe('stream', () => {
       spys(entry.stats);
     });
     eos(iteratorStream, (err) => {
-      if (err) return done(err);
+      if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
@@ -61,7 +61,7 @@ describe('stream', () => {
       spys(entry.stats);
     });
     eos(iteratorStream, (err) => {
-      if (err) return done(err);
+      if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
       assert.equal(spys.link.callCount, 0);
@@ -81,7 +81,7 @@ describe('stream', () => {
       spys(entry.stats);
     });
     eos(iteratorStream, (err) => {
-      if (err) return done(err);
+      if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
