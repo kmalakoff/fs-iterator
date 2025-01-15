@@ -39,7 +39,7 @@ describe('everything', () => {
     iterator.forEach(
       () => {},
       (err) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -61,7 +61,7 @@ describe('everything', () => {
     iterator.forEach(
       () => {},
       (err) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -93,7 +93,7 @@ describe('everything', () => {
         concurrency: 1,
       },
       (err) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -162,7 +162,7 @@ describe('everything', () => {
         },
       },
       (err) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         assert.equal(errors.length, 0);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -200,7 +200,7 @@ describe('everything', () => {
         },
       },
       (err) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -274,7 +274,7 @@ describe('everything', () => {
         },
       },
       (err) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
