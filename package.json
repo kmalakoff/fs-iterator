@@ -1,6 +1,6 @@
 {
   "name": "fs-iterator",
-  "version": "5.2.15",
+  "version": "5.2.16",
   "description": "A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.10 and above",
   "keywords": [
     "recursive",
