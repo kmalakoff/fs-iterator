@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "async-compat": "^1.6.5",
+    "call-once-fn": "^1.0.9",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
     "stack-base-iterator": "^1.1.15"
@@ -47,7 +48,6 @@
   "devDependencies": {
     "@types/mocha": "*",
     "@types/node": "*",
-    "end-of-stream": "*",
     "fs-generate": "*",
     "fs-stats-spys": "*",
     "is-promise": "*",
