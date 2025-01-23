@@ -40,7 +40,6 @@
   },
   "dependencies": {
     "async-compat": "^1.6.5",
-    "call-once-fn": "^1.0.10",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
     "stack-base-iterator": "^1.1.15"
@@ -52,6 +51,7 @@
     "fs-stats-spys": "*",
     "is-promise": "*",
     "next-tick": "*",
+    "on-one": "^0.1.1",
     "pinkie-promise": "*",
     "rimraf2": "*",
     "starts-with": "*"

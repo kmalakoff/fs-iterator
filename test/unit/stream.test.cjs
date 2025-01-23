@@ -3,7 +3,7 @@ const path = require('path');
 const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
-const once = require('call-once-fn');
+const oo = require('on-one');
 
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
@@ -38,17 +38,13 @@ describe('stream', () => {
     stream.on('data', (entry) => {
       spys(entry.stats);
     });
-    const end = once((err) => {
+    oo(stream, ['error', 'end', 'close', 'finish'], (err) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
       done();
     });
-    stream.on('error', end);
-    stream.on('end', end);
-    stream.on('close', end);
-    stream.on('finish', end);
   });
 
   it('directories only (highWaterMark: 1)', (done) => {
@@ -64,17 +60,13 @@ describe('stream', () => {
     stream.on('data', (entry) => {
       spys(entry.stats);
     });
-    const end = once((err) => {
+    oo(stream, ['error', 'end', 'close', 'finish'], (err) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
       assert.equal(spys.link.callCount, 0);
       done();
     });
-    stream.on('error', end);
-    stream.on('end', end);
-    stream.on('close', end);
-    stream.on('finish', end);
   });
 
   it('skip directories (highWaterMark: 1)', (done) => {
@@ -88,16 +80,12 @@ describe('stream', () => {
       if (entry.stats.isDirectory()) return;
       spys(entry.stats);
     });
-    const end = once((err) => {
+    oo(stream, ['error', 'end', 'close', 'finish'], (err) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
       done();
     });
-    stream.on('error', end);
-    stream.on('end', end);
-    stream.on('close', end);
-    stream.on('finish', end);
   });
 });
