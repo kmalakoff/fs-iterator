@@ -3,7 +3,7 @@ const path = require('path');
 const rimraf2 = require('rimraf2');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
-const eos = require('end-of-stream');
+const once = require('call-once-fn');
 
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
@@ -34,58 +34,70 @@ describe('stream', () => {
   it('default', (done) => {
     const spys = statsSpys();
 
-    const iteratorStream = new IteratorStream(TEST_DIR, { lstat: true });
-    iteratorStream.on('data', (entry) => {
+    const stream = new IteratorStream(TEST_DIR, { lstat: true });
+    stream.on('data', (entry) => {
       spys(entry.stats);
     });
-    eos(iteratorStream, (err) => {
+    const end = once((err) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
       done();
     });
+    stream.on('error', end);
+    stream.on('end', end);
+    stream.on('close', end);
+    stream.on('finish', end);
   });
 
   it('directories only (highWaterMark: 1)', (done) => {
     const spys = statsSpys();
 
-    const iteratorStream = new IteratorStream(TEST_DIR, {
+    const stream = new IteratorStream(TEST_DIR, {
       lstat: true,
       highWaterMark: 1,
       filter: function filter(entry) {
         return entry.stats.isDirectory();
       },
     });
-    iteratorStream.on('data', (entry) => {
+    stream.on('data', (entry) => {
       spys(entry.stats);
     });
-    eos(iteratorStream, (err) => {
+    const end = once((err) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
       assert.equal(spys.link.callCount, 0);
       done();
     });
+    stream.on('error', end);
+    stream.on('end', end);
+    stream.on('close', end);
+    stream.on('finish', end);
   });
 
   it('skip directories (highWaterMark: 1)', (done) => {
     const spys = statsSpys();
 
-    const iteratorStream = new IteratorStream(TEST_DIR, {
+    const stream = new IteratorStream(TEST_DIR, {
       lstat: true,
       highWaterMark: 1,
     });
-    iteratorStream.on('data', (entry) => {
+    stream.on('data', (entry) => {
       if (entry.stats.isDirectory()) return;
       spys(entry.stats);
     });
-    eos(iteratorStream, (err) => {
+    const end = once((err) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
       done();
     });
+    stream.on('error', end);
+    stream.on('end', end);
+    stream.on('close', end);
+    stream.on('finish', end);
   });
 });
