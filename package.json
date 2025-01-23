@@ -39,10 +39,10 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "async-compat": "^1.6.7",
+    "async-compat": "^1.6.8",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^1.1.18"
+    "stack-base-iterator": "^1.1.19"
   },
   "devDependencies": {
     "@types/mocha": "*",
