@@ -1,6 +1,6 @@
 ## fs-iterator
 
-A file system iterator with filter and asyncIterator iterafaces. Supports Node 0.8 and above
+A file system iterator with filter and asyncIterator interfaces
 
 Entries are of the format:
 
