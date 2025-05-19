@@ -7,22 +7,28 @@ import fifoRemove from './fifoRemove.js';
 import fsCompat from './fs-compat/index.js';
 import lifoFromArray from './lifoFromArray.js';
 
+import type { StackOptions } from 'stack-base-iterator';
+import type { IteratorOptions } from './types.js';
+
+function defaultError(err: NodeJS.ErrnoException): boolean {
+  return FSIterator.EXPECTED_ERRORS.indexOf(err.code) >= 0; // skip known issues
+}
+const bigint = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
+
 export default class FSIterator extends StackBaseIterator {
   static EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
   root: string;
+  depth: number;
+  readdirOptions: { encoding: string; withFileTypes: boolean };
+  statOptions: { bigint: boolean };
 
-  constructor(root, options) {
-    super(options);
-    options = options || {};
+  constructor(root: string, options: IteratorOptions = {}) {
+    super(options as StackOptions);
+    this.options.error = options.error || defaultError;
 
-    if (this.options.depth === undefined) this.options.depth = Infinity;
-    this.options.readdir = { encoding: 'utf8', withFileTypes: fs.Dirent && !options.alwaysStat };
-    this.options.stat = { bigint: process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) };
-    this.options.error =
-      options.error ||
-      function defaultError(err) {
-        return ~FSIterator.EXPECTED_ERRORS.indexOf(err.code); // skip known issues
-      };
+    this.depth = options.depth === undefined ? Infinity : options.depth;
+    this.readdirOptions = { encoding: 'utf8', withFileTypes: fs.Dirent && !options.alwaysStat };
+    this.statOptions = { bigint };
 
     this.root = path.resolve(root);
     this.stack = new PathStack();
@@ -31,7 +37,7 @@ export default class FSIterator extends StackBaseIterator {
       cancelled = true;
     }
     this.processing.push(setup);
-    fsCompat.readdir(this.root, this.options.readdir, (err, files) => {
+    fsCompat.readdir(this.root, this.readdirOptions, (err, files) => {
       fifoRemove(this.processing, setup);
       if (this.done || cancelled) return;
       if (err) return this.end(err);

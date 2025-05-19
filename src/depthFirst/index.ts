@@ -22,10 +22,10 @@ export default function path(item, iterator: Iterator, callback) {
       if (err || !keep || iterator.done) return callback(err);
 
       // not a directory or is a directory, but next level is too deep
-      if (!isDirectory(entry) || depth + 1 > iterator.options.depth) return callback(null, entry);
+      if (!isDirectory(entry) || depth + 1 > iterator.depth) return callback(null, entry);
 
       // get files in this directory
-      fsCompat.readdir(entry.fullPath, iterator.options.readdir, function readdirCallback(err, files) {
+      fsCompat.readdir(entry.fullPath, iterator.readdirOptions, function readdirCallback(err, files) {
         if (err || iterator.done) return callback(err);
         if (files.length) iterator.push({ path: entry.path, depth: depth + 1, files: lifoFromArray(files) });
         return callback(null, entry);
