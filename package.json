@@ -40,10 +40,10 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "async-compat": "^1.6.9",
+    "async-compat": "^1.6.10",
     "fifo": "^2.4.1",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^1.2.8"
+    "stack-base-iterator": "^1.2.9"
   },
   "devDependencies": {
     "@types/mocha": "*",
