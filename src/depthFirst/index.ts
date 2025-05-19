@@ -10,7 +10,7 @@ function isDirectory(entry) {
   return entry.stats.isDirectory();
 }
 
-export default function path<T>(item, iterator: Iterator<T>, callback) {
+export default function path<_T>(item, iterator: Iterator, callback) {
   const depth = item.depth;
   const entry = createEntry(iterator, item);
   item = null; // release reference
