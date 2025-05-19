@@ -8,14 +8,14 @@ import fsCompat from './fs-compat/index.js';
 import lifoFromArray from './lifoFromArray.js';
 
 import type { StackOptions } from 'stack-base-iterator';
-import type { IteratorOptions } from './types.js';
+import type { Entry, IteratorOptions } from './types.js';
 
 function defaultError(err: NodeJS.ErrnoException): boolean {
   return FSIterator.EXPECTED_ERRORS.indexOf(err.code) >= 0; // skip known issues
 }
 const bigint = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 
-export default class FSIterator<T> extends StackBaseIterator<T> {
+export default class FSIterator extends StackBaseIterator<Entry> {
   static EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
   root: string;
   depth: number;
