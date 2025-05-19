@@ -1,4 +1,4 @@
-import fsCompat from '../fs-compat/index.mjs';
+import fsCompat from '../fs-compat/index.js';
 
 function ensureStat(iterator, entry, callback) {
   if (entry.stats) return callback();

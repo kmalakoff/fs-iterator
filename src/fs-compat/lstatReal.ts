@@ -1,5 +1,5 @@
-import lstat from './lstat.mjs';
-import realpath from './realpath.mjs';
+import lstat from './lstat.js';
+import realpath from './realpath.js';
 
 export default function lstatReal(path, options, callback) {
   realpath(path, function realpathCallback(err, realpath) {
