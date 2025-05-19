@@ -8,7 +8,10 @@ export interface Entry {
   stats?: Stats | Dirent;
 }
 
+export type Callback = (err?: Error, value?: unknown) => void;
+
 export interface IteratorOptions extends StackOptions {
   depth?: number;
   alwaysStat?: boolean;
+  filter?: (entry: Entry, callback?: Callback) => boolean;
 }
