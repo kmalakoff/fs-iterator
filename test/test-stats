@@ -49,7 +49,7 @@ async function testIterator(options) {
 }
 
 (async () => {
-  await new Promise((resolve) => rimraf2(TEST_DIR, { disableGlob: true }, (err) => resolve(undefined)));
+  await new Promise((resolve) => rimraf2(TEST_DIR, { disableGlob: true }, (_err) => resolve(undefined)));
   await generate(TEST_DIR, STRUCTURE);
 
   await testReaddirp({ lstat: true });
