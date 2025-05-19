@@ -1,6 +1,6 @@
 import FIFO from 'fifo';
 
-import depthFirst from './depthFirst/index.mjs';
+import depthFirst from './depthFirst/index.js';
 
 function PathStack() {
   this.stack = new FIFO();
