@@ -2,12 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import StackBaseIterator from 'stack-base-iterator';
 
-import PathStack from './PathStack.mjs';
-import fifoRemove from './fifoRemove.mjs';
-import fsCompat from './fs-compat/index.mjs';
-import lifoFromArray from './lifoFromArray.mjs';
+import PathStack from './PathStack.js';
+import fifoRemove from './fifoRemove.js';
+import fsCompat from './fs-compat/index.js';
+import lifoFromArray from './lifoFromArray.js';
 
 export default class FSIterator extends StackBaseIterator {
+  static EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
+  root: string;
+
   constructor(root, options) {
     super(options);
     options = options || {};
@@ -36,5 +39,3 @@ export default class FSIterator extends StackBaseIterator {
     });
   }
 }
-
-FSIterator.EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
