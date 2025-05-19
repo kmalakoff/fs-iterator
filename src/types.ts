@@ -15,4 +15,5 @@ export interface IteratorOptions extends StackOptions {
   alwaysStat?: boolean;
   filter?: (entry: Entry, callback?: Callback) => boolean | undefined;
   callbacks?: boolean;
+  lstat?: boolean;
 }

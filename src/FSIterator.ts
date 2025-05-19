@@ -15,7 +15,7 @@ function defaultError(err: NodeJS.ErrnoException): boolean {
 }
 const bigint = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 
-export default class FSIterator extends StackBaseIterator {
+export default class FSIterator<T> extends StackBaseIterator<T> {
   static EXPECTED_ERRORS = ['ENOENT', 'EPERM', 'EACCES', 'ELOOP'];
   root: string;
   depth: number;
