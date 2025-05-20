@@ -1,14 +1,17 @@
-const _Pinkie = require('pinkie-promise');
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const generate = require('fs-generate');
-const statsSpys = require('fs-stats-spys');
-const isPromise = require('is-promise');
-const nextTick = require('next-tick');
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import generate from 'fs-generate';
+import statsSpys from 'fs-stats-spys';
+import isPromise from 'is-promise';
+import nextTick from 'next-tick';
+import Pinkie from 'pinkie-promise';
+import rimraf2 from 'rimraf2';
 
-const Iterator = require('fs-iterator');
+// @ts-ignore
+import Iterator, { type Entry } from 'fs-iterator';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
@@ -162,7 +165,7 @@ describe('forEach', () => {
       });
 
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           assert.ok(!!err);
           done();
@@ -181,7 +184,7 @@ describe('forEach', () => {
       });
 
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: 1 },
         (err) => {
           assert.ok(!!err);
@@ -201,7 +204,7 @@ describe('forEach', () => {
       });
 
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: 5 },
         (err) => {
           assert.ok(!!err);
@@ -221,7 +224,7 @@ describe('forEach', () => {
       });
 
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: Infinity },
         (err) => {
           assert.ok(!!err);
@@ -234,29 +237,24 @@ describe('forEach', () => {
   describe('promise interface', () => {
     (() => {
       // patch and restore promise
-      const root = typeof global !== 'undefined' ? global : window;
-      let rootPromise;
+      // @ts-ignore
+      let rootPromise: Promise;
       before(() => {
-        rootPromise = root.Promise;
-        root.Promise = require('pinkie-promise');
+        rootPromise = global.Promise;
+        global.Promise = Pinkie;
       });
       after(() => {
-        root.Promise = rootPromise;
+        global.Promise = rootPromise;
       });
     })();
     it('forEach function is mandatory', async () => {
       const iterator = new Iterator(TEST_DIR);
-      const promise = iterator.forEach(() => {});
+      const promise = iterator.forEach((_entry: Entry): undefined => {});
       assert.ok(isPromise(promise));
       await promise;
       const iterator2 = new Iterator(TEST_DIR);
-      const nothing = await iterator2.forEach(
-        () => {},
-        (err) => {
-          if (err) return done(err.message);
-        }
-      );
-      assert.ok(nothing === undefined);
+      const nothing = await iterator2.forEach((_entry: Entry): undefined => {});
+      assert.ok(nothing === true);
     });
 
     it('forEach function is mandatory', async () => {

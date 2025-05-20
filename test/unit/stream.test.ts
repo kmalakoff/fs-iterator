@@ -1,10 +1,14 @@
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const generate = require('fs-generate');
-const statsSpys = require('fs-stats-spys');
-const oo = require('on-one');
+import assert from 'assert';
+import path from 'path';
+import Stream from 'stream';
+import url from 'url';
+import generate from 'fs-generate';
+import statsSpys from 'fs-stats-spys';
+import oo from 'on-one';
+import rimraf2 from 'rimraf2';
+import IteratorStream from '../lib/IteratorStream.cjs';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
@@ -19,9 +23,7 @@ const STRUCTURE = {
 };
 
 describe('stream', () => {
-  if (!require('stream').Readable) return; // no readable streams
-  const IteratorStream = require('../lib/IteratorStream.cjs');
-
+  if (!Stream.Readable) return; // no readable streams
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
@@ -34,7 +36,7 @@ describe('stream', () => {
   it('default', (done) => {
     const spys = statsSpys();
 
-    const stream = new IteratorStream(TEST_DIR, { lstat: true });
+    const stream = new IteratorStream(TEST_DIR, { lstat: true }) as unknown as NodeJS.ReadableStream;
     stream.on('data', (entry) => {
       spys(entry.stats);
     });
@@ -56,7 +58,7 @@ describe('stream', () => {
       filter: function filter(entry) {
         return entry.stats.isDirectory();
       },
-    });
+    }) as unknown as NodeJS.ReadableStream;
     stream.on('data', (entry) => {
       spys(entry.stats);
     });
@@ -75,7 +77,7 @@ describe('stream', () => {
     const stream = new IteratorStream(TEST_DIR, {
       lstat: true,
       highWaterMark: 1,
-    });
+    }) as unknown as NodeJS.ReadableStream;
     stream.on('data', (entry) => {
       if (entry.stats.isDirectory()) return;
       spys(entry.stats);

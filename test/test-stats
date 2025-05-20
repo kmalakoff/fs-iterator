@@ -9,6 +9,7 @@ const Iterator = require('fs-iterator');
 const generate = require('fs-generate');
 const statsSpys = require('fs-stats-spys');
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 var TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 var STRUCTURE = {
   file1: 'a',

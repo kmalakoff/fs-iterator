@@ -1,12 +1,15 @@
-const _Pinkie = require('pinkie-promise');
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const generate = require('fs-generate');
-const statsSpys = require('fs-stats-spys');
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import generate from 'fs-generate';
+import statsSpys from 'fs-stats-spys';
+import Pinkie from 'pinkie-promise';
+import rimraf2 from 'rimraf2';
 
-const Iterator = require('fs-iterator');
+// @ts-ignore
+import Iterator, { type Entry } from 'fs-iterator';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
@@ -23,14 +26,14 @@ const STRUCTURE = {
 describe('promise', () => {
   (() => {
     // patch and restore promise
-    const root = typeof global !== 'undefined' ? global : window;
-    let rootPromise;
+    // @ts-ignore
+    let rootPromise: Promise;
     before(() => {
-      rootPromise = root.Promise;
-      root.Promise = require('pinkie-promise');
+      rootPromise = global.Promise;
+      global.Promise = Pinkie;
     });
     after(() => {
-      root.Promise = rootPromise;
+      global.Promise = rootPromise;
     });
   })();
 
@@ -48,7 +51,7 @@ describe('promise', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
         },
       });
@@ -56,7 +59,7 @@ describe('promise', () => {
       function consume() {
         iterator.next().then((value) => {
           if (value === null) {
-            assert.ok(spys.callCount, 13);
+            assert.equal(spys.callCount, 12);
             done();
           } else consume();
         });
@@ -111,7 +114,7 @@ describe('promise', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
         },
         lstat: true,
@@ -132,7 +135,7 @@ describe('promise', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
           return true;
         },

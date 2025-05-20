@@ -1,12 +1,15 @@
-const assert = require('assert');
-const path = require('path');
-const fs = require('fs');
-const rimraf2 = require('rimraf2');
-const generate = require('fs-generate');
-const statsSpys = require('fs-stats-spys');
+import assert from 'assert';
+import fs from 'fs';
+import path from 'path';
+import url from 'url';
+import generate from 'fs-generate';
+import statsSpys from 'fs-stats-spys';
+import rimraf2 from 'rimraf2';
 
-const Iterator = require('fs-iterator');
+// @ts-ignore
+import Iterator, { type Entry } from 'fs-iterator';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
@@ -20,10 +23,7 @@ const STRUCTURE = {
   'dir3/filelink2': '~dir2/file1',
 };
 
-describe('lstat', () => {
-  after((done) => {
-    rimraf2(TEST_DIR, { disableGlob: true }, done);
-  });
+describe('alwaysStat', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
@@ -36,127 +36,14 @@ describe('lstat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry) => {
-          spys(entry.stats);
-        },
-      });
-      iterator.forEach(
-        () => {},
-        (err) => {
-          if (err) return done(err.message);
-          if (fs.Dirent) {
-            assert.equal(spys.dir.callCount, 3);
-            assert.equal(spys.file.callCount, 2);
-            assert.equal(spys.link.callCount, 1);
-          } else {
-            assert.equal(spys.dir.callCount, 3);
-            assert.equal(spys.file.callCount, 3);
-            assert.equal(spys.link.callCount, 0);
-          }
-          done();
-        }
-      );
-    });
-
-    it('depth Infinity', (done) => {
-      const spys = statsSpys();
-
-      const iterator = new Iterator(TEST_DIR, {
-        depth: Infinity,
-        filter: (entry) => {
-          spys(entry.stats);
-        },
-      });
-      iterator.forEach(
-        () => {},
-        (err) => {
-          if (err) return done(err.message);
-          if (fs.Dirent) {
-            assert.equal(spys.dir.callCount, 5);
-            assert.equal(spys.file.callCount, 5);
-            assert.equal(spys.link.callCount, 2);
-          } else {
-            assert.equal(spys.dir.callCount, 5);
-            assert.equal(spys.file.callCount, 7);
-            assert.equal(spys.link.callCount, 0);
-          }
-          done();
-        }
-      );
-    });
-  });
-
-  describe('lstat false', () => {
-    it('depth 0', (done) => {
-      const spys = statsSpys();
-
-      const iterator = new Iterator(TEST_DIR, {
-        depth: 0,
-        filter: (entry) => {
-          spys(entry.stats);
-        },
-        lstat: false,
-      });
-      iterator.forEach(
-        () => {},
-        (err) => {
-          if (err) return done(err.message);
-          if (fs.Dirent) {
-            assert.equal(spys.dir.callCount, 3);
-            assert.equal(spys.file.callCount, 2);
-            assert.equal(spys.link.callCount, 1);
-          } else {
-            assert.equal(spys.dir.callCount, 3);
-            assert.equal(spys.file.callCount, 3);
-            assert.equal(spys.link.callCount, 0);
-          }
-          done();
-        }
-      );
-    });
-
-    it('depth Infinity', (done) => {
-      const spys = statsSpys();
-
-      const iterator = new Iterator(TEST_DIR, {
-        depth: Infinity,
-        filter: (entry) => {
-          spys(entry.stats);
-        },
-        lstat: false,
-      });
-      iterator.forEach(
-        () => {},
-        (err) => {
-          if (err) return done(err.message);
-          if (fs.Dirent) {
-            assert.equal(spys.dir.callCount, 5);
-            assert.equal(spys.file.callCount, 5);
-            assert.equal(spys.link.callCount, 2);
-          } else {
-            assert.equal(spys.dir.callCount, 5);
-            assert.equal(spys.file.callCount, 7);
-            assert.equal(spys.link.callCount, 0);
-          }
-          done();
-        }
-      );
-    });
-  });
-
-  describe('lstat true', () => {
-    it('depth 0', (done) => {
-      const spys = statsSpys();
-
-      const iterator = new Iterator(TEST_DIR, {
-        depth: 0,
-        filter: (entry) => {
+        filter: (entry: Entry) => {
+          assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 3);
@@ -172,13 +59,114 @@ describe('lstat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry) => {
+        filter: (entry: Entry) => {
+          assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
+        (err) => {
+          if (err) return done(err.message);
+          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
+    });
+  });
+
+  describe('alwaysStat false', () => {
+    it('depth 0', (done) => {
+      const spys = statsSpys();
+
+      const iterator = new Iterator(TEST_DIR, {
+        depth: 0,
+        filter: (entry: Entry) => {
+          assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
+          spys(entry.stats);
+        },
+        lstat: true,
+        alwaysStat: false,
+      });
+      iterator.forEach(
+        (_entry: Entry): undefined => {},
+        (err) => {
+          if (err) return done(err.message);
+          assert.equal(spys.dir.callCount, 3);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
+          done();
+        }
+      );
+    });
+
+    it('depth Infinity', (done) => {
+      const spys = statsSpys();
+
+      const iterator = new Iterator(TEST_DIR, {
+        depth: Infinity,
+        filter: (entry: Entry) => {
+          assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
+          spys(entry.stats);
+        },
+        lstat: true,
+        alwaysStat: false,
+      });
+      iterator.forEach(
+        (_entry: Entry): undefined => {},
+        (err) => {
+          if (err) return done(err.message);
+          assert.equal(spys.dir.callCount, 5);
+          assert.equal(spys.file.callCount, 5);
+          assert.equal(spys.link.callCount, 2);
+          done();
+        }
+      );
+    });
+  });
+
+  describe('alwaysStat true', () => {
+    it('depth 0', (done) => {
+      const spys = statsSpys();
+
+      const iterator = new Iterator(TEST_DIR, {
+        depth: 0,
+        filter: (entry: Entry) => {
+          assert.ok(entry.stats instanceof fs.Stats);
+          spys(entry.stats);
+        },
+        lstat: true,
+        alwaysStat: true,
+      });
+      iterator.forEach(
+        (_entry: Entry): undefined => {},
+        (err) => {
+          if (err) return done(err.message);
+          assert.equal(spys.dir.callCount, 3);
+          assert.equal(spys.file.callCount, 2);
+          assert.equal(spys.link.callCount, 1);
+          done();
+        }
+      );
+    });
+
+    it('depth Infinity', (done) => {
+      const spys = statsSpys();
+
+      const iterator = new Iterator(TEST_DIR, {
+        depth: Infinity,
+        filter: (entry: Entry) => {
+          assert.ok(entry.stats instanceof fs.Stats);
+          spys(entry.stats);
+        },
+        lstat: true,
+        alwaysStat: true,
+      });
+      iterator.forEach(
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
