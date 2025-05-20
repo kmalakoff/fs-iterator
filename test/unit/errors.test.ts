@@ -1,11 +1,14 @@
-const _Pinkie = require('pinkie-promise');
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const generate = require('fs-generate');
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import generate from 'fs-generate';
+import Pinkie from 'pinkie-promise';
+import rimraf2 from 'rimraf2';
 
-const Iterator = require('fs-iterator');
+// @ts-ignore
+import Iterator, { type Entry } from 'fs-iterator';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
@@ -32,7 +35,7 @@ describe('errors', () => {
         filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           assert.ok(!!err);
           done();
@@ -47,7 +50,7 @@ describe('errors', () => {
         filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         {
           concurrency: 1,
           error: (err) => {
@@ -70,7 +73,7 @@ describe('errors', () => {
         filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         {
           error: (err) => {
             errors.push(err);
@@ -101,7 +104,7 @@ describe('errors', () => {
     it('handle invalid root (forEach)', (done) => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
@@ -120,7 +123,7 @@ describe('errors', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           assert.ok(!!err);
           done();
@@ -140,7 +143,7 @@ describe('errors', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         {
           concurrency: 1,
           error: (err) => {
@@ -168,7 +171,7 @@ describe('errors', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         {
           error: (err) => {
             errors.push(err);
@@ -187,14 +190,14 @@ describe('errors', () => {
   describe('promise', () => {
     (() => {
       // patch and restore promise
-      const root = typeof global !== 'undefined' ? global : window;
-      let rootPromise;
+      // @ts-ignore
+      let rootPromise: Promise;
       before(() => {
-        rootPromise = root.Promise;
-        root.Promise = require('pinkie-promise');
+        rootPromise = global.Promise;
+        global.Promise = Pinkie;
       });
       after(() => {
-        root.Promise = rootPromise;
+        global.Promise = rootPromise;
       });
     })();
     it('handle invalid root (next)', async () => {
@@ -212,7 +215,7 @@ describe('errors', () => {
     it('handle invalid root (forEach)', (done) => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
@@ -226,7 +229,7 @@ describe('errors', () => {
         filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           assert.ok(!!err);
           done();
@@ -241,7 +244,7 @@ describe('errors', () => {
         filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         {
           concurrency: 1,
           error: (err) => {
@@ -264,7 +267,7 @@ describe('errors', () => {
         filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         {
           error: (err) => {
             errors.push(err);

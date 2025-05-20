@@ -1,13 +1,16 @@
-const _Pinkie = require('pinkie-promise');
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const generate = require('fs-generate');
-const statsSpys = require('fs-stats-spys');
-const nextTick = require('next-tick');
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import generate from 'fs-generate';
+import statsSpys from 'fs-stats-spys';
+import nextTick from 'next-tick';
+import Pinkie from 'pinkie-promise';
+import rimraf2 from 'rimraf2';
 
-const Iterator = require('fs-iterator');
+// @ts-ignore
+import Iterator, { type Entry } from 'fs-iterator';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
@@ -114,7 +117,7 @@ describe('forEach', () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
-          filter: (entry) => !entry.stats.isDirectory(),
+          filter: (entry: Entry) => !entry.stats.isDirectory(),
           lstat: true,
         });
         iterator.forEach(
@@ -270,14 +273,14 @@ describe('forEach', () => {
     describe('promise', () => {
       (() => {
         // patch and restore promise
-        const root = typeof global !== 'undefined' ? global : window;
-        let rootPromise;
+        // @ts-ignore
+        let rootPromise: Promise;
         before(() => {
-          rootPromise = root.Promise;
-          root.Promise = require('pinkie-promise');
+          rootPromise = global.Promise;
+          global.Promise = Pinkie;
         });
         after(() => {
-          root.Promise = rootPromise;
+          global.Promise = rootPromise;
         });
       })();
       it('infinite limit to get all', async () => {
@@ -357,7 +360,7 @@ describe('forEach', () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
-          filter: (entry) => Promise.resolve(!entry.stats.isDirectory()),
+          filter: (entry: Entry) => Promise.resolve(!entry.stats.isDirectory()),
           lstat: true,
         });
         const empty = await iterator.forEach(

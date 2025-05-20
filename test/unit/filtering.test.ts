@@ -1,14 +1,17 @@
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import generate from 'fs-generate';
+import statsSpys from 'fs-stats-spys';
 // biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-const Promise = require('pinkie-promise');
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const generate = require('fs-generate');
-const statsSpys = require('fs-stats-spys');
-const startsWith = require('starts-with');
+import Promise from 'pinkie-promise';
+import rimraf2 from 'rimraf2';
+import startsWith from 'starts-with';
 
-const Iterator = require('fs-iterator');
+// @ts-ignore
+import Iterator, { type Entry } from 'fs-iterator';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
@@ -35,16 +38,16 @@ describe('filtering', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
           return false;
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 1);
+          assert.equal(spys.callCount, 6);
           done();
         }
       );
@@ -54,16 +57,16 @@ describe('filtering', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
-          return path !== 'dir2';
+          return entry.path !== 'dir2';
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13 - 2);
+          assert.equal(spys.callCount, 10);
           done();
         }
       );
@@ -73,16 +76,16 @@ describe('filtering', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
           return entry.stats.isDirectory() || startsWith(entry.path, TEST_DIR_PATH);
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13 - 1);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -103,10 +106,10 @@ describe('filtering', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 1);
+          assert.equal(spys.callCount, 6);
           done();
         }
       );
@@ -125,10 +128,10 @@ describe('filtering', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13 - 2);
+          assert.equal(spys.callCount, 10);
           done();
         }
       );
@@ -147,10 +150,10 @@ describe('filtering', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13 - 1);
+          assert.equal(spys.callCount, 6);
           done();
         }
       );
@@ -162,16 +165,16 @@ describe('filtering', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
           return Promise.resolve(false);
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 1);
+          assert.equal(spys.callCount, 6);
           done();
         }
       );
@@ -181,16 +184,16 @@ describe('filtering', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
-          return Promise.resolve(path !== 'dir2');
+          return Promise.resolve(entry.path !== 'dir2');
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13 - 2);
+          assert.equal(spys.callCount, 10);
           done();
         }
       );
@@ -200,16 +203,16 @@ describe('filtering', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
           return Promise.resolve(!entry.stats.isDirectory() || startsWith(entry.path, TEST_DIR_PATH));
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13 - 1);
+          assert.equal(spys.callCount, 6);
           done();
         }
       );

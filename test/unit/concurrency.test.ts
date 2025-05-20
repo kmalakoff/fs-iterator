@@ -1,14 +1,17 @@
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import generate from 'fs-generate';
+import statsSpys from 'fs-stats-spys';
+import nextTick from 'next-tick';
 // biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
-const Promise = require('pinkie-promise');
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const generate = require('fs-generate');
-const statsSpys = require('fs-stats-spys');
-const nextTick = require('next-tick');
+import Promise from 'pinkie-promise';
+import rimraf2 from 'rimraf2';
 
-const Iterator = require('fs-iterator');
+// @ts-ignore
+import Iterator, { type Entry } from 'fs-iterator';
 
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
 const STRUCTURE = {
   file1: 'a',
@@ -34,17 +37,17 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
         },
       });
 
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: 1 },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -54,16 +57,16 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: 5 },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -73,16 +76,16 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: Infinity },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -101,11 +104,11 @@ describe('concurrency', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: 1 },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -122,11 +125,11 @@ describe('concurrency', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: 5 },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -143,11 +146,11 @@ describe('concurrency', () => {
         callbacks: true,
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: Infinity },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -159,17 +162,17 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
           return Promise.resolve();
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: 1 },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -179,17 +182,17 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
           return Promise.resolve();
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: 5 },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
@@ -199,17 +202,17 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry) => {
+        filter: (entry: Entry) => {
           spys(entry.stats);
           return Promise.resolve();
         },
       });
       iterator.forEach(
-        () => {},
+        (_entry: Entry): undefined => {},
         { concurrency: Infinity },
         (err) => {
           if (err) return done(err.message);
-          assert.ok(spys.callCount, 13);
+          assert.equal(spys.callCount, 12);
           done();
         }
       );
