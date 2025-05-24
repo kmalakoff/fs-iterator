@@ -20,7 +20,7 @@ function IteratorStream(root, options = {}) {
   this.processing = 0;
   this.iterator = new Iterator(root, options);
 }
-inherits(IteratorStream, ReadableStream);
+if (ReadableStream) inherits(IteratorStream, ReadableStream);
 
 IteratorStream.prototype.destroy = function (err) {
   ReadableStream.prototype.destroy.call(this, err);
@@ -54,5 +54,4 @@ IteratorStream.prototype._read = function (batch) {
     }
   );
 };
-
-module.exports = IteratorStream;
+module.exports = ReadableStream ? IteratorStream : undefined;

@@ -1,6 +1,5 @@
 import assert from 'assert';
 import path from 'path';
-import Stream from 'stream';
 import url from 'url';
 import generate from 'fs-generate';
 import statsSpys from 'fs-stats-spys';
@@ -23,7 +22,7 @@ const STRUCTURE = {
 };
 
 describe('stream', () => {
-  if (!Stream.Readable) return; // no readable streams
+  if (!IteratorStream) return; // no readable streams
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, done);
