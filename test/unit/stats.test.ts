@@ -29,7 +29,9 @@ describe('stats compatibility', () => {
   });
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
 
@@ -42,7 +44,7 @@ describe('stats compatibility', () => {
         (entry) => {
           spys(entry.stats);
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 7);
@@ -60,7 +62,7 @@ describe('stats compatibility', () => {
         (entry) => {
           spys(entry.stats);
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -80,7 +82,7 @@ describe('stats compatibility', () => {
         (entry) => {
           spys(entry.stats);
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 5);
@@ -104,7 +106,7 @@ describe('stats compatibility', () => {
         (entry) => {
           spys(entry.stats);
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);

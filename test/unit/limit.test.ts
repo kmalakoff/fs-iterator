@@ -31,7 +31,9 @@ describe('forEach', () => {
     });
     beforeEach((done) => {
       rimraf2(TEST_DIR, { disableGlob: true }, () => {
-        generate(TEST_DIR, STRUCTURE, done);
+        generate(TEST_DIR, STRUCTURE, (err) => {
+          done(err);
+        });
       });
     });
 

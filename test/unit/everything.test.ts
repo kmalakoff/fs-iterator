@@ -26,7 +26,9 @@ const DELETE_PATH = `dir2${path.sep}file1`;
 describe('everything', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
 
@@ -41,7 +43,7 @@ describe('everything', () => {
     });
     iterator.forEach(
       (_entry: Entry): undefined => {},
-      (err) => {
+      (err?: Error) => {
         if (err) return done(err.message);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
@@ -63,7 +65,7 @@ describe('everything', () => {
     });
     iterator.forEach(
       (_entry: Entry): undefined => {},
-      (err) => {
+      (err?: Error) => {
         if (err) return done(err.message);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
@@ -86,7 +88,7 @@ describe('everything', () => {
       },
       alwaysStat: true,
       lstat: true,
-      error: (err) => {
+      error: (err?: Error) => {
         errors.push(err);
       },
     });
@@ -95,7 +97,7 @@ describe('everything', () => {
       {
         concurrency: 1,
       },
-      (err) => {
+      (err?: Error) => {
         if (err) return done(err.message);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
@@ -118,7 +120,7 @@ describe('everything', () => {
       },
       alwaysStat: true,
       lstat: true,
-      error: (err) => {
+      error: (err?: Error) => {
         assert.ok(!!err);
         return false;
       },
@@ -128,7 +130,7 @@ describe('everything', () => {
       {
         concurrency: 1,
       },
-      (err) => {
+      (err?: Error) => {
         assert.ok(!!err);
         assert.equal(spys.dir.callCount, 2);
         assert.equal(spys.file.callCount, 1);
@@ -151,7 +153,7 @@ describe('everything', () => {
       },
       alwaysStat: true,
       lstat: true,
-      error: (err) => {
+      error: (err?: Error) => {
         assert.ok(!!err);
         return true;
       },
@@ -160,11 +162,11 @@ describe('everything', () => {
       (_entry: Entry): undefined => {},
       {
         concurrency: 1,
-        error: (err) => {
+        error: (err?: Error) => {
           errors.push(err);
         },
       },
-      (err) => {
+      (err?: Error) => {
         if (err) return done(err.message);
         assert.equal(errors.length, 0);
         assert.equal(spys.dir.callCount, 5);
@@ -188,7 +190,7 @@ describe('everything', () => {
       },
       alwaysStat: true,
       lstat: true,
-      error: (err) => {
+      error: (err?: Error) => {
         assert.ok(!!err);
         return false;
       },
@@ -197,12 +199,12 @@ describe('everything', () => {
       (_entry: Entry): undefined => {},
       {
         concurrency: 1,
-        error: (err) => {
+        error: (err?: Error) => {
           errors.push(err);
           return false;
         },
       },
-      (err) => {
+      (err?: Error) => {
         if (err) return done(err.message);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
@@ -226,7 +228,7 @@ describe('everything', () => {
       },
       alwaysStat: true,
       lstat: true,
-      error: (err) => {
+      error: (err?: Error) => {
         assert.ok(!!err);
         return false;
       },
@@ -235,12 +237,12 @@ describe('everything', () => {
       (_entry: Entry): undefined => {},
       {
         concurrency: 1,
-        error: (err) => {
+        error: (err?: Error) => {
           errors.push(err);
           return true;
         },
       },
-      (err) => {
+      (err?: Error) => {
         assert.ok(err);
         assert.equal(spys.dir.callCount, 2);
         assert.equal(spys.file.callCount, 1);
@@ -263,7 +265,7 @@ describe('everything', () => {
       },
       alwaysStat: true,
       lstat: true,
-      error: (err) => {
+      error: (err?: Error) => {
         assert.ok(!!err);
         return false;
       },
@@ -272,11 +274,11 @@ describe('everything', () => {
       (_entry: Entry): undefined => {},
       {
         concurrency: 1,
-        error: (err) => {
+        error: (err?: Error) => {
           errors.push(err);
         },
       },
-      (err) => {
+      (err?: Error) => {
         if (err) return done(err.message);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);

@@ -40,7 +40,9 @@ describe('promise', () => {
   describe('setup', () => {
     beforeEach((done) => {
       rimraf2(TEST_DIR, { disableGlob: true }, () => {
-        generate(TEST_DIR, STRUCTURE, done);
+        generate(TEST_DIR, STRUCTURE, (err) => {
+          done(err);
+        });
       });
     });
     after((done) => {
@@ -78,7 +80,7 @@ describe('promise', () => {
           assert.ok(!callback);
           return Promise.resolve();
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -100,7 +102,7 @@ describe('promise', () => {
           return Promise.resolve(false);
         },
         { concurrency: 1 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
@@ -161,7 +163,7 @@ describe('promise', () => {
       });
 
       function consume() {
-        iterator.next().catch((err) => {
+        iterator.next().catch((err?: Error) => {
           assert.ok(!!err);
           done();
         });
