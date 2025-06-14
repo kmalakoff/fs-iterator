@@ -28,7 +28,9 @@ const STRUCTURE = {
 describe('concurrency', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
 
@@ -45,7 +47,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 1 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -64,7 +66,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 5 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -83,7 +85,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: Infinity },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -106,7 +108,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 1 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -127,7 +129,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 5 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -148,7 +150,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: Infinity },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -170,7 +172,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 1 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -190,7 +192,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 5 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -210,7 +212,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: Infinity },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();

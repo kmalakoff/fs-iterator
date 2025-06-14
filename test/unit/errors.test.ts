@@ -5,6 +5,8 @@ import generate from 'fs-generate';
 import Pinkie from 'pinkie-promise';
 import rimraf2 from 'rimraf2';
 
+import fs from 'fs';
+
 // @ts-ignore
 import Iterator, { type Entry } from 'fs-iterator';
 
@@ -25,7 +27,9 @@ const STRUCTURE = {
 describe('errors', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
 
@@ -36,7 +40,7 @@ describe('errors', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           done();
         }
@@ -53,12 +57,12 @@ describe('errors', () => {
         (_entry: Entry): undefined => {},
         {
           concurrency: 1,
-          error: (err) => {
+          error: (err?: Error) => {
             errors.push(err);
             return true;
           },
         },
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -75,12 +79,12 @@ describe('errors', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         {
-          error: (err) => {
+          error: (err?: Error) => {
             errors.push(err);
             return false;
           },
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(errors.length, 6);
           done();
@@ -105,7 +109,7 @@ describe('errors', () => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: NodeJS.ErrnoException) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
           done();
@@ -124,7 +128,7 @@ describe('errors', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           done();
         }
@@ -146,12 +150,12 @@ describe('errors', () => {
         (_entry: Entry): undefined => {},
         {
           concurrency: 1,
-          error: (err) => {
+          error: (err?: Error) => {
             errors.push(err);
             return true;
           },
         },
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -173,12 +177,12 @@ describe('errors', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         {
-          error: (err) => {
+          error: (err?: Error) => {
             errors.push(err);
             return false;
           },
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(errors.length, 6);
           done();
@@ -216,7 +220,7 @@ describe('errors', () => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: NodeJS.ErrnoException) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
           done();
@@ -230,7 +234,7 @@ describe('errors', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           done();
         }
@@ -247,12 +251,12 @@ describe('errors', () => {
         (_entry: Entry): undefined => {},
         {
           concurrency: 1,
-          error: (err) => {
+          error: (err?: Error) => {
             errors.push(err);
             return true;
           },
         },
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -269,12 +273,12 @@ describe('errors', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         {
-          error: (err) => {
+          error: (err?: Error) => {
             errors.push(err);
             return false;
           },
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(errors.length, 6);
           done();

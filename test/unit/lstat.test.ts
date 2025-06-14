@@ -29,7 +29,9 @@ describe('lstat', () => {
   });
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
 
@@ -45,7 +47,7 @@ describe('lstat', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 3);
@@ -72,7 +74,7 @@ describe('lstat', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 5);
@@ -102,7 +104,7 @@ describe('lstat', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 3);
@@ -130,7 +132,7 @@ describe('lstat', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 5);
@@ -160,7 +162,7 @@ describe('lstat', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
@@ -182,7 +184,7 @@ describe('lstat', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);

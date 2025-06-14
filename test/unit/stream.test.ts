@@ -25,7 +25,9 @@ describe('stream', () => {
   if (!IteratorStream) return; // no readable streams
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
   after((done) => {
@@ -39,7 +41,7 @@ describe('stream', () => {
     stream.on('data', (entry) => {
       spys(entry.stats);
     });
-    oo(stream, ['error', 'end', 'close', 'finish'], (err) => {
+    oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
@@ -61,7 +63,7 @@ describe('stream', () => {
     stream.on('data', (entry) => {
       spys(entry.stats);
     });
-    oo(stream, ['error', 'end', 'close', 'finish'], (err) => {
+    oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
@@ -81,7 +83,7 @@ describe('stream', () => {
       if (entry.stats.isDirectory()) return;
       spys(entry.stats);
     });
-    oo(stream, ['error', 'end', 'close', 'finish'], (err) => {
+    oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
       if (err) return done(err.message);
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
