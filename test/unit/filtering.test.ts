@@ -29,7 +29,9 @@ const TEST_DIR_PATH = `dir3${path.sep}dir4`;
 describe('filtering', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
 
@@ -45,7 +47,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 6);
           done();
@@ -64,7 +66,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 10);
           done();
@@ -83,7 +85,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 12);
           done();
@@ -107,7 +109,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 6);
           done();
@@ -129,7 +131,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 10);
           done();
@@ -151,7 +153,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 6);
           done();
@@ -172,7 +174,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 6);
           done();
@@ -191,7 +193,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 10);
           done();
@@ -210,7 +212,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 6);
           done();

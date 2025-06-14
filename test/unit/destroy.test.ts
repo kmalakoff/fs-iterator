@@ -26,7 +26,9 @@ const STRUCTURE = {
 describe('destroy', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
 
@@ -42,7 +44,7 @@ describe('destroy', () => {
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -64,7 +66,7 @@ describe('destroy', () => {
       iterator.destroy();
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 0);
@@ -89,7 +91,7 @@ describe('destroy', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 1 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
@@ -115,7 +117,7 @@ describe('destroy', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: Infinity },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.callCount, 4);
           done();
