@@ -28,7 +28,9 @@ const STRUCTURE = {
 describe('forEach', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
 
@@ -41,7 +43,7 @@ describe('forEach', () => {
         (entry) => {
           spys(entry.stats);
         },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -63,7 +65,7 @@ describe('forEach', () => {
           nextTick(callback);
         },
         { callbacks: true },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -87,7 +89,7 @@ describe('forEach', () => {
           }, 10);
         },
         { callbacks: true, concurrency: 1 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
@@ -106,7 +108,7 @@ describe('forEach', () => {
           spys(entry.stats);
         },
         { concurrency: 1 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -125,7 +127,7 @@ describe('forEach', () => {
           spys(entry.stats);
         },
         { concurrency: 5 },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -144,7 +146,7 @@ describe('forEach', () => {
           spys(entry.stats);
         },
         { concurrency: Infinity },
-        (err) => {
+        (err?: Error) => {
           if (err) return done(err.message);
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
@@ -166,7 +168,7 @@ describe('forEach', () => {
 
       iterator.forEach(
         (_entry: Entry): undefined => {},
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           done();
         }
@@ -186,7 +188,7 @@ describe('forEach', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 1 },
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           done();
         }
@@ -206,7 +208,7 @@ describe('forEach', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 5 },
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           done();
         }
@@ -226,7 +228,7 @@ describe('forEach', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: Infinity },
-        (err) => {
+        (err?: Error) => {
           assert.ok(!!err);
           done();
         }
@@ -330,7 +332,7 @@ describe('forEach', () => {
       });
 
       try {
-        await iterator.forEach((err) => {
+        await iterator.forEach((err?: Error) => {
           if (err) throw err;
         });
         assert.ok(false);
@@ -346,7 +348,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err) => {
+          (err?: Error) => {
             if (err) throw err;
           },
           { concurrency: 1 }
@@ -364,7 +366,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err) => {
+          (err?: Error) => {
             if (err) throw err;
           },
           { concurrency: 5 }
@@ -382,7 +384,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err) => {
+          (err?: Error) => {
             if (err) throw err;
           },
           { concurrency: Infinity }

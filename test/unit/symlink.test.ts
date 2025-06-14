@@ -27,7 +27,9 @@ const STRUCTURE = {
 describe('symlink', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
-      generate(TEST_DIR, STRUCTURE, done);
+      generate(TEST_DIR, STRUCTURE, (err) => {
+        done(err);
+      });
     });
   });
   after((done) => {
@@ -45,7 +47,7 @@ describe('symlink', () => {
     });
     iterator.forEach(
       (_entry: Entry): undefined => {},
-      (err) => {
+      (err?: Error) => {
         if (err) return done(err.message);
         assert.equal(spys.callCount, 15);
         assert.equal(spys.dir.callCount, 5);
@@ -67,7 +69,7 @@ describe('symlink', () => {
     });
     iterator.forEach(
       (_entry: Entry): undefined => {},
-      (err) => {
+      (err?: Error) => {
         if (err) return done(err.message);
         assert.equal(spys.callCount, 15);
         if (fs.Dirent) {
