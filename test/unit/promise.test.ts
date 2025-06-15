@@ -53,14 +53,14 @@ describe('promise', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
       });
 
       function consume() {
         iterator.next().then((value) => {
-          if (value === null) {
+          if (value.done) {
             assert.equal(spys.callCount, 12);
             done();
           } else consume();
@@ -74,14 +74,17 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry, callback) => {
+        (entry, callback?) => {
           spys(entry.stats);
           assert.ok(entry);
           assert.ok(!callback);
-          return Promise.resolve();
+          return Promise.resolve(undefined);
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -95,7 +98,7 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry, callback) => {
+        (entry, callback?) => {
           spys(entry.stats);
           assert.ok(entry);
           assert.ok(!callback);
@@ -103,7 +106,10 @@ describe('promise', () => {
         },
         { concurrency: 1 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
@@ -116,7 +122,7 @@ describe('promise', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
         lstat: true,
@@ -124,7 +130,7 @@ describe('promise', () => {
 
       async function consume() {
         const value = await iterator.next();
-        if (value === null) {
+        if (value.done) {
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -146,7 +152,7 @@ describe('promise', () => {
 
       function consume() {
         iterator.next().then((value) => {
-          if (value === null) {
+          if (value.done) {
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
             assert.equal(spys.link.callCount, 2);

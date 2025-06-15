@@ -5,7 +5,10 @@ import generate from 'fs-generate';
 import statsSpys from 'fs-stats-spys';
 import oo from 'on-one';
 import rimraf2 from 'rimraf2';
-import IteratorStream from '../lib/IteratorStream.cjs';
+import IteratorStream from '../lib/IteratorStream';
+
+// @ts-ignore
+import type { Entry } from 'fs-iterator';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
@@ -38,11 +41,14 @@ describe('stream', () => {
     const spys = statsSpys();
 
     const stream = new IteratorStream(TEST_DIR, { lstat: true }) as unknown as NodeJS.ReadableStream;
-    stream.on('data', (entry) => {
+    stream.on('data', (entry: Entry): undefined => {
       spys(entry.stats);
     });
     oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
-      if (err) return done(err.message);
+      if (err) {
+        done(err.message);
+        return;
+      }
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
@@ -60,11 +66,14 @@ describe('stream', () => {
         return entry.stats.isDirectory();
       },
     }) as unknown as NodeJS.ReadableStream;
-    stream.on('data', (entry) => {
+    stream.on('data', (entry: Entry): undefined => {
       spys(entry.stats);
     });
     oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
-      if (err) return done(err.message);
+      if (err) {
+        done(err.message);
+        return;
+      }
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
       assert.equal(spys.link.callCount, 0);
@@ -79,12 +88,15 @@ describe('stream', () => {
       lstat: true,
       highWaterMark: 1,
     }) as unknown as NodeJS.ReadableStream;
-    stream.on('data', (entry) => {
+    stream.on('data', (entry: Entry): undefined => {
       if (entry.stats.isDirectory()) return;
       spys(entry.stats);
     });
     oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
-      if (err) return done(err.message);
+      if (err) {
+        done(err.message);
+        return;
+      }
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);

@@ -36,7 +36,7 @@ describe('everything', () => {
     const spys = statsSpys();
 
     const iterator = new Iterator(TEST_DIR, {
-      filter: (entry: Entry) => {
+      filter: (entry: Entry): undefined => {
         spys(entry.stats);
       },
       lstat: true,
@@ -44,7 +44,10 @@ describe('everything', () => {
     iterator.forEach(
       (_entry: Entry): undefined => {},
       (err?: Error) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -66,7 +69,10 @@ describe('everything', () => {
     iterator.forEach(
       (_entry: Entry): undefined => {},
       (err?: Error) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -88,7 +94,7 @@ describe('everything', () => {
       },
       alwaysStat: true,
       lstat: true,
-      error: (err?: Error) => {
+      error: (err?: Error): undefined => {
         errors.push(err);
       },
     });
@@ -98,7 +104,10 @@ describe('everything', () => {
         concurrency: 1,
       },
       (err?: Error) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -143,7 +152,6 @@ describe('everything', () => {
   it('Should handle a delete (error in forEach custom error handler - return true)', (done) => {
     const spys = statsSpys();
     const errors = [];
-
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
         spys(entry.stats);
@@ -162,12 +170,15 @@ describe('everything', () => {
       (_entry: Entry): undefined => {},
       {
         concurrency: 1,
-        error: (err?: Error) => {
+        error: (err?: Error): undefined => {
           errors.push(err);
         },
       },
       (err?: Error) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
         assert.equal(errors.length, 0);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -205,7 +216,10 @@ describe('everything', () => {
         },
       },
       (err?: Error) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -274,12 +288,15 @@ describe('everything', () => {
       (_entry: Entry): undefined => {},
       {
         concurrency: 1,
-        error: (err?: Error) => {
+        error: (err?: Error): undefined => {
           errors.push(err);
         },
       },
       (err?: Error) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);

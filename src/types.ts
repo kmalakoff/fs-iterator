@@ -6,14 +6,23 @@ export interface Entry {
   path: string;
   fullPath: string;
   stats?: Stats | BigIntStats | Dirent;
+  realStats?: Stats | BigIntStats | Dirent;
 }
 
-export type Callback = (err?: Error, value?: unknown) => void;
+export interface StackEntry {
+  path?: string;
+  basename: string | Stats | BigIntStats | Dirent;
+  depth: number;
+}
+
+export type FilterSync = (entry: Entry) => boolean | undefined | Error;
+export type FilterCallback = (entry: Entry, callback: (err?: Error, value?: boolean) => undefined) => undefined;
+export type FilterPromise = (entry: Entry) => Promise<boolean | undefined>;
 
 export interface IteratorOptions extends StackOptions {
   depth?: number;
   alwaysStat?: boolean;
-  filter?: (entry: Entry, callback?: Callback) => boolean | undefined;
+  filter?: FilterSync | FilterCallback | FilterPromise;
   callbacks?: boolean;
   lstat?: boolean;
 }

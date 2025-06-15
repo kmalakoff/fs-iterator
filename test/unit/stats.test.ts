@@ -41,11 +41,14 @@ describe('stats compatibility', () => {
 
       const iterator = new Iterator(TEST_DIR, { alwaysStat: true, lstat: false });
       iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 7);
           assert.equal(spys.link.callCount, 0);
@@ -59,11 +62,14 @@ describe('stats compatibility', () => {
 
       const iterator = new Iterator(TEST_DIR, { alwaysStat: true, lstat: true });
       iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -79,11 +85,14 @@ describe('stats compatibility', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: false });
       iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -103,11 +112,14 @@ describe('stats compatibility', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);

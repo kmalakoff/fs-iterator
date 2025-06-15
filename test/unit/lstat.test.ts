@@ -41,14 +41,17 @@ describe('lstat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 3);
             assert.equal(spys.file.callCount, 2);
@@ -68,14 +71,17 @@ describe('lstat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -97,7 +103,7 @@ describe('lstat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
         lstat: false,
@@ -105,7 +111,10 @@ describe('lstat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 3);
             assert.equal(spys.file.callCount, 2);
@@ -125,7 +134,7 @@ describe('lstat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
         lstat: false,
@@ -133,7 +142,10 @@ describe('lstat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           if (fs.Dirent) {
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -155,7 +167,7 @@ describe('lstat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
         lstat: true,
@@ -163,7 +175,10 @@ describe('lstat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -177,7 +192,7 @@ describe('lstat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
         lstat: true,
@@ -185,7 +200,10 @@ describe('lstat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
