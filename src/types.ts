@@ -24,5 +24,7 @@ export interface IteratorOptions extends StackOptions {
   alwaysStat?: boolean;
   filter?: FilterSync | FilterCallback | FilterPromise;
   callbacks?: boolean;
+  async?: boolean;
+  concurrency?: number;
   lstat?: boolean;
 }
