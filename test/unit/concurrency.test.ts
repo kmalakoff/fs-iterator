@@ -39,7 +39,7 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
       });
@@ -48,7 +48,10 @@ describe('concurrency', () => {
         (_entry: Entry): undefined => {},
         { concurrency: 1 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -59,7 +62,7 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
       });
@@ -67,7 +70,10 @@ describe('concurrency', () => {
         (_entry: Entry): undefined => {},
         { concurrency: 5 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -78,7 +84,7 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           spys(entry.stats);
         },
       });
@@ -86,7 +92,10 @@ describe('concurrency', () => {
         (_entry: Entry): undefined => {},
         { concurrency: Infinity },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -109,7 +118,10 @@ describe('concurrency', () => {
         (_entry: Entry): undefined => {},
         { concurrency: 1 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -130,7 +142,10 @@ describe('concurrency', () => {
         (_entry: Entry): undefined => {},
         { concurrency: 5 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -151,7 +166,10 @@ describe('concurrency', () => {
         (_entry: Entry): undefined => {},
         { concurrency: Infinity },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -166,14 +184,17 @@ describe('concurrency', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry) => {
           spys(entry.stats);
-          return Promise.resolve();
+          return Promise.resolve(undefined);
         },
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 1 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -186,14 +207,17 @@ describe('concurrency', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry) => {
           spys(entry.stats);
-          return Promise.resolve();
+          return Promise.resolve(undefined);
         },
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: 5 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -206,14 +230,17 @@ describe('concurrency', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry) => {
           spys(entry.stats);
-          return Promise.resolve();
+          return Promise.resolve(undefined);
         },
       });
       iterator.forEach(
         (_entry: Entry): undefined => {},
         { concurrency: Infinity },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }

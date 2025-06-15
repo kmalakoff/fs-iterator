@@ -38,7 +38,7 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -47,7 +47,10 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -61,7 +64,7 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -70,7 +73,10 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -86,7 +92,7 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -96,7 +102,10 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -110,7 +119,7 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -120,7 +129,10 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -133,10 +145,9 @@ describe('alwaysStat', () => {
   describe('alwaysStat true', () => {
     it('depth 0', (done) => {
       const spys = statsSpys();
-
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           assert.ok(entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -146,7 +157,10 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -160,7 +174,7 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry) => {
+        filter: (entry: Entry): undefined => {
           assert.ok(entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -170,7 +184,10 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);

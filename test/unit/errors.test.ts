@@ -5,8 +5,6 @@ import generate from 'fs-generate';
 import Pinkie from 'pinkie-promise';
 import rimraf2 from 'rimraf2';
 
-import fs from 'fs';
-
 // @ts-ignore
 import Iterator, { type Entry } from 'fs-iterator';
 
@@ -85,7 +83,10 @@ describe('errors', () => {
           },
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(errors.length, 6);
           done();
         }
@@ -183,7 +184,10 @@ describe('errors', () => {
           },
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(errors.length, 6);
           done();
         }
@@ -279,7 +283,10 @@ describe('errors', () => {
           },
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(errors.length, 6);
           done();
         }

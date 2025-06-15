@@ -50,18 +50,18 @@ describe('async await', () => {
     const spys = statsSpys();
 
     const iterator = new Iterator(TEST_DIR, {
-      filter: (entry: Entry) => {
+      filter: (entry: Entry): undefined => {
         spys(entry.stats);
       },
     });
 
-    let value = await iterator.next();
-    while (value) {
-      assert.ok(typeof value.basename === 'string');
-      assert.ok(typeof value.path === 'string');
-      assert.ok(typeof value.fullPath === 'string');
-      assert.ok(typeof value.stats === 'object');
-      value = await iterator.next();
+    let value = (await iterator.next()) as IteratorReturnResult<Entry>;
+    while (!value.done) {
+      assert.ok(typeof value.value.basename === 'string');
+      assert.ok(typeof value.value.path === 'string');
+      assert.ok(typeof value.value.fullPath === 'string');
+      assert.ok(typeof value.value.stats === 'object');
+      value = (await iterator.next()) as IteratorReturnResult<Entry>;
     }
 
     assert.equal(spys.callCount, 12);
@@ -71,19 +71,19 @@ describe('async await', () => {
     const spys = statsSpys();
 
     const iterator = new Iterator(TEST_DIR, {
-      filter: (entry: Entry) => {
+      filter: (entry: Entry): undefined => {
         spys(entry.stats);
       },
       lstat: true,
     });
 
-    let value = await iterator.next();
-    while (value) {
-      assert.ok(typeof value.basename === 'string');
-      assert.ok(typeof value.path === 'string');
-      assert.ok(typeof value.fullPath === 'string');
-      assert.ok(typeof value.stats === 'object');
-      value = await iterator.next();
+    let value = (await iterator.next()) as IteratorReturnResult<Entry>;
+    while (!value.done) {
+      assert.ok(typeof value.value.basename === 'string');
+      assert.ok(typeof value.value.path === 'string');
+      assert.ok(typeof value.value.fullPath === 'string');
+      assert.ok(typeof value.value.stats === 'object');
+      value = (await iterator.next()) as IteratorReturnResult<Entry>;
     }
 
     assert.equal(spys.dir.callCount, 5);
@@ -102,13 +102,13 @@ describe('async await', () => {
       lstat: true,
     });
 
-    let value = await iterator.next();
-    while (value) {
-      assert.ok(typeof value.basename === 'string');
-      assert.ok(typeof value.path === 'string');
-      assert.ok(typeof value.fullPath === 'string');
-      assert.ok(typeof value.stats === 'object');
-      value = await iterator.next();
+    let value = (await iterator.next()) as IteratorReturnResult<Entry>;
+    while (!value.done) {
+      assert.ok(typeof value.value.basename === 'string');
+      assert.ok(typeof value.value.path === 'string');
+      assert.ok(typeof value.value.fullPath === 'string');
+      assert.ok(typeof value.value.stats === 'object');
+      value = (await iterator.next()) as IteratorReturnResult<Entry>;
     }
 
     assert.equal(spys.dir.callCount, 5);
@@ -122,13 +122,13 @@ describe('async await', () => {
     });
 
     try {
-      let value = await iterator.next();
+      let value = (await iterator.next()) as IteratorReturnResult<Entry>;
       while (value) {
-        assert.ok(typeof value.basename === 'string');
-        assert.ok(typeof value.path === 'string');
-        assert.ok(typeof value.fullPath === 'string');
-        assert.ok(typeof value.stats === 'object');
-        value = await iterator.next();
+        assert.ok(typeof value.value.basename === 'string');
+        assert.ok(typeof value.value.path === 'string');
+        assert.ok(typeof value.value.fullPath === 'string');
+        assert.ok(typeof value.value.stats === 'object');
+        value = (await iterator.next()) as IteratorReturnResult<Entry>;
       }
     } catch (err) {
       assert.ok(!!err);

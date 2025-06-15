@@ -9,7 +9,7 @@ import Pinkie from 'pinkie-promise';
 import rimraf2 from 'rimraf2';
 
 // @ts-ignore
-import Iterator, { type Entry } from 'fs-iterator';
+import Iterator, { type Entry, type EachFunction } from 'fs-iterator';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
@@ -40,11 +40,14 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -66,7 +69,10 @@ describe('forEach', () => {
         },
         { callbacks: true },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -90,7 +96,10 @@ describe('forEach', () => {
         },
         { callbacks: true, concurrency: 1 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
@@ -104,12 +113,15 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         { concurrency: 1 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -123,12 +135,15 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         { concurrency: 5 },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -142,12 +157,15 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         { concurrency: Infinity },
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -160,7 +178,7 @@ describe('forEach', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (_entry, callback) => {
           nextTick(() => {
-            callback(null, new Error('Failed'));
+            callback(new Error('Failed'));
           });
         },
         callbacks: true,
@@ -179,7 +197,7 @@ describe('forEach', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (_entry, callback) => {
           nextTick(() => {
-            callback(null, new Error('Failed'));
+            callback(new Error('Failed'));
           });
         },
         callbacks: true,
@@ -199,7 +217,7 @@ describe('forEach', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (_entry, callback) => {
           nextTick(() => {
-            callback(null, new Error('Failed'));
+            callback(new Error('Failed'));
           });
         },
         callbacks: true,
@@ -219,7 +237,7 @@ describe('forEach', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (_entry, callback) => {
           nextTick(() => {
-            callback(null, new Error('Failed'));
+            callback(new Error('Failed'));
           });
         },
         callbacks: true,
@@ -262,7 +280,7 @@ describe('forEach', () => {
     it('forEach function is mandatory', async () => {
       try {
         const iterator = new Iterator(TEST_DIR);
-        const promise = iterator.forEach();
+        const promise = iterator.forEach(undefined as EachFunction<Entry>);
         assert.ok(isPromise(promise));
       } catch (err) {
         assert.ok(!!err);
@@ -273,7 +291,7 @@ describe('forEach', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
-      await iterator.forEach((entry) => {
+      await iterator.forEach((entry: Entry): undefined => {
         spys(entry.stats);
       });
       assert.equal(spys.dir.callCount, 5);
@@ -286,7 +304,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       await iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         { concurrency: 1 }
@@ -301,7 +319,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       await iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         { concurrency: 5 }
@@ -316,7 +334,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       await iterator.forEach(
-        (entry) => {
+        (entry: Entry): undefined => {
           spys(entry.stats);
         },
         { concurrency: Infinity }
@@ -332,7 +350,7 @@ describe('forEach', () => {
       });
 
       try {
-        await iterator.forEach((err?: Error) => {
+        await iterator.forEach((err?: Entry): undefined => {
           if (err) throw err;
         });
         assert.ok(false);
@@ -348,7 +366,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err?: Error) => {
+          (err?: Entry): undefined => {
             if (err) throw err;
           },
           { concurrency: 1 }
@@ -366,7 +384,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err?: Error) => {
+          (err?: Entry): undefined => {
             if (err) throw err;
           },
           { concurrency: 5 }
@@ -384,7 +402,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err?: Error) => {
+          (err?: Entry): undefined => {
             if (err) throw err;
           },
           { concurrency: Infinity }

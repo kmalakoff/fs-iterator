@@ -15,7 +15,7 @@ Entries are of the format:
 const Iterator = require('fs-iterator');
 
 // traverse skipping .git folders
-const iterator = new Iterator(__dirname, { filter: (entry: Entry) => { return entry.stats.isDirectory() && entry.basename === '.git'; } });
+const iterator = new Iterator(__dirname, { filter: (entry: Entry): boolean => { return entry.stats.isDirectory() && entry.basename === '.git'; } });
 iterator.on('error', console.log); // log expected errors without stopping flow 'ENOENT', 'EPERM', 'EACCES', 'ELOOP'
 
 let entry = await iterator.next();
@@ -26,7 +26,7 @@ while(entry) {
 
 // using forEach with concurrency
 const iterator2 = new Iterator(__dirname, { error: (err) => { return true; /* filter errors */ }});
-const done = await iterator2.forEach((entry) => { /* do something */ }, { concurrency: 1024 })
+const done = await iterator2.forEach((entry: Entry): undefined => { /* do something */ }, { concurrency: 1024 })
 ```
 
 **Callback**
@@ -35,8 +35,8 @@ const done = await iterator2.forEach((entry) => { /* do something */ }, { concur
 const Iterator = require('fs-iterator');
 
 // traverse skipping .git folders
-const iterator = new Iterator(__dirname, { filter: (entry: Entry) => { return entry.stats.isDirectory() && entry.basename === '.git'; }, error: (err) => { return true; /* filter errors */ } });
-iterator.forEach((entry) => { /* do something */ }, { concurrency: 1024 }, (err, done) => {})
+const iterator = new Iterator(__dirname, { filter: (entry: Entry): boolean => { return entry.stats.isDirectory() && entry.basename === '.git'; }, error: (err) => { return true; /* filter errors */ } });
+iterator.forEach((entry: Entry): undefined => { /* do something */ }, { concurrency: 1024 }, (err, done) => {})
 ```
 
 **Iterator Options**:
