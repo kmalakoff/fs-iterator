@@ -1,6 +1,6 @@
 import type Iterator from '../FSIterator.js';
 import fsCompat from '../fs-compat/index.js';
-import lifoFromArray from '../lifoFromArray.js';
+import type { Entry, StackEntry } from '../types.js';
 import createEntry from './createEntry.js';
 import filter from './filter.js';
 import stat from './stat.js';
@@ -10,7 +10,9 @@ function isDirectory(entry) {
   return entry.stats.isDirectory();
 }
 
-export default function path<_T>(item, iterator: Iterator, callback) {
+export type Callback = (error?: Error, entry?: Entry) => undefined;
+
+export default function depthFirst(item: StackEntry, iterator: Iterator, callback: Callback): undefined {
   const depth = item.depth;
   const entry = createEntry(iterator, item);
   item = null; // release reference
@@ -25,9 +27,12 @@ export default function path<_T>(item, iterator: Iterator, callback) {
       if (!isDirectory(entry) || depth + 1 > iterator.depth) return callback(null, entry);
 
       // get files in this directory
-      fsCompat.readdir(entry.fullPath, iterator.readdirOptions, function readdirCallback(err, files) {
+      fsCompat.readdir(entry.fullPath, iterator.readdirOptions, (err, files) => {
         if (err || iterator.isDone()) return callback(err);
-        if (files.length) iterator.push({ path: entry.path, depth: depth + 1, files: lifoFromArray(files) });
+        if (files.length) {
+          const stackItems = files.map((x) => depthFirst.bind(null, { path: entry.path, depth: depth + 1, basename: x })).reverse();
+          iterator.push.apply(iterator, stackItems);
+        }
         return callback(null, entry);
       });
     });

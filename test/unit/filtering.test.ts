@@ -48,7 +48,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 6);
           done();
         }
@@ -67,7 +70,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 10);
           done();
         }
@@ -86,7 +92,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 12);
           done();
         }
@@ -110,7 +119,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 6);
           done();
         }
@@ -132,7 +144,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 10);
           done();
         }
@@ -154,7 +169,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 6);
           done();
         }
@@ -175,7 +193,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 6);
           done();
         }
@@ -194,7 +215,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 10);
           done();
         }
@@ -213,7 +237,10 @@ describe('filtering', () => {
       iterator.forEach(
         (_entry: Entry): undefined => {},
         (err?: Error) => {
-          if (err) return done(err.message);
+          if (err) {
+            done(err.message);
+            return;
+          }
           assert.equal(spys.callCount, 6);
           done();
         }

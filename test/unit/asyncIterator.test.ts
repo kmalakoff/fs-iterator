@@ -50,7 +50,7 @@ describe('asyncIterator', () => {
     const spys = statsSpys();
 
     const iterator = new Iterator(TEST_DIR, {
-      filter: (entry: Entry) => {
+      filter: (entry: Entry): undefined => {
         spys(entry.stats);
       },
     });
@@ -69,7 +69,7 @@ describe('asyncIterator', () => {
     const spys = statsSpys();
 
     const iterator = new Iterator(TEST_DIR, {
-      filter: (entry: Entry) => {
+      filter: (entry: Entry): undefined => {
         spys(entry.stats);
       },
       lstat: true,
