@@ -42,7 +42,7 @@
   "dependencies": {
     "async-compat": "^1.6.13",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^1.2.25"
+    "stack-base-iterator": "^1.2.26"
   },
   "devDependencies": {
     "@types/mocha": "*",
