@@ -32,7 +32,7 @@ export default class FSIterator extends StackBaseIterator<Entry, Entry> {
     }
     this.processing.push(setup);
     fsCompat.readdir(this.root, this.readdirOptions, (err, files) => {
-      this.processing.removeValue(setup);
+      this.processing.remove(setup);
       if (this.done || cancelled) return;
       if (err) return this.end(err);
       if (files.length) {
