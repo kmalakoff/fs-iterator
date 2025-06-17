@@ -8,9 +8,9 @@ export type Callback = (error?: Error) => undefined;
 
 function ensureStat(iterator: Iterator, entry: Entry, callback: Callback): undefined {
   if (entry.stats) return callback();
-  const optons = (iterator as unknown as AbstractIterator<Entry>).options as IteratorOptions;
+  const options = (iterator as unknown as AbstractIterator<Entry>).options as IteratorOptions;
 
-  const stat = optons.lstat ? fsCompat.lstat : fsCompat.stat;
+  const stat = options.lstat ? fsCompat.lstat : fsCompat.stat;
   stat(entry.fullPath, iterator.statOptions, function statCallback(err, stats) {
     if (err) return callback(err);
     entry.stats = stats;

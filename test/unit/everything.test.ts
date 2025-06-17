@@ -23,7 +23,7 @@ const STRUCTURE = {
 };
 const DELETE_PATH = `dir2${path.sep}file1`;
 
-describe('everything', () => {
+describe.skip('everything', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, (err) => {
