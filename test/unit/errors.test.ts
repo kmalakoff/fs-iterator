@@ -98,12 +98,16 @@ describe('errors', () => {
     it('handle invalid root (next)', (done) => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
 
-      iterator.next((err, value) => {
-        assert.ok(err);
-        assert.equal(err.code, 'ENOENT');
-        assert.ok(!value);
-        done();
-      });
+      iterator
+        .next()
+        .then((value) => {
+          assert.ok(!value);
+        })
+        .catch((err) => {
+          assert.ok(err);
+          assert.equal(err.code, 'ENOENT');
+          done();
+        });
     });
 
     it('handle invalid root (forEach)', (done) => {

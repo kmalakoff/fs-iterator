@@ -85,6 +85,7 @@ describe('concurrency', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry): undefined => {
+          console.log(entry);
           spys(entry.stats);
         },
       });

@@ -10,9 +10,9 @@ function isDirectory(entry) {
   return entry.stats.isDirectory();
 }
 
-export type Callback = (error?: Error, entry?: Entry) => undefined;
+export type Callback = (error?: Error, entry?: IteratorResult<Entry>) => undefined;
 
-export default function depthFirst(item: StackEntry, iterator: Iterator, callback: Callback): undefined {
+export default function depthFirst<_T>(item: StackEntry, iterator: Iterator, callback: Callback): undefined {
   const depth = item.depth;
   const entry = createEntry(iterator, item);
   item = null; // release reference
@@ -24,7 +24,7 @@ export default function depthFirst(item: StackEntry, iterator: Iterator, callbac
       if (err || !keep || iterator.isDone()) return callback(err);
 
       // not a directory or is a directory, but next level is too deep
-      if (!isDirectory(entry) || depth + 1 > iterator.depth) return callback(null, entry);
+      if (!isDirectory(entry) || depth + 1 > iterator.depth) return callback(null, { done: false, value: entry });
 
       // get files in this directory
       fsCompat.readdir(entry.fullPath, iterator.readdirOptions, (err, files) => {
@@ -33,7 +33,7 @@ export default function depthFirst(item: StackEntry, iterator: Iterator, callbac
           const stackItems = files.map((x) => depthFirst.bind(null, { path: entry.path, depth: depth + 1, basename: x })).reverse();
           iterator.push.apply(iterator, stackItems);
         }
-        return callback(null, entry);
+        return callback(null, { done: false, value: entry });
       });
     });
   });

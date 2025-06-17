@@ -18,10 +18,10 @@ const Iterator = require('fs-iterator');
 const iterator = new Iterator(__dirname, { filter: (entry: Entry): boolean => { return entry.stats.isDirectory() && entry.basename === '.git'; } });
 iterator.on('error', console.log); // log expected errors without stopping flow 'ENOENT', 'EPERM', 'EACCES', 'ELOOP'
 
-let entry = await iterator.next();
-while(entry) {
+let value = await iterator.next();
+while(!value.done) {
   /* do something */
-  entry = await iterator.next();
+  value = await iterator.next();
 }
 
 // using forEach with concurrency

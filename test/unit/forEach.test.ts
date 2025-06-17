@@ -81,7 +81,7 @@ describe('forEach', () => {
       );
     });
 
-    it('simple forEach (callbacks, stop)', (done) => {
+    it('simple forEach (callbacks)', (done) => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
