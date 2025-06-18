@@ -1,0 +1,4 @@
+{
+  "upgrade": true,
+  "reject": ["readable-stream", "@types/readable-stream"]
+}
