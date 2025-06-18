@@ -7,6 +7,8 @@ updates:
     ignore:
       - dependency-name: "@types/mocha"
       - dependency-name: "@types/node"
+      - dependency-name: '@types/readable-stream'
+      - dependency-name: 'readable-stream'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:

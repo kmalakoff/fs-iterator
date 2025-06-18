@@ -1,15 +1,14 @@
 import assert from 'assert';
-import path from 'path';
-import url from 'url';
 import generate from 'fs-generate';
+// @ts-ignore
+import Iterator, { type EachFunction, type Entry } from 'fs-iterator';
 import statsSpys from 'fs-stats-spys';
 import isPromise from 'is-promise';
 import nextTick from 'next-tick';
+import path from 'path';
 import Pinkie from 'pinkie-promise';
 import rimraf2 from 'rimraf2';
-
-// @ts-ignore
-import Iterator, { type Entry, type EachFunction } from 'fs-iterator';
+import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));

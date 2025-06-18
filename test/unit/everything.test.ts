@@ -1,12 +1,11 @@
 import assert from 'assert';
-import path from 'path';
-import url from 'url';
 import generate from 'fs-generate';
-import statsSpys from 'fs-stats-spys';
-import rimraf2 from 'rimraf2';
-
 // @ts-ignore
 import Iterator, { type Entry } from 'fs-iterator';
+import statsSpys from 'fs-stats-spys';
+import path from 'path';
+import rimraf2 from 'rimraf2';
+import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
@@ -23,7 +22,7 @@ const STRUCTURE = {
 };
 const DELETE_PATH = `dir2${path.sep}file1`;
 
-describe.skip('everything', () => {
+describe('everything', () => {
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, (err) => {
