@@ -1,14 +1,13 @@
 import assert from 'assert';
-import path from 'path';
-import url from 'url';
 import generate from 'fs-generate';
-import statsSpys from 'fs-stats-spys';
-import oo from 'on-one';
-import rimraf2 from 'rimraf2';
-import IteratorStream from '../lib/IteratorStream';
-
 // @ts-ignore
 import type { Entry } from 'fs-iterator';
+import statsSpys from 'fs-stats-spys';
+import oo from 'on-one';
+import path from 'path';
+import rimraf2 from 'rimraf2';
+import url from 'url';
+import IteratorStream from '../lib/IteratorStream';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
@@ -25,7 +24,6 @@ const STRUCTURE = {
 };
 
 describe('stream', () => {
-  if (!IteratorStream) return; // no readable streams
   beforeEach((done) => {
     rimraf2(TEST_DIR, { disableGlob: true }, () => {
       generate(TEST_DIR, STRUCTURE, (err) => {
