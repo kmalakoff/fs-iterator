@@ -7,7 +7,7 @@ import oo from 'on-one';
 import path from 'path';
 import rimraf2 from 'rimraf2';
 import url from 'url';
-import IteratorStream from '../lib/IteratorStream';
+import IteratorStream from '../lib/IteratorStream.ts';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));

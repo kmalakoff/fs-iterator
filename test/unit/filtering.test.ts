@@ -27,14 +27,13 @@ const TEST_DIR_PATH = `dir3${path.sep}dir4`;
 describe('filtering', () => {
   (() => {
     // patch and restore promise
-    // @ts-ignore
-    let rootPromise: Promise;
+    if (typeof global === 'undefined') return;
+    const globalPromise = global.Promise;
     before(() => {
-      rootPromise = global.Promise;
       global.Promise = Pinkie;
     });
     after(() => {
-      global.Promise = rootPromise;
+      global.Promise = globalPromise;
     });
   })();
 
