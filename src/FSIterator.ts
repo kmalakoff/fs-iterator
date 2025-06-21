@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import StackBaseIterator from 'stack-base-iterator';
 
-import depthFirst from './depthFirst/index.js';
-import fsCompat from './fs-compat/index.js';
-import type { Entry, IteratorOptions } from './types.js';
+import depthFirst from './depthFirst/index.ts';
+import fsCompat from './fs-compat/index.ts';
+import type { Entry, IteratorOptions } from './types.ts';
 
 const bigint = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 
