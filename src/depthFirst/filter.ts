@@ -1,7 +1,7 @@
 import compat from 'async-compat';
 
-import type Iterator from '../FSIterator.js';
-import type { Entry, IteratorOptions } from '../types.js';
+import type Iterator from '../FSIterator.ts';
+import type { Entry, IteratorOptions } from '../types.ts';
 
 export type Callback = (error?: Error, keep?: boolean) => undefined;
 

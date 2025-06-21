@@ -1,9 +1,9 @@
-import type Iterator from '../FSIterator.js';
-import fsCompat from '../fs-compat/index.js';
-import type { Entry, StackEntry } from '../types.js';
-import createEntry from './createEntry.js';
-import filter from './filter.js';
-import stat from './stat.js';
+import type Iterator from '../FSIterator.ts';
+import fsCompat from '../fs-compat/index.ts';
+import type { Entry, StackEntry } from '../types.ts';
+import createEntry from './createEntry.ts';
+import filter from './filter.ts';
+import stat from './stat.ts';
 
 function isDirectory(entry) {
   if (entry.realStats) return entry.realStats.isDirectory();
