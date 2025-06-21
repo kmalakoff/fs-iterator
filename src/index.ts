@@ -1,4 +1,4 @@
-export * from './types.js';
+export * from './types.ts';
 
-import FSIterator from './FSIterator.js';
+import FSIterator from './FSIterator.ts';
 export default FSIterator;

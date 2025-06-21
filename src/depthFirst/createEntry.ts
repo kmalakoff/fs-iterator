@@ -1,7 +1,7 @@
 import type { Dirent } from 'fs';
 import path from 'path';
-import type Iterator from '../FSIterator.js';
-import type { Entry, StackEntry } from '../types.js';
+import type Iterator from '../FSIterator.ts';
+import type { Entry, StackEntry } from '../types.ts';
 
 function join(left, right) {
   if (!left) return right || '';
