@@ -15,14 +15,14 @@ export interface StackEntry {
   depth: number;
 }
 
-export type FilterSync = (entry: Entry) => boolean | undefined | Error;
-export type FilterCallback = (entry: Entry, callback: (err?: Error, value?: boolean) => undefined) => undefined;
-export type FilterPromise = (entry: Entry) => Promise<boolean | undefined>;
+export type FilterSync = (entry: Entry) => boolean | undefined | Error | Promise<boolean | undefined>;
+export type FilterCallback = (err?: Error, value?: boolean) => undefined;
+export type FilterAsync = (entry: Entry, callback: FilterCallback) => undefined;
 
 export interface IteratorOptions extends StackOptions {
   depth?: number;
   alwaysStat?: boolean;
-  filter?: FilterSync | FilterCallback | FilterPromise;
+  filter?: FilterSync | FilterAsync;
   callbacks?: boolean;
   async?: boolean;
   concurrency?: number;
