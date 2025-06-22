@@ -18,11 +18,12 @@ export interface StackEntry {
 export type FilterSync = (entry: Entry) => boolean | undefined | Error | Promise<boolean | undefined>;
 export type FilterCallback = (err?: Error, value?: boolean) => undefined;
 export type FilterAsync = (entry: Entry, callback: FilterCallback) => undefined;
+export type FilterFunction = FilterSync | FilterAsync;
 
 export interface IteratorOptions extends StackOptions {
   depth?: number;
   alwaysStat?: boolean;
-  filter?: FilterSync | FilterAsync;
+  filter?: FilterFunction;
   callbacks?: boolean;
   async?: boolean;
   concurrency?: number;
