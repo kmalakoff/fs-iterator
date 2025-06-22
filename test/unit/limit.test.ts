@@ -199,7 +199,7 @@ describe('forEach', () => {
           (entry: Entry): undefined => {
             spys(entry.stats);
           },
-          { lstat: true, limit: 3, concurrency: 1 },
+          { limit: 3, concurrency: 1 },
           (err, empty) => {
             if (err) {
               done(err.message);
@@ -229,7 +229,7 @@ describe('forEach', () => {
           (entry: Entry): undefined => {
             spys(entry.stats);
           },
-          { lstat: true, limit: 3, concurrency: 5 },
+          { limit: 3, concurrency: 5 },
           (err, empty) => {
             if (err) {
               done(err.message);

@@ -262,7 +262,7 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry, _callback) => {
+        filter: (entry) => {
           spys(entry.stats);
           return Promise.resolve(undefined);
         },
@@ -288,7 +288,7 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 1,
-        filter: (entry, _callback) => {
+        filter: (entry) => {
           spys(entry.stats);
           return Promise.resolve(undefined);
         },
@@ -314,7 +314,7 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 2,
-        filter: (entry, _callback) => {
+        filter: (entry) => {
           spys(entry.stats);
           return Promise.resolve(undefined);
         },
@@ -340,7 +340,7 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry, _callback) => {
+        filter: (entry) => {
           spys(entry.stats);
           return Promise.resolve(undefined);
         },
