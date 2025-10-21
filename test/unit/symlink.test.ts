@@ -1,7 +1,6 @@
 import assert from 'assert';
 import fs from 'fs';
 import generate from 'fs-generate';
-// @ts-ignore
 import Iterator, { type Entry } from 'fs-iterator';
 import statsSpys from 'fs-stats-spys';
 import path from 'path';
