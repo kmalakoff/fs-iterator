@@ -1,4 +1,3 @@
-// @ts-ignore
 import Iterator, { type IteratorOptions } from 'fs-iterator';
 import readable from 'readable-stream';
 import stream, { type ReadableOptions } from 'readable-stream';
@@ -29,7 +28,7 @@ export default class IteratorStream extends Readable {
     this.iterator_ = new Iterator(root, iteratorOptions);
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   destroy(err) {
     super.destroy(err);
     if (this.iterator_) {

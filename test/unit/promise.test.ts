@@ -1,6 +1,5 @@
 import assert from 'assert';
 import generate from 'fs-generate';
-// @ts-ignore
 import Iterator, { type Entry } from 'fs-iterator';
 import statsSpys from 'fs-stats-spys';
 import path from 'path';
@@ -71,6 +70,7 @@ describe('promise', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: Not an iterable
       iterator.forEach(
         (entry, callback?) => {
           spys(entry.stats);
@@ -95,6 +95,7 @@ describe('promise', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
+      // biome-ignore lint/suspicious/useIterableCallbackReturn: Not an iterable
       iterator.forEach(
         (entry, callback?) => {
           spys(entry.stats);
