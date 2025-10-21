@@ -15,6 +15,7 @@ export interface StackEntry {
   depth: number;
 }
 
+export type { EachFunction } from 'stack-base-iterator';
 export type FilterSync = (entry: Entry) => boolean | undefined | Error | Promise<boolean | undefined>;
 export type FilterCallback = (err?: Error, value?: boolean) => undefined;
 export type FilterAsync = (entry: Entry, callback: FilterCallback) => undefined;
