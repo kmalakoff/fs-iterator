@@ -1,11 +1,11 @@
 import assert from 'assert';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
+import { safeRm } from 'fs-remove-compat';
 import statsSpys from 'fs-stats-spys';
 import nextTick from 'next-tick';
 import path from 'path';
 import Pinkie from 'pinkie-promise';
-import rimraf2 from 'rimraf2';
 import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -25,10 +25,10 @@ const STRUCTURE = {
 describe('forEach', () => {
   describe('limit', () => {
     after((done) => {
-      rimraf2(TEST_DIR, { disableGlob: true }, done);
+      safeRm(TEST_DIR, done);
     });
     beforeEach((done) => {
-      rimraf2(TEST_DIR, { disableGlob: true }, () => {
+      safeRm(TEST_DIR, () => {
         generate(TEST_DIR, STRUCTURE, (err) => {
           done(err);
         });
