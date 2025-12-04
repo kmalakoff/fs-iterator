@@ -1,9 +1,9 @@
 import assert from 'assert';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
+import { safeRm, safeRmSync } from 'fs-remove-compat';
 import statsSpys from 'fs-stats-spys';
 import path from 'path';
-import rimraf2 from 'rimraf2';
 import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -23,7 +23,7 @@ const DELETE_PATH = `dir2${path.sep}file1`;
 
 describe('everything', () => {
   beforeEach((done) => {
-    rimraf2(TEST_DIR, { disableGlob: true }, () => {
+    safeRm(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, (err) => {
         done(err);
       });
@@ -87,7 +87,7 @@ describe('everything', () => {
       filter: (entry: Entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
+        if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
       },
       alwaysStat: true,
@@ -122,7 +122,7 @@ describe('everything', () => {
       filter: (entry: Entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
+        if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
       },
       alwaysStat: true,
@@ -154,7 +154,7 @@ describe('everything', () => {
       filter: (entry: Entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
+        if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
       },
       alwaysStat: true,
@@ -194,7 +194,7 @@ describe('everything', () => {
       filter: (entry: Entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
+        if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
       },
       alwaysStat: true,
@@ -235,7 +235,7 @@ describe('everything', () => {
       filter: (entry: Entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
+        if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
       },
       alwaysStat: true,
@@ -272,7 +272,7 @@ describe('everything', () => {
       filter: (entry: Entry) => {
         spys(entry.stats);
 
-        if (entry.path === DELETE_PATH) rimraf2.sync(path.join(TEST_DIR, 'dir2'), { disableGlob: true });
+        if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
       },
       alwaysStat: true,
