@@ -1,10 +1,10 @@
 import assert from 'assert';
 import generate from 'fs-generate';
 import type { Entry } from 'fs-iterator';
+import { safeRm } from 'fs-remove-compat';
 import statsSpys from 'fs-stats-spys';
 import oo from 'on-one';
 import path from 'path';
-import rimraf2 from 'rimraf2';
 import url from 'url';
 import IteratorStream from '../lib/IteratorStream.ts';
 
@@ -24,14 +24,14 @@ const STRUCTURE = {
 
 describe('stream', () => {
   beforeEach((done) => {
-    rimraf2(TEST_DIR, { disableGlob: true }, () => {
+    safeRm(TEST_DIR, () => {
       generate(TEST_DIR, STRUCTURE, (err) => {
         done(err);
       });
     });
   });
   after((done) => {
-    rimraf2(TEST_DIR, { disableGlob: true }, done);
+    safeRm(TEST_DIR, done);
   });
 
   it('default', (done) => {

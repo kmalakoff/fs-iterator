@@ -51,6 +51,7 @@
     "@types/node": "*",
     "@types/readable-stream": "^2.3.8",
     "fs-generate": "*",
+    "fs-remove-compat": "*",
     "fs-stats-spys": "*",
     "is-promise": "*",
     "next-tick": "*",
@@ -58,7 +59,6 @@
     "on-one": "*",
     "pinkie-promise": "*",
     "readable-stream": "^2.3.8",
-    "rimraf2": "*",
     "ts-dev-stack": "*",
     "tsds-config": "*"
   },
