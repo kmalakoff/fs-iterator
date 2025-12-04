@@ -5,8 +5,8 @@ import statsSpys from 'fs-stats-spys';
 import path from 'path';
 import Pinkie from 'pinkie-promise';
 import rimraf2 from 'rimraf2';
-import startsWith from 'starts-with';
 import url from 'url';
+import { stringStartsWith } from '../lib/compat.ts';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TEST_DIR = path.join(path.join(__dirname, '..', '..', '.tmp', 'test'));
@@ -95,7 +95,7 @@ describe('filtering', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry) => {
           spys(entry.stats);
-          return entry.stats.isDirectory() || startsWith(entry.path, TEST_DIR_PATH);
+          return entry.stats.isDirectory() || stringStartsWith(entry.path, TEST_DIR_PATH);
         },
       });
       iterator.forEach(
@@ -170,7 +170,7 @@ describe('filtering', () => {
         filter: (entry, callback) => {
           spys(entry.stats);
           setTimeout(() => {
-            callback(null, !entry.stats.isDirectory() || startsWith(entry.path, TEST_DIR_PATH));
+            callback(null, !entry.stats.isDirectory() || stringStartsWith(entry.path, TEST_DIR_PATH));
           }, 10);
         },
         callbacks: true,
@@ -240,7 +240,7 @@ describe('filtering', () => {
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry) => {
           spys(entry.stats);
-          return Promise.resolve(!entry.stats.isDirectory() || startsWith(entry.path, TEST_DIR_PATH));
+          return Promise.resolve(!entry.stats.isDirectory() || stringStartsWith(entry.path, TEST_DIR_PATH));
         },
       });
       iterator.forEach(
