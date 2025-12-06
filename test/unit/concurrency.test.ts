@@ -58,7 +58,7 @@ describe('concurrency', () => {
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -80,7 +80,7 @@ describe('concurrency', () => {
         { concurrency: 5 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -102,7 +102,7 @@ describe('concurrency', () => {
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -128,7 +128,7 @@ describe('concurrency', () => {
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -152,7 +152,7 @@ describe('concurrency', () => {
         { concurrency: 5 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -176,7 +176,7 @@ describe('concurrency', () => {
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -201,7 +201,7 @@ describe('concurrency', () => {
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -224,7 +224,7 @@ describe('concurrency', () => {
         { concurrency: 5 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -247,7 +247,7 @@ describe('concurrency', () => {
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);

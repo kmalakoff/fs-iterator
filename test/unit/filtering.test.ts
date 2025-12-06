@@ -58,7 +58,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 6);
@@ -80,7 +80,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 10);
@@ -102,7 +102,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 12);
@@ -129,7 +129,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 6);
@@ -154,7 +154,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 10);
@@ -179,7 +179,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 6);
@@ -203,7 +203,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 6);
@@ -225,7 +225,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 10);
@@ -247,7 +247,7 @@ describe('filtering', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 6);
