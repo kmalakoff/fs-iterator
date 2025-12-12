@@ -47,7 +47,7 @@ describe('forEach', () => {
           { limit: Infinity, concurrency: 1 },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(empty);
@@ -70,7 +70,7 @@ describe('forEach', () => {
           { limit: 3, concurrency: 1 },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(!empty);
@@ -94,7 +94,7 @@ describe('forEach', () => {
           { limit: 3, concurrency: 5 },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(!empty);
@@ -115,7 +115,7 @@ describe('forEach', () => {
           { limit: 3, concurrency: Infinity },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(!empty);
@@ -139,7 +139,7 @@ describe('forEach', () => {
           { limit: 100, concurrency: 1 },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(empty);
@@ -172,7 +172,7 @@ describe('forEach', () => {
           { limit: Infinity, concurrency: 1 },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(empty);
@@ -201,7 +201,7 @@ describe('forEach', () => {
           { limit: 3, concurrency: 1 },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(!empty);
@@ -231,7 +231,7 @@ describe('forEach', () => {
           { limit: 3, concurrency: 5 },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(!empty);
@@ -258,7 +258,7 @@ describe('forEach', () => {
           { limit: 3, concurrency: Infinity },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(!empty);
@@ -286,7 +286,7 @@ describe('forEach', () => {
           { limit: 100, concurrency: 1 },
           (err, empty) => {
             if (err) {
-              done(err.message);
+              done(err);
               return;
             }
             assert.ok(empty);

@@ -43,7 +43,7 @@ describe('everything', () => {
       (_entry: Entry): undefined => {},
       (err?: Error) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         assert.equal(spys.dir.callCount, 5);
@@ -68,7 +68,7 @@ describe('everything', () => {
       (_entry: Entry): undefined => {},
       (err?: Error) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         assert.equal(spys.dir.callCount, 5);
@@ -103,7 +103,7 @@ describe('everything', () => {
       },
       (err?: Error) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         assert.equal(errors.length, 2);
@@ -174,7 +174,7 @@ describe('everything', () => {
       },
       (err?: Error) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         assert.equal(errors.length, 0);
@@ -215,7 +215,7 @@ describe('everything', () => {
       },
       (err?: Error) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         assert.equal(errors.length, 2);
@@ -292,7 +292,7 @@ describe('everything', () => {
       },
       (err?: Error) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         assert.equal(errors.length, 2);

@@ -44,7 +44,7 @@ describe('destroy', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -69,7 +69,7 @@ describe('destroy', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 0);
@@ -97,7 +97,7 @@ describe('destroy', () => {
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 4);
@@ -126,7 +126,7 @@ describe('destroy', () => {
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.callCount, 4);

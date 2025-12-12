@@ -46,7 +46,7 @@ describe('alwaysStat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 3);
@@ -72,7 +72,7 @@ describe('alwaysStat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -101,7 +101,7 @@ describe('alwaysStat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 3);
@@ -128,7 +128,7 @@ describe('alwaysStat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -156,7 +156,7 @@ describe('alwaysStat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 3);
@@ -183,7 +183,7 @@ describe('alwaysStat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);

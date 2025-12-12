@@ -42,25 +42,25 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "async-compat": "*",
-    "fs.realpath": "*",
-    "stack-base-iterator": "*"
+    "async-compat": "^1.7.7",
+    "fs.realpath": "^1.0.0",
+    "stack-base-iterator": "^2.1.13"
   },
   "devDependencies": {
-    "@types/mocha": "*",
-    "@types/node": "*",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.0.1",
     "@types/readable-stream": "^2.3.8",
-    "fs-generate": "*",
-    "fs-remove-compat": "*",
-    "fs-stats-spys": "*",
-    "is-promise": "*",
-    "next-tick": "*",
-    "node-version-use": "*",
-    "on-one": "*",
-    "pinkie-promise": "*",
+    "fs-generate": "^1.10.8",
+    "fs-remove-compat": "^0.2.1",
+    "fs-stats-spys": "^1.2.7",
+    "is-promise": "^4.0.0",
+    "next-tick": "^1.1.0",
+    "node-version-use": "^2.1.5",
+    "on-one": "^1.0.8",
+    "pinkie-promise": "^2.0.1",
     "readable-stream": "^2.3.8",
-    "ts-dev-stack": "*",
-    "tsds-config": "*"
+    "ts-dev-stack": "^1.21.3",
+    "tsds-config": "^0.2.1"
   },
   "engines": {
     "node": ">=0.8"

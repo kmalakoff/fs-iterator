@@ -44,7 +44,7 @@ describe('stats compatibility', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -65,7 +65,7 @@ describe('stats compatibility', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -88,7 +88,7 @@ describe('stats compatibility', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           if (fs.Dirent) {
@@ -115,7 +115,7 @@ describe('stats compatibility', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);

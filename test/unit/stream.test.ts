@@ -43,7 +43,7 @@ describe('stream', () => {
     });
     oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
       if (err) {
-        done(err.message);
+        done(err);
         return;
       }
       assert.equal(spys.dir.callCount, 5);
@@ -68,7 +68,7 @@ describe('stream', () => {
     });
     oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
       if (err) {
-        done(err.message);
+        done(err);
         return;
       }
       assert.equal(spys.dir.callCount, 5);
@@ -91,7 +91,7 @@ describe('stream', () => {
     });
     oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
       if (err) {
-        done(err.message);
+        done(err);
         return;
       }
       assert.equal(spys.dir.callCount, 0);

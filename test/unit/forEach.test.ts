@@ -43,7 +43,7 @@ describe('forEach', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -68,7 +68,7 @@ describe('forEach', () => {
         { callbacks: true },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -95,7 +95,7 @@ describe('forEach', () => {
         { callbacks: true, concurrency: 1 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 1);
@@ -117,7 +117,7 @@ describe('forEach', () => {
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -139,7 +139,7 @@ describe('forEach', () => {
         { concurrency: 5 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -161,7 +161,7 @@ describe('forEach', () => {
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);

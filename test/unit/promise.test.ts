@@ -80,7 +80,7 @@ describe('promise', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);
@@ -106,7 +106,7 @@ describe('promise', () => {
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 1);
