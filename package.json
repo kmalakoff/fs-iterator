@@ -44,7 +44,7 @@
   "dependencies": {
     "async-compat": "^1.7.9",
     "fs.realpath": "^1.0.0",
-    "stack-base-iterator": "^2.1.14"
+    "stack-base-iterator": "^2.1.15"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
@@ -55,7 +55,7 @@
     "fs-stats-spys": "^1.2.9",
     "is-promise": "^4.0.0",
     "next-tick": "^1.1.0",
-    "node-version-use": "^2.1.5",
+    "node-version-use": "^2.1.6",
     "on-one": "^1.0.10",
     "pinkie-promise": "^2.0.1",
     "readable-stream": "^2.3.8",
