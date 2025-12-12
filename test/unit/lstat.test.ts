@@ -47,7 +47,7 @@ describe('lstat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           if (fs.Dirent) {
@@ -77,7 +77,7 @@ describe('lstat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           if (fs.Dirent) {
@@ -110,7 +110,7 @@ describe('lstat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           if (fs.Dirent) {
@@ -141,7 +141,7 @@ describe('lstat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           if (fs.Dirent) {
@@ -174,7 +174,7 @@ describe('lstat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 3);
@@ -199,7 +199,7 @@ describe('lstat', () => {
         (_entry: Entry): undefined => {},
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(spys.dir.callCount, 5);

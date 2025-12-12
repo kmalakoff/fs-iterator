@@ -82,7 +82,7 @@ describe('errors', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(errors.length, 6);
@@ -187,7 +187,7 @@ describe('errors', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(errors.length, 6);
@@ -285,7 +285,7 @@ describe('errors', () => {
         },
         (err?: Error) => {
           if (err) {
-            done(err.message);
+            done(err);
             return;
           }
           assert.equal(errors.length, 6);
