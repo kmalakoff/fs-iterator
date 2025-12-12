@@ -47,7 +47,7 @@ describe('symlink', () => {
       (_entry: Entry): undefined => {},
       (err?: Error) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         assert.equal(spys.callCount, 15);
@@ -72,7 +72,7 @@ describe('symlink', () => {
       (_entry: Entry): undefined => {},
       (err?: Error) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         assert.equal(spys.callCount, 15);
