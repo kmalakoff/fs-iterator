@@ -27,7 +27,7 @@ export default class FSIterator extends StackBaseIterator<Entry, Entry> {
 
     this.root = path.resolve(root);
     let cancelled = false;
-    function setup(): undefined {
+    function setup(): void {
       cancelled = true;
     }
     this.processing.push(setup);
