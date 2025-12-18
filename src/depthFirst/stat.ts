@@ -2,13 +2,13 @@ import type Iterator from '../FSIterator.ts';
 import fsCompat from '../fs-compat/index.ts';
 import type { Entry, IteratorOptions } from '../types.ts';
 
-export type Callback = (error?: Error) => undefined;
+export type Callback = (error?: Error) => void;
 
 interface IteratorWithOptions {
   options: IteratorOptions;
 }
 
-function ensureStat(iterator: Iterator, entry: Entry, callback: Callback): undefined {
+function ensureStat(iterator: Iterator, entry: Entry, callback: Callback) {
   if (entry.stats) return callback();
   const options = (iterator as unknown as IteratorWithOptions).options as IteratorOptions;
 

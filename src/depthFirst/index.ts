@@ -10,9 +10,9 @@ function isDirectory(entry) {
   return entry.stats.isDirectory();
 }
 
-export type Callback = (error?: Error, entry?: IteratorResult<Entry>) => undefined;
+export type Callback = (error?: Error, entry?: IteratorResult<Entry>) => void;
 
-export default function depthFirst<_T>(item: StackEntry, iterator: Iterator, callback: Callback): undefined {
+export default function depthFirst<_T>(item: StackEntry, iterator: Iterator, callback: Callback): void {
   const depth = item.depth;
   const entry = createEntry(iterator, item);
   item = null; // release reference
