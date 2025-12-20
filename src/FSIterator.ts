@@ -20,7 +20,7 @@ export default class FSIterator extends StackBaseIterator<Entry, Entry> {
   statOptions = { bigint };
 
   constructor(root: string, options: IteratorOptions = {}) {
-    super(options as IteratorOptions);
+    super(options);
     this.options.error = options.error || defaultError;
     this.depth = options.depth === undefined ? Infinity : options.depth;
     this.readdirOptions = { encoding: 'utf8', withFileTypes: fs.Dirent && !options.alwaysStat } as unknown as { encoding: 'buffer'; withFileTypes: true; recursive?: boolean };

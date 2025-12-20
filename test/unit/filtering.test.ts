@@ -55,7 +55,7 @@ describe('filtering', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -77,7 +77,7 @@ describe('filtering', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -99,7 +99,7 @@ describe('filtering', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -126,7 +126,7 @@ describe('filtering', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -151,7 +151,7 @@ describe('filtering', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -176,7 +176,7 @@ describe('filtering', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -200,7 +200,7 @@ describe('filtering', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -222,7 +222,7 @@ describe('filtering', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -244,7 +244,7 @@ describe('filtering', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);

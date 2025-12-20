@@ -1,1 +1,1 @@
-ignores: ["node-version-use", "ts-dev-stack", "fs-iterator"]
+ignores: ["node-version-use", "ts-dev-stack", "fs-iterator", "readable-stream"]
