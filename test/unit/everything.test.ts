@@ -34,13 +34,13 @@ describe('everything', () => {
     const spys = statsSpys();
 
     const iterator = new Iterator(TEST_DIR, {
-      filter: (entry: Entry): undefined => {
+      filter: (entry: Entry): void => {
         spys(entry.stats);
       },
       lstat: true,
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       (err?: Error) => {
         if (err) {
           done(err);
@@ -65,7 +65,7 @@ describe('everything', () => {
       lstat: true,
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       (err?: Error) => {
         if (err) {
           done(err);
@@ -92,12 +92,12 @@ describe('everything', () => {
       },
       alwaysStat: true,
       lstat: true,
-      error: (err?: Error): undefined => {
+      error: (err?: Error): void => {
         errors.push(err);
       },
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       {
         concurrency: 1,
       },
@@ -133,7 +133,7 @@ describe('everything', () => {
       },
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       {
         concurrency: 1,
       },
@@ -165,10 +165,10 @@ describe('everything', () => {
       },
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       {
         concurrency: 1,
-        error: (err?: Error): undefined => {
+        error: (err?: Error): void => {
           errors.push(err);
         },
       },
@@ -205,7 +205,7 @@ describe('everything', () => {
       },
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       {
         concurrency: 1,
         error: (err?: Error) => {
@@ -246,7 +246,7 @@ describe('everything', () => {
       },
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       {
         concurrency: 1,
         error: (err?: Error) => {
@@ -283,10 +283,10 @@ describe('everything', () => {
       },
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       {
         concurrency: 1,
-        error: (err?: Error): undefined => {
+        error: (err?: Error): void => {
           errors.push(err);
         },
       },

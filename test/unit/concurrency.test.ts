@@ -48,13 +48,13 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
       });
 
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
@@ -71,12 +71,12 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 5 },
         (err?: Error) => {
           if (err) {
@@ -93,12 +93,12 @@ describe('concurrency', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {
@@ -124,7 +124,7 @@ describe('concurrency', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
@@ -148,7 +148,7 @@ describe('concurrency', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 5 },
         (err?: Error) => {
           if (err) {
@@ -172,7 +172,7 @@ describe('concurrency', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {
@@ -197,7 +197,7 @@ describe('concurrency', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
@@ -220,7 +220,7 @@ describe('concurrency', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 5 },
         (err?: Error) => {
           if (err) {
@@ -243,7 +243,7 @@ describe('concurrency', () => {
         },
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {

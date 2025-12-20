@@ -1,8 +1,6 @@
 import Iterator, { type IteratorOptions } from 'fs-iterator';
-import readable from 'readable-stream';
-import stream, { type ReadableOptions } from 'readable-stream';
-
-const Readable = stream.Readable || readable.Readable;
+import type { ReadableOptions } from 'stream';
+import { Readable } from './compat.ts';
 
 export default class IteratorStream extends Readable {
   options: IteratorOptions;
@@ -40,7 +38,7 @@ export default class IteratorStream extends Readable {
   _read(batch) {
     this.processing++;
     this.iterator_.forEach(
-      (entry): undefined => {
+      (entry): void => {
         if (this.destroyed || this.done) return;
         batch--;
         this.push(entry);

@@ -38,7 +38,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry: Entry): undefined => {
+        (entry: Entry): void => {
           spys(entry.stats);
         },
         (err?: Error) => {
@@ -111,7 +111,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry: Entry): undefined => {
+        (entry: Entry): void => {
           spys(entry.stats);
         },
         { concurrency: 1 },
@@ -133,7 +133,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry: Entry): undefined => {
+        (entry: Entry): void => {
           spys(entry.stats);
         },
         { concurrency: 5 },
@@ -155,7 +155,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry: Entry): undefined => {
+        (entry: Entry): void => {
           spys(entry.stats);
         },
         { concurrency: Infinity },
@@ -183,7 +183,7 @@ describe('forEach', () => {
       });
 
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           assert.ok(!!err);
           done();
@@ -202,7 +202,7 @@ describe('forEach', () => {
       });
 
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 1 },
         (err?: Error) => {
           assert.ok(!!err);
@@ -222,7 +222,7 @@ describe('forEach', () => {
       });
 
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 5 },
         (err?: Error) => {
           assert.ok(!!err);
@@ -242,7 +242,7 @@ describe('forEach', () => {
       });
 
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: Infinity },
         (err?: Error) => {
           assert.ok(!!err);
@@ -266,11 +266,11 @@ describe('forEach', () => {
     })();
     it('forEach function is mandatory', async () => {
       const iterator = new Iterator(TEST_DIR);
-      const promise = iterator.forEach((_entry: Entry): undefined => {});
+      const promise = iterator.forEach((_entry: Entry): void => {});
       assert.ok(isPromise(promise));
       await promise;
       const iterator2 = new Iterator(TEST_DIR);
-      const nothing = await iterator2.forEach((_entry: Entry): undefined => {});
+      const nothing = await iterator2.forEach((_entry: Entry): void => {});
       assert.ok(nothing === true);
     });
 
@@ -288,7 +288,7 @@ describe('forEach', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
-      await iterator.forEach((entry: Entry): undefined => {
+      await iterator.forEach((entry: Entry): void => {
         spys(entry.stats);
       });
       assert.equal(spys.dir.callCount, 5);
@@ -301,7 +301,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       await iterator.forEach(
-        (entry: Entry): undefined => {
+        (entry: Entry): void => {
           spys(entry.stats);
         },
         { concurrency: 1 }
@@ -316,7 +316,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       await iterator.forEach(
-        (entry: Entry): undefined => {
+        (entry: Entry): void => {
           spys(entry.stats);
         },
         { concurrency: 5 }
@@ -331,7 +331,7 @@ describe('forEach', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       await iterator.forEach(
-        (entry: Entry): undefined => {
+        (entry: Entry): void => {
           spys(entry.stats);
         },
         { concurrency: Infinity }
@@ -347,7 +347,7 @@ describe('forEach', () => {
       });
 
       try {
-        await iterator.forEach((err?: Entry): undefined => {
+        await iterator.forEach((err?: Entry): void => {
           if (err) throw err;
         });
         assert.ok(false);
@@ -363,7 +363,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err?: Entry): undefined => {
+          (err?: Entry): void => {
             if (err) throw err;
           },
           { concurrency: 1 }
@@ -381,7 +381,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err?: Entry): undefined => {
+          (err?: Entry): void => {
             if (err) throw err;
           },
           { concurrency: 5 }
@@ -399,7 +399,7 @@ describe('forEach', () => {
 
       try {
         await iterator.forEach(
-          (err?: Entry): undefined => {
+          (err?: Entry): void => {
             if (err) throw err;
           },
           { concurrency: Infinity }

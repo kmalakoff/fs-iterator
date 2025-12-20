@@ -38,7 +38,7 @@ describe('stream', () => {
     const spys = statsSpys();
 
     const stream = new IteratorStream(TEST_DIR, { lstat: true }) as unknown as NodeJS.ReadableStream;
-    stream.on('data', (entry: Entry): undefined => {
+    stream.on('data', (entry: Entry): void => {
       spys(entry.stats);
     });
     oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
@@ -63,7 +63,7 @@ describe('stream', () => {
         return entry.stats.isDirectory();
       },
     }) as unknown as NodeJS.ReadableStream;
-    stream.on('data', (entry: Entry): undefined => {
+    stream.on('data', (entry: Entry): void => {
       spys(entry.stats);
     });
     oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
@@ -85,7 +85,7 @@ describe('stream', () => {
       lstat: true,
       highWaterMark: 1,
     }) as unknown as NodeJS.ReadableStream;
-    stream.on('data', (entry: Entry): undefined => {
+    stream.on('data', (entry: Entry): void => {
       if (entry.stats.isDirectory()) return;
       spys(entry.stats);
     });

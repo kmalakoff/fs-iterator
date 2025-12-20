@@ -38,13 +38,13 @@ describe('symlink', () => {
     const spys = statsSpys();
 
     const iterator = new Iterator(TEST_DIR, {
-      filter: (entry: Entry): undefined => {
+      filter: (entry: Entry): void => {
         spys(entry.stats);
       },
       lstat: true,
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       (err?: Error) => {
         if (err) {
           done(err);
@@ -63,13 +63,13 @@ describe('symlink', () => {
     const spys = statsSpys();
 
     const iterator = new Iterator(TEST_DIR, {
-      filter: (entry: Entry): undefined => {
+      filter: (entry: Entry): void => {
         spys(entry.stats);
       },
       lstat: false,
     });
     iterator.forEach(
-      (_entry: Entry): undefined => {},
+      (_entry: Entry): void => {},
       (err?: Error) => {
         if (err) {
           done(err);

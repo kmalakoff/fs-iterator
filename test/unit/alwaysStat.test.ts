@@ -36,14 +36,14 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -62,14 +62,14 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -90,7 +90,7 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -98,7 +98,7 @@ describe('alwaysStat', () => {
         alwaysStat: false,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -117,7 +117,7 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -125,7 +125,7 @@ describe('alwaysStat', () => {
         alwaysStat: false,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -145,7 +145,7 @@ describe('alwaysStat', () => {
       const spys = statsSpys();
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           assert.ok(entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -153,7 +153,7 @@ describe('alwaysStat', () => {
         alwaysStat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -172,7 +172,7 @@ describe('alwaysStat', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           assert.ok(entry.stats instanceof fs.Stats);
           spys(entry.stats);
         },
@@ -180,7 +180,7 @@ describe('alwaysStat', () => {
         alwaysStat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
