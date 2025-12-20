@@ -41,7 +41,7 @@ describe('forEach', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: Infinity, concurrency: 1 },
@@ -64,7 +64,7 @@ describe('forEach', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: 1 },
@@ -88,7 +88,7 @@ describe('forEach', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: 5 },
@@ -109,7 +109,7 @@ describe('forEach', () => {
 
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: Infinity },
@@ -133,7 +133,7 @@ describe('forEach', () => {
           lstat: true,
         });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 100, concurrency: 1 },
@@ -166,7 +166,7 @@ describe('forEach', () => {
         });
 
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: Infinity, concurrency: 1 },
@@ -195,7 +195,7 @@ describe('forEach', () => {
           lstat: true,
         });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: 1 },
@@ -225,7 +225,7 @@ describe('forEach', () => {
           lstat: true,
         });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: 5 },
@@ -252,7 +252,7 @@ describe('forEach', () => {
           lstat: true,
         });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: Infinity },
@@ -280,7 +280,7 @@ describe('forEach', () => {
           lstat: true,
         });
         iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 100, concurrency: 1 },
@@ -321,7 +321,7 @@ describe('forEach', () => {
         });
 
         const empty = await iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: Infinity, concurrency: 1 }
@@ -340,7 +340,7 @@ describe('forEach', () => {
           lstat: true,
         });
         const empty = await iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: 1 }
@@ -360,7 +360,7 @@ describe('forEach', () => {
           lstat: true,
         });
         const empty = await iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: 5 }
@@ -377,7 +377,7 @@ describe('forEach', () => {
           lstat: true,
         });
         const empty = await iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 3, concurrency: Infinity }
@@ -393,7 +393,7 @@ describe('forEach', () => {
           lstat: true,
         });
         const empty = await iterator.forEach(
-          (entry: Entry): undefined => {
+          (entry: Entry): void => {
             spys(entry.stats);
           },
           { limit: 100, concurrency: 1 }

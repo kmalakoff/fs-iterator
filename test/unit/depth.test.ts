@@ -49,13 +49,13 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -74,13 +74,13 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 1,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -99,13 +99,13 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 2,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -124,13 +124,13 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -159,7 +159,7 @@ describe('depth', () => {
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -186,7 +186,7 @@ describe('depth', () => {
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -213,7 +213,7 @@ describe('depth', () => {
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -240,7 +240,7 @@ describe('depth', () => {
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -268,7 +268,7 @@ describe('depth', () => {
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -294,7 +294,7 @@ describe('depth', () => {
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -320,7 +320,7 @@ describe('depth', () => {
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -346,7 +346,7 @@ describe('depth', () => {
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);

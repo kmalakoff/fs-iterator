@@ -35,7 +35,7 @@ describe('errors', () => {
         filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           assert.ok(!!err);
           done();
@@ -50,7 +50,7 @@ describe('errors', () => {
         filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         {
           concurrency: 1,
           error: (err?: Error) => {
@@ -73,7 +73,7 @@ describe('errors', () => {
         filter: () => new Error('Failed'),
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         {
           error: (err?: Error) => {
             errors.push(err);
@@ -111,7 +111,7 @@ describe('errors', () => {
     it('handle invalid root (forEach)', (done) => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: NodeJS.ErrnoException) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
@@ -130,7 +130,7 @@ describe('errors', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           assert.ok(!!err);
           done();
@@ -150,7 +150,7 @@ describe('errors', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         {
           concurrency: 1,
           error: (err?: Error) => {
@@ -178,7 +178,7 @@ describe('errors', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         {
           error: (err?: Error) => {
             errors.push(err);
@@ -224,7 +224,7 @@ describe('errors', () => {
     it('handle invalid root (forEach)', (done) => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: NodeJS.ErrnoException) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
@@ -238,7 +238,7 @@ describe('errors', () => {
         filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           assert.ok(!!err);
           done();
@@ -253,7 +253,7 @@ describe('errors', () => {
         filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         {
           concurrency: 1,
           error: (err?: Error) => {
@@ -276,7 +276,7 @@ describe('errors', () => {
         filter: () => Promise.reject(new Error('Failed')),
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         {
           error: (err?: Error) => {
             errors.push(err);

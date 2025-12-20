@@ -35,13 +35,13 @@ describe('destroy', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
         lstat: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -60,13 +60,13 @@ describe('destroy', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
       });
       iterator.destroy();
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         (err?: Error) => {
           if (err) {
             done(err);
@@ -93,7 +93,7 @@ describe('destroy', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: 1 },
         (err?: Error) => {
           if (err) {
@@ -122,7 +122,7 @@ describe('destroy', () => {
         callbacks: true,
       });
       iterator.forEach(
-        (_entry: Entry): undefined => {},
+        (_entry: Entry): void => {},
         { concurrency: Infinity },
         (err?: Error) => {
           if (err) {
@@ -153,12 +153,12 @@ describe('destroy', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
         lstat: true,
       });
-      await iterator.forEach((_entry: Entry): undefined => {});
+      await iterator.forEach((_entry: Entry): void => {});
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
@@ -169,12 +169,12 @@ describe('destroy', () => {
       const spys = statsSpys();
 
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry: Entry): undefined => {
+        filter: (entry: Entry): void => {
           spys(entry.stats);
         },
       });
       iterator.destroy();
-      await iterator.forEach((_entry: Entry): undefined => {});
+      await iterator.forEach((_entry: Entry): void => {});
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 0);
       assert.equal(spys.link.callCount, 0);
@@ -191,7 +191,7 @@ describe('destroy', () => {
         },
         lstat: true,
       });
-      await iterator.forEach((_entry: Entry): undefined => {}, { concurrency: 1 });
+      await iterator.forEach((_entry: Entry): void => {}, { concurrency: 1 });
       assert.equal(spys.callCount, 4);
       assert.equal(spys.dir.callCount, 2);
       assert.equal(spys.file.callCount, 2);
@@ -210,7 +210,7 @@ describe('destroy', () => {
         },
         callbacks: true,
       });
-      await iterator.forEach((_entry: Entry): undefined => {}, { concurrency: Infinity });
+      await iterator.forEach((_entry: Entry): void => {}, { concurrency: Infinity });
       assert.equal(spys.callCount, 4);
     });
   });
