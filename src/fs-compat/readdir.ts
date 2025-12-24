@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'graceful-fs';
 
 // prior to Node 9, fs.readdir did not return sorted files
 const parts = process.versions.node.split('.');
