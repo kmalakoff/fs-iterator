@@ -25,9 +25,7 @@ export const PassThrough: typeof import('stream').PassThrough = major > 0 ? _req
  */
 const hasStartsWith = typeof String.prototype.startsWith === 'function';
 export function stringStartsWith(str: string, search: string, position?: number): boolean {
-  if (hasStartsWith) {
-    return str.startsWith(search, position);
-  }
+  if (hasStartsWith) return str.startsWith(search, position);
   position = position || 0;
   return str.indexOf(search, position) === position;
 }
