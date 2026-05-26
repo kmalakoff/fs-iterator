@@ -2,7 +2,7 @@ import type Iterator from '../FSIterator.ts';
 import fsCompat from '../fs-compat/index.ts';
 import type { Entry, IteratorOptions } from '../types.ts';
 
-export type Callback = (error?: Error) => void;
+export type Callback = (error?: Error | null) => void;
 
 interface IteratorWithOptions {
   options: IteratorOptions;

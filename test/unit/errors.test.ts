@@ -36,7 +36,7 @@ describe('errors', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           done();
         }
@@ -53,12 +53,12 @@ describe('errors', () => {
         (_entry: Entry): void => {},
         {
           concurrency: 1,
-          error: (err?: Error) => {
+          error: (err?: Error | null) => {
             errors.push(err);
             return true;
           },
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -75,12 +75,12 @@ describe('errors', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         {
-          error: (err?: Error) => {
+          error: (err?: Error | null) => {
             errors.push(err);
             return false;
           },
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(errors.length, 6);
@@ -129,7 +129,7 @@ describe('errors', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           done();
         }
@@ -151,12 +151,12 @@ describe('errors', () => {
         (_entry: Entry): void => {},
         {
           concurrency: 1,
-          error: (err?: Error) => {
+          error: (err?: Error | null) => {
             errors.push(err);
             return true;
           },
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -178,12 +178,12 @@ describe('errors', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         {
-          error: (err?: Error) => {
+          error: (err?: Error | null) => {
             errors.push(err);
             return false;
           },
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(errors.length, 6);
@@ -235,7 +235,7 @@ describe('errors', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           done();
         }
@@ -252,12 +252,12 @@ describe('errors', () => {
         (_entry: Entry): void => {},
         {
           concurrency: 1,
-          error: (err?: Error) => {
+          error: (err?: Error | null) => {
             errors.push(err);
             return true;
           },
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           assert.equal(errors.length, 1);
           done();
@@ -274,12 +274,12 @@ describe('errors', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         {
-          error: (err?: Error) => {
+          error: (err?: Error | null) => {
             errors.push(err);
             return false;
           },
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(errors.length, 6);

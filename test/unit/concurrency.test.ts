@@ -57,7 +57,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 1 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -77,7 +77,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 5 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -97,7 +97,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: Infinity },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -121,7 +121,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 1 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -143,7 +143,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 5 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -165,7 +165,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: Infinity },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -188,7 +188,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 1 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -209,7 +209,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 5 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -230,7 +230,7 @@ describe('concurrency', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: Infinity },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);

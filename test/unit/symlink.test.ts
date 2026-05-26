@@ -45,7 +45,7 @@ describe('symlink', () => {
     });
     iterator.forEach(
       (_entry: Entry): void => {},
-      (err?: Error) => {
+      (err?: Error | null) => {
         if (err) return done(err);
         assert.equal(spys.callCount, 15);
         assert.equal(spys.dir.callCount, 5);
@@ -67,7 +67,7 @@ describe('symlink', () => {
     });
     iterator.forEach(
       (_entry: Entry): void => {},
-      (err?: Error) => {
+      (err?: Error | null) => {
         if (err) return done(err);
         assert.equal(spys.callCount, 15);
         if (fs.Dirent) {

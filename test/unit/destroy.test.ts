@@ -43,7 +43,7 @@ describe('destroy', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -66,7 +66,7 @@ describe('destroy', () => {
       iterator.destroy();
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 0);
@@ -92,7 +92,7 @@ describe('destroy', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 1 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 4);
@@ -119,7 +119,7 @@ describe('destroy', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: Infinity },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 4);
