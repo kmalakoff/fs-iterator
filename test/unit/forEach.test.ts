@@ -42,7 +42,7 @@ describe('forEach', () => {
         (entry: Entry): void => {
           spys(entry.stats as fs.Stats);
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -65,7 +65,7 @@ describe('forEach', () => {
           nextTick(callback);
         },
         { callbacks: true },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -90,7 +90,7 @@ describe('forEach', () => {
           }, 10);
         },
         { callbacks: true, concurrency: 1 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 1);
@@ -110,7 +110,7 @@ describe('forEach', () => {
           spys(entry.stats as fs.Stats);
         },
         { concurrency: 1 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -130,7 +130,7 @@ describe('forEach', () => {
           spys(entry.stats as fs.Stats);
         },
         { concurrency: 5 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -150,7 +150,7 @@ describe('forEach', () => {
           spys(entry.stats as fs.Stats);
         },
         { concurrency: Infinity },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -173,7 +173,7 @@ describe('forEach', () => {
 
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           done();
         }
@@ -193,7 +193,7 @@ describe('forEach', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 1 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           done();
         }
@@ -213,7 +213,7 @@ describe('forEach', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: 5 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           done();
         }
@@ -233,7 +233,7 @@ describe('forEach', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         { concurrency: Infinity },
-        (err?: Error) => {
+        (err?: Error | null) => {
           assert.ok(!!err);
           done();
         }

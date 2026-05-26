@@ -72,13 +72,13 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry: Entry, callback?: (err?: Error) => void) => {
+        (entry: Entry, callback?: (err?: Error | null) => void) => {
           spys(entry.stats as fs.Stats);
           assert.ok(entry);
           assert.ok(!callback);
           return Promise.resolve(undefined);
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -94,14 +94,14 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry: Entry, callback?: (err?: Error) => void) => {
+        (entry: Entry, callback?: (err?: Error | null) => void) => {
           spys(entry.stats as fs.Stats);
           assert.ok(entry);
           assert.ok(!callback);
           return Promise.resolve(false);
         },
         { concurrency: 1 },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 1);
@@ -163,7 +163,7 @@ describe('promise', () => {
       });
 
       function consume() {
-        iterator.next().catch((err?: Error) => {
+        iterator.next().catch((err?: Error | null) => {
           assert.ok(!!err);
           done();
         });
