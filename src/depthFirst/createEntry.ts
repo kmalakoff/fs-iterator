@@ -3,7 +3,7 @@ import path from 'path';
 import type Iterator from '../FSIterator.ts';
 import type { Entry, StackEntry } from '../types.ts';
 
-function join(left, right) {
+function join(left: string | undefined, right: string | undefined): string {
   if (!left) return right || '';
   if (!right) return left;
   return left + path.sep + right;
@@ -21,5 +21,5 @@ export default function createEntry(iterator: Iterator, item: StackEntry): Entry
   const basename = item.basename as string;
   const path = join(item.path, basename);
   const fullPath = join(iterator.root, path);
-  return { basename, stats: null, path, fullPath };
+  return { basename, stats: undefined, path, fullPath };
 }
