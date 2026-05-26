@@ -39,17 +39,14 @@ describe('symlink', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry): void => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
       },
       lstat: true,
     });
     iterator.forEach(
       (_entry: Entry): void => {},
       (err?: Error) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         assert.equal(spys.callCount, 15);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 7);
@@ -64,17 +61,14 @@ describe('symlink', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry): void => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
       },
       lstat: false,
     });
     iterator.forEach(
       (_entry: Entry): void => {},
       (err?: Error) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         assert.equal(spys.callCount, 15);
         if (fs.Dirent) {
           assert.equal(spys.dir.callCount, 5);

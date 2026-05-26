@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type fs from 'fs';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
 import { safeRm, safeRmSync } from 'fs-remove-compat';
@@ -35,17 +36,14 @@ describe('everything', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry): void => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
       },
       lstat: true,
     });
     iterator.forEach(
       (_entry: Entry): void => {},
       (err?: Error) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -59,7 +57,7 @@ describe('everything', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
         return true;
       },
       lstat: true,
@@ -67,10 +65,7 @@ describe('everything', () => {
     iterator.forEach(
       (_entry: Entry): void => {},
       (err?: Error) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 5);
         assert.equal(spys.link.callCount, 2);
@@ -85,7 +80,7 @@ describe('everything', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
 
         if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
@@ -102,10 +97,7 @@ describe('everything', () => {
         concurrency: 1,
       },
       (err?: Error) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -120,7 +112,7 @@ describe('everything', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
 
         if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
@@ -152,7 +144,7 @@ describe('everything', () => {
     const errors = [];
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
 
         if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
@@ -173,10 +165,7 @@ describe('everything', () => {
         },
       },
       (err?: Error) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         assert.equal(errors.length, 0);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -192,7 +181,7 @@ describe('everything', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
 
         if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
@@ -214,10 +203,7 @@ describe('everything', () => {
         },
       },
       (err?: Error) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);
@@ -233,7 +219,7 @@ describe('everything', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
 
         if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
@@ -270,7 +256,7 @@ describe('everything', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
 
         if (entry.path === DELETE_PATH) safeRmSync(path.join(TEST_DIR, 'dir2'), { recursive: true, force: true });
         return true;
@@ -291,10 +277,7 @@ describe('everything', () => {
         },
       },
       (err?: Error) => {
-        if (err) {
-          done(err);
-          return;
-        }
+        if (err) return done(err);
         assert.equal(errors.length, 2);
         assert.equal(spys.dir.callCount, 5);
         assert.equal(spys.file.callCount, 4);

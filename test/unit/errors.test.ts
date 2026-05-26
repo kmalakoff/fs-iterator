@@ -81,10 +81,8 @@ describe('errors', () => {
           },
         },
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(errors.length, 6);
           done();
         }
@@ -186,10 +184,8 @@ describe('errors', () => {
           },
         },
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(errors.length, 6);
           done();
         }
@@ -217,7 +213,7 @@ describe('errors', () => {
         assert.ok(!value);
       } catch (err) {
         assert.ok(err);
-        assert.equal(err.code, 'ENOENT');
+        assert.equal((err as NodeJS.ErrnoException).code, 'ENOENT');
       }
     });
 
@@ -284,10 +280,8 @@ describe('errors', () => {
           },
         },
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(errors.length, 6);
           done();
         }

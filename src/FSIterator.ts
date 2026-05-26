@@ -1,15 +1,15 @@
+import type { BigIntStats, Dirent, Stats } from 'fs';
 import fs from 'fs';
 import path from 'path';
 import StackBaseIterator from 'stack-base-iterator';
-
 import depthFirst from './depthFirst/index.ts';
 import fsCompat from './fs-compat/index.ts';
 import type { Entry, IteratorOptions } from './types.ts';
 
-const bigint = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
+const bigint = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE ?? '');
 
 function defaultError(err: NodeJS.ErrnoException): boolean {
-  return FSIterator.EXPECTED_ERRORS.indexOf(err.code) >= 0; // skip known issues
+  return FSIterator.EXPECTED_ERRORS.indexOf(err.code ?? '') >= 0; // skip known issues
 }
 
 export default class FSIterator extends StackBaseIterator<Entry, Entry> {
@@ -36,8 +36,8 @@ export default class FSIterator extends StackBaseIterator<Entry, Entry> {
       if (this.done || cancelled) return;
       if (err) return this.end(err);
       if (files.length) {
-        const stackItems = files.map((x) => depthFirst.bind(null, { path: null, depth: 0, basename: x })).reverse();
-        this.push.apply(this, stackItems);
+        const stackItems = files.map((x) => depthFirst.bind(undefined, { path: undefined, depth: 0, basename: x as unknown as string | Stats | BigIntStats | Dirent })).reverse();
+        (this.push as (...args: unknown[]) => void).apply(this, stackItems);
       }
     });
   }

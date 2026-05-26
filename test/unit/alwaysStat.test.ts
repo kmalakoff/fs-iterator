@@ -38,17 +38,15 @@ describe('alwaysStat', () => {
         depth: 0,
         filter: (entry: Entry): void => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
         },
         lstat: true,
       });
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -64,17 +62,15 @@ describe('alwaysStat', () => {
         depth: Infinity,
         filter: (entry: Entry): void => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
         },
         lstat: true,
       });
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -92,7 +88,7 @@ describe('alwaysStat', () => {
         depth: 0,
         filter: (entry: Entry): void => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
         },
         lstat: true,
         alwaysStat: false,
@@ -100,10 +96,8 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -119,7 +113,7 @@ describe('alwaysStat', () => {
         depth: Infinity,
         filter: (entry: Entry): void => {
           assert.ok(fs.Dirent ? entry.stats instanceof fs.Dirent : entry.stats instanceof fs.Stats);
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
         },
         lstat: true,
         alwaysStat: false,
@@ -127,10 +121,8 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -147,7 +139,7 @@ describe('alwaysStat', () => {
         depth: 0,
         filter: (entry: Entry): void => {
           assert.ok(entry.stats instanceof fs.Stats);
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
         },
         lstat: true,
         alwaysStat: true,
@@ -155,10 +147,8 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -174,7 +164,7 @@ describe('alwaysStat', () => {
         depth: Infinity,
         filter: (entry: Entry): void => {
           assert.ok(entry.stats instanceof fs.Stats);
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
         },
         lstat: true,
         alwaysStat: true,
@@ -182,10 +172,8 @@ describe('alwaysStat', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);

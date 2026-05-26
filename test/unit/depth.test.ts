@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type { Stats } from 'fs';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
 import { safeRm } from 'fs-remove-compat';
@@ -50,17 +51,15 @@ describe('depth', () => {
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
         lstat: true,
       });
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -75,17 +74,15 @@ describe('depth', () => {
       const iterator = new Iterator(TEST_DIR, {
         depth: 1,
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
         lstat: true,
       });
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 4);
           assert.equal(spys.file.callCount, 4);
           assert.equal(spys.link.callCount, 2);
@@ -100,17 +97,15 @@ describe('depth', () => {
       const iterator = new Iterator(TEST_DIR, {
         depth: 2,
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
         lstat: true,
       });
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -125,17 +120,15 @@ describe('depth', () => {
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
         lstat: true,
       });
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -151,8 +144,8 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry, callback) => {
-          spys(entry.stats);
+        filter: (entry: Entry, callback) => {
+          spys(entry.stats as Stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -161,10 +154,8 @@ describe('depth', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -178,8 +169,8 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 1,
-        filter: (entry, callback) => {
-          spys(entry.stats);
+        filter: (entry: Entry, callback) => {
+          spys(entry.stats as Stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -188,10 +179,8 @@ describe('depth', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 4);
           assert.equal(spys.file.callCount, 4);
           assert.equal(spys.link.callCount, 2);
@@ -205,8 +194,8 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 2,
-        filter: (entry, callback) => {
-          spys(entry.stats);
+        filter: (entry: Entry, callback) => {
+          spys(entry.stats as Stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -215,10 +204,8 @@ describe('depth', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -232,8 +219,8 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry, callback) => {
-          spys(entry.stats);
+        filter: (entry: Entry, callback) => {
+          spys(entry.stats as Stats);
           nextTick(callback);
         },
         callbacks: true,
@@ -242,10 +229,8 @@ describe('depth', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -261,8 +246,8 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 0,
-        filter: (entry) => {
-          spys(entry.stats);
+        filter: (entry: Entry) => {
+          spys(entry.stats as Stats);
           return Promise.resolve(undefined);
         },
         lstat: true,
@@ -270,10 +255,8 @@ describe('depth', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 3);
           assert.equal(spys.file.callCount, 2);
           assert.equal(spys.link.callCount, 1);
@@ -287,8 +270,8 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 1,
-        filter: (entry) => {
-          spys(entry.stats);
+        filter: (entry: Entry) => {
+          spys(entry.stats as Stats);
           return Promise.resolve(undefined);
         },
         lstat: true,
@@ -296,10 +279,8 @@ describe('depth', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 4);
           assert.equal(spys.file.callCount, 4);
           assert.equal(spys.link.callCount, 2);
@@ -313,8 +294,8 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: 2,
-        filter: (entry) => {
-          spys(entry.stats);
+        filter: (entry: Entry) => {
+          spys(entry.stats as Stats);
           return Promise.resolve(undefined);
         },
         lstat: true,
@@ -322,10 +303,8 @@ describe('depth', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -339,8 +318,8 @@ describe('depth', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         depth: Infinity,
-        filter: (entry) => {
-          spys(entry.stats);
+        filter: (entry: Entry) => {
+          spys(entry.stats as Stats);
           return Promise.resolve(undefined);
         },
         lstat: true,
@@ -348,10 +327,8 @@ describe('depth', () => {
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);

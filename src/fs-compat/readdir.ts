@@ -4,15 +4,15 @@ import fs from 'graceful-fs';
 const parts = process.versions.node.split('.');
 const readdir =
   +parts[0] === 0 && +parts[1] <= 8
-    ? function readdirSort(path, callback) {
-        fs.readdir(path, (err, files) => {
-          err ? callback(err) : callback(null, files.sort());
+    ? function readdirSort(path: string, callback: (err: NodeJS.ErrnoException | null, files: string[]) => void): void {
+        fs.readdir(path, (err: NodeJS.ErrnoException | null, files: string[]) => {
+          err ? callback(err, [] as string[]) : callback(null, files.sort());
         });
       }
     : fs.readdir;
 
-function readdirAddOptions(path, _options, callback) {
+function readdirAddOptions(path: string, _options: object | undefined, callback: (err: NodeJS.ErrnoException | null, files: string[]) => void): void {
   return readdir(path, callback);
 }
 
-export default (fs.readdir.length === 3 ? fs.readdir : readdirAddOptions) as typeof fs.readdir;
+export default (fs.readdir.length === 3 ? fs.readdir : readdirAddOptions) as unknown as typeof fs.readdir;

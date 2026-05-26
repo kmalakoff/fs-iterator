@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type fs from 'fs';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
 import { safeRm } from 'fs-remove-compat';
@@ -51,7 +52,7 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
         },
       });
 
@@ -71,17 +72,15 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry, callback?) => {
-          spys(entry.stats);
+        (entry: Entry, callback?: (err?: Error) => void) => {
+          spys(entry.stats as fs.Stats);
           assert.ok(entry);
           assert.ok(!callback);
           return Promise.resolve(undefined);
         },
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -95,18 +94,16 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, { lstat: true });
       iterator.forEach(
-        (entry, callback?) => {
-          spys(entry.stats);
+        (entry: Entry, callback?: (err?: Error) => void) => {
+          spys(entry.stats as fs.Stats);
           assert.ok(entry);
           assert.ok(!callback);
           return Promise.resolve(false);
         },
         { concurrency: 1 },
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 1);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
@@ -120,7 +117,7 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
         },
         lstat: true,
       });
@@ -141,7 +138,7 @@ describe('promise', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry) => {
-          spys(entry.stats);
+          spys(entry.stats as fs.Stats);
           return true;
         },
         lstat: true,

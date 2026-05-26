@@ -11,9 +11,9 @@ interface IteratorWithOptions {
 
 export default function filter(iterator: Iterator, entry: Entry, callback: Callback): void {
   const options = (iterator as unknown as IteratorWithOptions).options;
-  if (!options.filter) return callback(null, true);
+  if (!options.filter) return callback(undefined, true);
 
-  compat.asyncFunction(options.filter, options.callbacks, entry, (err, keep) => {
-    err ? callback(err) : callback(null, !!compat.defaultValue(keep, true));
+  (compat.asyncFunction as (...args: unknown[]) => void)(options.filter, options.callbacks, entry, (err: Error | undefined, keep: boolean | undefined) => {
+    err ? callback(err) : callback(undefined, !!compat.defaultValue(keep, true));
   });
 }

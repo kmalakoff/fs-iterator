@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type fs from 'fs';
 import generate from 'fs-generate';
 import type { Entry } from 'fs-iterator';
 import { safeRm } from 'fs-remove-compat';
@@ -39,13 +40,10 @@ describe('stream', () => {
 
     const stream = new IteratorStream(TEST_DIR, { lstat: true }) as unknown as NodeJS.ReadableStream;
     stream.on('data', (entry: Entry): void => {
-      spys(entry.stats);
+      spys(entry.stats as fs.Stats);
     });
-    oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
-      if (err) {
-        done(err);
-        return;
-      }
+    oo(stream, ['error', 'end', 'close', 'finish'], (err: Error | null) => {
+      if (err) return done(err);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
@@ -59,18 +57,15 @@ describe('stream', () => {
     const stream = new IteratorStream(TEST_DIR, {
       lstat: true,
       highWaterMark: 1,
-      filter: function filter(entry) {
-        return entry.stats.isDirectory();
+      filter: function filter(entry: Entry) {
+        return entry.stats?.isDirectory() ?? false;
       },
     }) as unknown as NodeJS.ReadableStream;
     stream.on('data', (entry: Entry): void => {
-      spys(entry.stats);
+      spys(entry.stats as fs.Stats);
     });
-    oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
-      if (err) {
-        done(err);
-        return;
-      }
+    oo(stream, ['error', 'end', 'close', 'finish'], (err: Error | null) => {
+      if (err) return done(err);
       assert.equal(spys.dir.callCount, 5);
       assert.equal(spys.file.callCount, 0);
       assert.equal(spys.link.callCount, 0);
@@ -86,14 +81,11 @@ describe('stream', () => {
       highWaterMark: 1,
     }) as unknown as NodeJS.ReadableStream;
     stream.on('data', (entry: Entry): void => {
-      if (entry.stats.isDirectory()) return;
-      spys(entry.stats);
+      if (entry.stats?.isDirectory()) return;
+      spys(entry.stats as fs.Stats);
     });
-    oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
-      if (err) {
-        done(err);
-        return;
-      }
+    oo(stream, ['error', 'end', 'close', 'finish'], (err: Error | null) => {
+      if (err) return done(err);
       assert.equal(spys.dir.callCount, 0);
       assert.equal(spys.file.callCount, 5);
       assert.equal(spys.link.callCount, 2);
