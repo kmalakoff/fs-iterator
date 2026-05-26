@@ -57,7 +57,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 3);
@@ -80,7 +80,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 4);
@@ -103,7 +103,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -126,7 +126,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -153,7 +153,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 3);
@@ -178,7 +178,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 4);
@@ -203,7 +203,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -228,7 +228,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -254,7 +254,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 3);
@@ -278,7 +278,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 4);
@@ -302,7 +302,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -326,7 +326,7 @@ describe('depth', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);

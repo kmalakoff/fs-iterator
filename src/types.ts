@@ -17,7 +17,7 @@ export interface StackEntry {
 
 export type { EachFunction } from 'stack-base-iterator';
 export type FilterSync = (entry: Entry) => boolean | undefined | Error | Promise<boolean | undefined>;
-export type FilterCallback = (err?: Error, value?: boolean) => void;
+export type FilterCallback = (err?: Error | null, value?: boolean) => void;
 export type FilterAsync = (entry: Entry, callback: FilterCallback) => void;
 export type FilterFunction = FilterSync | FilterAsync;
 

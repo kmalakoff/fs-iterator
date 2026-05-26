@@ -42,7 +42,7 @@ describe('stats compatibility', () => {
         (entry: Entry): void => {
           spys(entry.stats as fs.Stats);
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -61,7 +61,7 @@ describe('stats compatibility', () => {
         (entry: Entry): void => {
           spys(entry.stats as fs.Stats);
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);
@@ -82,7 +82,7 @@ describe('stats compatibility', () => {
         (entry: Entry): void => {
           spys(entry.stats as fs.Stats);
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           if (fs.Dirent) {
@@ -107,7 +107,7 @@ describe('stats compatibility', () => {
         (entry: Entry): void => {
           spys(entry.stats as fs.Stats);
         },
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.dir.callCount, 5);

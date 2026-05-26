@@ -57,7 +57,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 6);
@@ -77,7 +77,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 10);
@@ -97,7 +97,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 12);
@@ -122,7 +122,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 6);
@@ -145,7 +145,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 10);
@@ -168,7 +168,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 6);
@@ -190,7 +190,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 6);
@@ -210,7 +210,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 10);
@@ -230,7 +230,7 @@ describe('filtering', () => {
       });
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: Error) => {
+        (err?: Error | null) => {
           if (err) return done(err);
 
           assert.equal(spys.callCount, 6);
