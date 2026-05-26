@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type { Stats } from 'fs';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
 import { safeRm } from 'fs-remove-compat';
@@ -36,17 +37,15 @@ describe('destroy', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
         lstat: true,
       });
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 5);
           assert.equal(spys.file.callCount, 5);
           assert.equal(spys.link.callCount, 2);
@@ -61,17 +60,15 @@ describe('destroy', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
       });
       iterator.destroy();
       iterator.forEach(
         (_entry: Entry): void => {},
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.dir.callCount, 0);
           assert.equal(spys.file.callCount, 0);
           assert.equal(spys.link.callCount, 0);
@@ -85,8 +82,8 @@ describe('destroy', () => {
 
       let count = 0;
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry, callback) => {
-          spys(entry.stats);
+        filter: (entry: Entry, callback) => {
+          spys(entry.stats as Stats);
           if (++count === 4) iterator.destroy();
           callback();
         },
@@ -96,10 +93,8 @@ describe('destroy', () => {
         (_entry: Entry): void => {},
         { concurrency: 1 },
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.callCount, 4);
           assert.equal(spys.dir.callCount, 2);
           assert.equal(spys.file.callCount, 2);
@@ -114,8 +109,8 @@ describe('destroy', () => {
 
       let count = 0;
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry, callback) => {
-          spys(entry.stats);
+        filter: (entry: Entry, callback) => {
+          spys(entry.stats as Stats);
           if (++count === 4) iterator.destroy();
           callback();
         },
@@ -125,10 +120,8 @@ describe('destroy', () => {
         (_entry: Entry): void => {},
         { concurrency: Infinity },
         (err?: Error) => {
-          if (err) {
-            done(err);
-            return;
-          }
+          if (err) return done(err);
+
           assert.equal(spys.callCount, 4);
           done();
         }
@@ -154,7 +147,7 @@ describe('destroy', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
         lstat: true,
       });
@@ -170,7 +163,7 @@ describe('destroy', () => {
 
       const iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry): void => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
         },
       });
       iterator.destroy();
@@ -184,9 +177,9 @@ describe('destroy', () => {
       const spys = statsSpys();
 
       let count = 0;
-      const iterator = new Iterator(TEST_DIR, {
+      const iterator: Iterator = new Iterator(TEST_DIR, {
         filter: (entry: Entry) => {
-          spys(entry.stats);
+          spys(entry.stats as Stats);
           if (++count === 4) return iterator.destroy();
         },
         lstat: true,
@@ -203,8 +196,8 @@ describe('destroy', () => {
 
       let count = 0;
       const iterator = new Iterator(TEST_DIR, {
-        filter: (entry, callback) => {
-          spys(entry.stats);
+        filter: (entry: Entry, callback) => {
+          spys(entry.stats as Stats);
           if (++count === 4) iterator.destroy();
           callback();
         },

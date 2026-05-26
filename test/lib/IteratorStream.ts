@@ -1,14 +1,14 @@
-import Iterator, { type IteratorOptions } from 'fs-iterator';
+import Iterator, { type Entry, type IteratorOptions } from 'fs-iterator';
 import type { ReadableOptions } from 'stream';
 import { Readable } from './compat.ts';
 
 export default class IteratorStream extends Readable {
   options: IteratorOptions;
   processing: number;
-  done: boolean;
-  iterator_: Iterator;
+  done = false;
+  iterator_: Iterator | null;
 
-  constructor(root, options: IteratorOptions | ReadableOptions = {}) {
+  constructor(root: string, options: IteratorOptions | ReadableOptions = {}) {
     const readableOptions = options as ReadableOptions;
     super({ objectMode: true, highWaterMark: readableOptions.highWaterMark || 4096 });
 
@@ -17,7 +17,7 @@ export default class IteratorStream extends Readable {
     const error = iteratorOptions.error;
     iteratorOptions.error = (err) => {
       if (!this.destroyed) return;
-      if (~Iterator.EXPECTED_ERRORS.indexOf(err.code)) this.emit('warn', err);
+      if (~Iterator.EXPECTED_ERRORS.indexOf(err.code ?? '')) this.emit('warn', err);
       else this.emit('error', err);
       return !error || error(err);
     };
@@ -35,10 +35,10 @@ export default class IteratorStream extends Readable {
     }
   }
 
-  _read(batch) {
+  _read(batch: number): void {
     this.processing++;
-    this.iterator_.forEach(
-      (entry): void => {
+    this.iterator_?.forEach(
+      (entry: Entry): void => {
         if (this.destroyed || this.done) return;
         batch--;
         this.push(entry);

@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type fs from 'fs';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
 import { safeRm } from 'fs-remove-compat';
@@ -48,7 +49,7 @@ describe('async await', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry): void => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
       },
     });
 
@@ -69,7 +70,7 @@ describe('async await', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry): void => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
       },
       lstat: true,
     });
@@ -93,7 +94,7 @@ describe('async await', () => {
 
     const iterator = new Iterator(TEST_DIR, {
       filter: (entry: Entry) => {
-        spys(entry.stats);
+        spys(entry.stats as fs.Stats);
         return true;
       },
       lstat: true,

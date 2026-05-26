@@ -23,7 +23,7 @@ function ensureStat(iterator: Iterator, entry: Entry, callback: Callback) {
 export default function stat(iterator: Iterator, entry: Entry, callback: Callback) {
   ensureStat(iterator, entry, function ensureStatCallback(err) {
     if (err) return callback(err);
-    if (!entry.stats.isSymbolicLink()) return callback();
+    if (!entry.stats || !entry.stats.isSymbolicLink()) return callback();
     fsCompat.lstatReal(entry.fullPath, iterator.statOptions, function lstatRealCallback(err, realStats) {
       if (err) return callback(err);
       entry.realStats = realStats;

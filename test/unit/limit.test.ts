@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type fs from 'fs';
 import generate from 'fs-generate';
 import Iterator, { type Entry } from 'fs-iterator';
 import { safeRm } from 'fs-remove-compat';
@@ -42,14 +43,11 @@ describe('forEach', () => {
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: Infinity, concurrency: 1 },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(empty);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -65,14 +63,11 @@ describe('forEach', () => {
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: 1 },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
@@ -89,14 +84,11 @@ describe('forEach', () => {
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: 5 },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
@@ -110,14 +102,11 @@ describe('forEach', () => {
         const iterator = new Iterator(TEST_DIR, { lstat: true });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: Infinity },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
@@ -129,19 +118,16 @@ describe('forEach', () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
-          filter: (entry: Entry) => !entry.stats.isDirectory(),
+          filter: (entry: Entry) => !entry.stats?.isDirectory(),
           lstat: true,
         });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 100, concurrency: 1 },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
@@ -167,14 +153,11 @@ describe('forEach', () => {
 
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: Infinity, concurrency: 1 },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(empty);
             assert.equal(spys.dir.callCount, 5);
             assert.equal(spys.file.callCount, 5);
@@ -196,14 +179,11 @@ describe('forEach', () => {
         });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: 1 },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 2);
@@ -226,14 +206,11 @@ describe('forEach', () => {
         });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: 5 },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
@@ -253,14 +230,11 @@ describe('forEach', () => {
         });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: Infinity },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(!empty);
             assert.equal(spys.callCount, 3);
             done();
@@ -273,7 +247,7 @@ describe('forEach', () => {
         const iterator = new Iterator(TEST_DIR, {
           filter: (entry, callback) => {
             setTimeout(() => {
-              callback(null, !entry.stats.isDirectory());
+              callback(undefined, !entry.stats?.isDirectory());
             }, 10);
           },
           callbacks: true,
@@ -281,14 +255,11 @@ describe('forEach', () => {
         });
         iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 100, concurrency: 1 },
           (err, empty) => {
-            if (err) {
-              done(err);
-              return;
-            }
+            if (err) return done(err);
             assert.ok(empty);
             assert.equal(spys.callCount, 3);
             assert.equal(spys.dir.callCount, 0);
@@ -316,13 +287,13 @@ describe('forEach', () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
-          filter: (_entry) => Promise.resolve(undefined),
+          filter: (_entry: Entry) => Promise.resolve(undefined),
           lstat: true,
         });
 
         const empty = await iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: Infinity, concurrency: 1 }
         );
@@ -336,12 +307,12 @@ describe('forEach', () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
-          filter: (_entry) => Promise.resolve(undefined),
+          filter: (_entry: Entry) => Promise.resolve(undefined),
           lstat: true,
         });
         const empty = await iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: 1 }
         );
@@ -356,12 +327,12 @@ describe('forEach', () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
-          filter: (_entry) => Promise.resolve(undefined),
+          filter: (_entry: Entry) => Promise.resolve(undefined),
           lstat: true,
         });
         const empty = await iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: 5 }
         );
@@ -373,12 +344,12 @@ describe('forEach', () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
-          filter: (_entry) => Promise.resolve(undefined),
+          filter: (_entry: Entry) => Promise.resolve(undefined),
           lstat: true,
         });
         const empty = await iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 3, concurrency: Infinity }
         );
@@ -389,12 +360,12 @@ describe('forEach', () => {
         const spys = statsSpys();
 
         const iterator = new Iterator(TEST_DIR, {
-          filter: (entry: Entry) => Promise.resolve(!entry.stats.isDirectory()),
+          filter: (entry: Entry) => Promise.resolve(!entry.stats?.isDirectory()),
           lstat: true,
         });
         const empty = await iterator.forEach(
           (entry: Entry): void => {
-            spys(entry.stats);
+            spys(entry.stats as fs.Stats);
           },
           { limit: 100, concurrency: 1 }
         );
