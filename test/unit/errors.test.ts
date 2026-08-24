@@ -110,7 +110,7 @@ describe('errors', () => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: NodeJS.ErrnoException) => {
+        (err?: NodeJS.ErrnoException | null) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
           done();
@@ -221,7 +221,7 @@ describe('errors', () => {
       const iterator = new Iterator(`${TEST_DIR}does-not-exist`);
       iterator.forEach(
         (_entry: Entry): void => {},
-        (err?: NodeJS.ErrnoException) => {
+        (err?: NodeJS.ErrnoException | null) => {
           assert.ok(err);
           assert.equal(err.code, 'ENOENT');
           done();
