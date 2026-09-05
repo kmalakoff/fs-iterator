@@ -60,7 +60,7 @@
     "node-version-use": "*",
     "on-one": "^1.0.0",
     "pinkie-promise": "*",
-    "readable-stream": "^2.0.2",
+    "readable-stream": "2.3.8",
     "ts-dev-stack": "*",
     "tsds-config": "*"
   },
