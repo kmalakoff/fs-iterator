@@ -2,12 +2,11 @@ var fs = require('fs');
 var path = require('path');
 var EventEmitter = require('eventemitter3');
 var inherits = require('inherits');
-var nextTick = require('next-tick');
 var createProcesor = require('maximize-iterator/lib/createProcessor');
 
 var Fifo = require('./lib/Fifo');
-var next = require('./lib/next');
 var PathStack = require('./lib/PathStack');
+var processOrQueue = require('./lib/processOrQueue');
 
 var DEFAULT_STAT = 'lstat';
 var DEFAULT_CONCURRENCY = Infinity;
@@ -24,13 +23,12 @@ function Iterator(root, options) {
     stats: options.stats || options.alwaysStat,
     filter: options.filter,
     callbacks: options.callbacks || options.async,
-    fs: options.fs || fs,
     push: function stackPush(item) {
-      if (self.options) self.stack.push(item);
+      if (!self.done) self.stack.push(item);
     },
   };
 
-  this.options.stat = this.options.fs[options.stat || DEFAULT_STAT];
+  this.options.stat = fs[options.stat || DEFAULT_STAT];
   if (process.platform === 'win32' && fs.stat.length === 3) {
     var stat = this.options.stat;
     this.options.stat = function windowsStat(path) {
@@ -47,19 +45,16 @@ function Iterator(root, options) {
 
   this.root = path.resolve(root);
   this.queued = new Fifo();
-  this.processing = new Fifo();
   this.processors = new Fifo();
-  this.processMore = next(this);
   this.stack = new PathStack(this);
   this.stack.push({ root: root, path: null, basename: '', depth: 0 });
+  this.processing = 0;
 }
 inherits(Iterator, EventEmitter);
 
 Iterator.prototype.next = function next(callback) {
   if (typeof callback === 'function') {
-    if (!this.options) return callback(null, null);
-    this.queued.unshift(callback);
-    this.processMore();
+    processOrQueue(this, callback);
   } else {
     var self = this;
     return new Promise(function nextPromise(resolve, reject) {
@@ -70,7 +65,7 @@ Iterator.prototype.next = function next(callback) {
   }
 };
 
-Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTick) {
+Iterator.prototype.forEach = function forEach(fn, options, callback) {
   var self = this;
   if (typeof fn !== 'function') throw new Error('Missing each function');
   if (typeof options === 'function') {
@@ -79,7 +74,7 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
   }
 
   if (typeof callback === 'function') {
-    if (!this.options) return callback();
+    if (this.done) return callback(null, true);
     options = options || {};
     options = {
       each: fn,
@@ -94,51 +89,42 @@ Iterator.prototype.forEach = function forEach(fn, options, callback, skipNextTic
       total: 0,
       counter: 0,
       stop: function stop() {
-        return !self.options || self.queued.length >= self.stack.length;
+        return self.done || self.queued.length >= self.stack.length;
       },
     };
 
     var processor = createProcesor(this.next.bind(this), options, function processorCallback(err) {
-      if (self.options) self.processors.discard(processor);
-      options = null;
+      if (!self.destroyed) self.processors.discard(processor);
       processor = null;
-      skipNextTick ? callback(err, !self.options ? true : !self.stack.length) : nextTick(callback.bind(null, err, !self.options ? true : !self.stack.length));
+      options = null;
+      return callback(err, self.done ? true : !self.stack.length);
     });
     this.processors.push(processor);
     processor();
   } else {
     return new Promise(function forEachPromise(resolve, reject) {
-      self.forEach(
-        fn,
-        options,
-        function forEachCallback(err, done) {
-          err ? reject(err) : resolve(done);
-        },
-        true
-      );
+      self.forEach(fn, options, function forEachCallback(err, done) {
+        err ? reject(err) : resolve(done);
+      });
     });
   }
 };
 
-Iterator.prototype.destroy = function destroy(clear) {
-  if (!clear) {
-    if (this.destroyed) throw new Error('Already destroyed');
-    this.destroyed = true;
-  }
-
-  if (!this.options) return;
+Iterator.prototype.destroy = function destroy() {
+  if (this.destroyed) throw new Error('Already destroyed');
+  this.destroyed = true;
+  this.done = true;
+  this._events = null;
+  this._eventsCount = 0;
   this.options = null;
-  while (this.stack.length) this.stack.pop();
-  while (this.processors.length) this.processors.pop()(true);
-  while (this.processing.length) this.processing.pop()(null, null);
-  while (this.queued.length) this.queued.pop()(null, null);
-  this.removeAllListeners();
   this.root = null;
-  this.stack = null;
+  while (this.processors.length) this.processors.pop()(true);
   this.processors = null;
-  this.processing = null;
+  while (this.queued.length) this.queued.pop()(null, null);
   this.queued = null;
   this.processMore = null;
+  this.stack.destroy();
+  this.stack = null;
 };
 
 if (typeof Symbol !== 'undefined' && Symbol.asyncIterator) {
