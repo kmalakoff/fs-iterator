@@ -1,5 +1,5 @@
 {
-  "name": "fs-iterator-operations-testOptions",
+  "name": "fs-iterator-benchmark",
   "private": true,
   "version": "0.0.0",
   "description": "Tests",
@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "benchmark-suite": "^0.1.0",
-    "fs-iterator-2.2.0": "npm:fs-iterator@^2.2.0",
-    "readdirp": "^3.4.0"
+    "fs-iterator-2.2.0": "npm:fs-iterator@^2.2.0"
   }
 }
