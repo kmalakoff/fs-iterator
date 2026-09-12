@@ -2,6 +2,7 @@ var Stats = require('stats-incremental');
 var heapdump = require('heapdump');
 const pify = require('pify');
 const gc = require('expose-gc/function');
+var humanize = require('humanize-data');
 
 const writeSnapshot = pify(heapdump.writeSnapshot);
 
@@ -66,5 +67,9 @@ module.exports = class MemoryTest {
       await writeSnapshot(`hd-${this.name}-${now}-end.heapsnapshot`);
     }
     return { end: end, iteration: stats };
+  }
+
+  formatStats(stats) {
+    return `${humanize(stats.mean)} ±${(Math.sqrt(stats.variance / stats.mean) / 100).toFixed(1)}% (${stats.n} runs sampled)`;
   }
 };
