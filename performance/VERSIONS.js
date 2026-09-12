@@ -4,7 +4,7 @@ module.exports = [
     Iterator: require('..'),
   },
   {
-    version: '2.5.4',
-    Iterator: require('fs-iterator-2.5.4'),
+    version: '2.5.8',
+    Iterator: require('fs-iterator-2.5.8'),
   },
 ];
