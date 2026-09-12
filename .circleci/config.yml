@@ -1,0 +1,25 @@
+version: 2.1
+orbs:
+  node: circleci/node@2.0.3
+  win: circleci/windows@2.2.0
+jobs:
+  node:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+  windows:
+    executor:
+      name: win/default
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+
+workflows:
+  build-and-test:
+    jobs:
+      - node
+      - windows
