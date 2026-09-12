@@ -5,15 +5,7 @@ var createProcesor = require('maximize-iterator/lib/createProcessor');
 var Fifo = require('./lib/Fifo');
 var PathStack = require('./lib/PathStack');
 var processOrQueue = require('./lib/processOrQueue');
-
-var readdir = fs.readdir;
-// prior to Node 9, fs.readdir did not return sorted files
-if (+process.versions.node.split('.')[1] < 9)
-  readdir = function readdir(fullPath, callback) {
-    fs.readdir(fullPath, function (err, files) {
-      err ? callback(err) : callback(null, files.sort());
-    });
-  };
+var fsCompat = require('./lib/fs-compat');
 
 function Iterator(root, options) {
   var self = this;
@@ -23,24 +15,10 @@ function Iterator(root, options) {
     depth: options.depth === undefined ? Infinity : options.depth,
     filter: options.filter || null,
     callbacks: options.callbacks || options.async || false,
+    lstat: options.lstat,
+    readdir: { encoding: 'utf8', withFileTypes: fs.Dirent && !options.alwaysStat },
+    stat: { bigint: process.platform === 'win32' },
   };
-
-  // use dirent vs stat each file
-  if (fs.Dirent && !options.alwaysStat) {
-    // if (options.lstat) console.log('Using fs.Dirent. Skipping lstat');
-    var readdirOptions = { encoding: 'utf8', withFileTypes: true };
-    this.options.readdir = function readdir(fullPath, callback) {
-      fs.readdir(fullPath, readdirOptions, callback);
-    };
-  } else this.options.readdir = readdir;
-
-  // platform compatibility
-  if (process.platform === 'win32' && fs.stat.length === 3) {
-    var stat = fs[options.lstat ? 'lstat' : 'stat'];
-    this.options.stat = function windowsStat(path) {
-      stat(path, { bigint: true });
-    };
-  } else this.options.stat = fs[options.lstat ? 'lstat' : 'stat'];
 
   this.options.error =
     options.error ||
@@ -54,7 +32,7 @@ function Iterator(root, options) {
   this.stack = new PathStack(this);
 
   this.processing = 1; // fetch first
-  this.options.readdir(this.root, function (err, files) {
+  fsCompat.readdir(this.root, this.options.readdir, function (err, files) {
     self.processing--;
     if (self.done) return;
 
@@ -69,7 +47,6 @@ Iterator.prototype.destroy = function destroy() {
   if (this.destroyed) throw new Error('Already destroyed');
   this.destroyed = true;
 
-  // iterator
   this.done = true;
   this.options = null;
   this.root = null;

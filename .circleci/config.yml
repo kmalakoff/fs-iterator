@@ -9,14 +9,14 @@ jobs:
     steps:
       - checkout
       - run: npm install
-      - run: npm run compatibility
+      - run: npm run compat
   windows:
     executor:
       name: win/default
     steps:
       - checkout
       - run: npm install
-      - run: npm run compatibility
+      - run: npm run compat
 
 workflows:
   all-tests:
@@ -54,8 +54,8 @@ workflows:
 #           install-yarn: false
 #           install-npm: false
 #       - run: npm install --production
-#       - run: cd compatibility && npm install
-#       - run: cd compatibility && npm run test-all
+#       - run: cd compat && npm install
+#       - run: cd compat && npm run test-all
 #   test-windows:
 #     parameters:
 #       os:
