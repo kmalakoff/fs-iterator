@@ -36,6 +36,6 @@ module.exports = async function run({ Iterator, version, testOptions }, dir) {
   });
 
   console.log('Comparing ' + suite.name);
-  await suite.run({ time: 10000 });
+  await suite.run({ time: 10000, heapdumpTrigger: 1024 * 100 });
   console.log('****************\n');
 };
