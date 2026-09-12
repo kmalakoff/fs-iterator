@@ -15,8 +15,11 @@
     "test": "npm run ops && npm run mem"
   },
   "dependencies": {
-    "benchmark-suite": "^0.1.6",
-    "fs-iterator-3.0.0": "npm:fs-iterator@4.0.2",
+    "benchmark-suite": "^0.1.7",
+    "fs-iterator-3.0.0": "npm:fs-iterator@4.1.0",
     "object-assign": "^4.1.1"
+  },
+  "engines": {
+    "node": "lts"
   }
 }
