@@ -5,6 +5,16 @@ var createProcesor = require('maximize-iterator/lib/createProcessor');
 var Fifo = require('./lib/Fifo');
 var PathStack = require('./lib/PathStack');
 var processOrQueue = require('./lib/processOrQueue');
+var compareVersions = require('compare-versions');
+
+var readdir = fs.readdir;
+// prior to Node 9, fs.readdir did not return sorted files
+if (compareVersions(process.versions.node, '0.9.0') < 0)
+  readdir = function readdir(fullPath, callback) {
+    fs.readdir(fullPath, function (err, files) {
+      err ? callback(err) : callback(null, files.sort());
+    });
+  };
 
 function Iterator(root, options) {
   var self = this;
@@ -23,7 +33,7 @@ function Iterator(root, options) {
     this.options.readdir = function readdir(fullPath, callback) {
       fs.readdir(fullPath, readdirOptions, callback);
     };
-  } else this.options.readdir = fs.readdir;
+  } else this.options.readdir = readdir;
 
   // platform compatibility
   if (process.platform === 'win32' && fs.stat.length === 3) {
