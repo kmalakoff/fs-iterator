@@ -1,4 +1,4 @@
-var MemorySuite = require('./benchmark-memory');
+var MemorySuite = require('../benchmark-memory');
 
 module.exports = async function run({ readdirp, version, testOptions }, dir) {
   console.log('****************\n');
@@ -8,7 +8,7 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
   var suite = new MemorySuite('ReaddirpStream ' + dir);
 
   for (const test of testOptions) {
-    suite.add(test.name, function (fn) {
+    suite.add(`${version}-${test.name}`, function (fn) {
       return new Promise(function (resolve, reject) {
         const stream = new readdirp.ReaddirpStream(dir, { highWaterMark: test.options ? test.options.concurrency : 4096 });
         stream.on('data', function () {
@@ -39,6 +39,6 @@ module.exports = async function run({ readdirp, version, testOptions }, dir) {
 
   console.log('Comparing ' + suite.name);
   global.gc();
-  await suite.run({ maxTime: 10000, heapdumpTrigger: 1024 * 1024 * 3 });
+  await suite.run({ maxTime: 10000, heapdumpTrigger: 1024 * 1024 * 4 });
   console.log('****************\n');
 };
