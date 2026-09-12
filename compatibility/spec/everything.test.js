@@ -129,6 +129,7 @@ describe('everything', function () {
       alwaysStat: true,
       lstat: true,
       error: function (err) {
+        assert.ok(!!err);
         return false;
       },
     });
@@ -165,6 +166,7 @@ describe('everything', function () {
       alwaysStat: true,
       lstat: true,
       error: function (err) {
+        assert.ok(!!err);
         return false;
       },
     });
@@ -205,6 +207,7 @@ describe('everything', function () {
       alwaysStat: true,
       lstat: true,
       error: function (err) {
+        assert.ok(!!err);
         return false;
       },
     });
@@ -246,6 +249,7 @@ describe('everything', function () {
       alwaysStat: true,
       lstat: true,
       error: function (err) {
+        assert.ok(!!err);
         return false;
       },
     });
@@ -286,6 +290,7 @@ describe('everything', function () {
       alwaysStat: true,
       lstat: true,
       error: function (err) {
+        assert.ok(!!err);
         return false;
       },
     });

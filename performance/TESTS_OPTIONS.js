@@ -1,8 +1,8 @@
 // const CONCURRENCIES = [Infinity];
-const CONCURRENCIES = [100];
+// const CONCURRENCIES = [100];
 // const CONCURRENCIES = [10];
 // const CONCURRENCIES = [1];
-// const CONCURRENCIES = [1, 1000, Infinity];
+const CONCURRENCIES = [1, 1000, Infinity];
 // const CONCURRENCIES = [1, 100, 1000, Infinity];
 // const ALWAYS_STATS = [false, true];
 const ALWAYS_STATS = [false];
