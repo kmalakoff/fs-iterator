@@ -8,19 +8,19 @@ for (const concurrency of CONCURRENCIES) {
   TESTS.push({ name: `${concurrency}`, options: { highWaterMark: concurrency } });
 }
 
-module.exports = async function run({ ReaddirpStream, version }, dir) {
+module.exports = async function run({ readdirp, version }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
 
   return new Promise(function (resolve, reject) {
-    const suite = new Benchmark.Suite('Iterator ' + dir);
+    const suite = new Benchmark.Suite('ReaddirpStream ' + dir);
 
     for (const test of TESTS) {
       suite.add(
         test.name,
         async function (deferred) {
-          const stream = new ReaddirpStream(dir, test.options);
+          const stream = new readdirp.ReaddirpStream(dir, test.options);
           stream.on('data', function (entry) {});
           stream.on('error', function (err) {
             deferred.reject(err);

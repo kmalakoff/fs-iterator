@@ -8,9 +8,9 @@ const READDIRP_VERSIONS = require('../READDIRP_VERSIONS');
 const DATA_DIR = path.resolve(path.join(__dirname, '..', 'node_modules'));
 
 (async () => {
-  // for (const options of ITERATOR_VERSIONS) {
-  //   await tests(options, DATA_DIR);
-  // }
+  for (const options of ITERATOR_VERSIONS) {
+    await tests(options, DATA_DIR);
+  }
 
   for (const options of READDIRP_VERSIONS) {
     await readdirp(options, DATA_DIR);

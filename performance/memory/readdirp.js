@@ -8,7 +8,7 @@ for (const concurrency of CONCURRENCIES) {
   TESTS.push({ name: `${concurrency}`, options: { concurrency: concurrency } });
 }
 
-module.exports = async function run({ ReaddirpStream, version }, dir) {
+module.exports = async function run({ readdirp, version }, dir) {
   console.log('****************\n');
   console.log(`Running: ${version}`);
   console.log('----------------');
@@ -18,7 +18,7 @@ module.exports = async function run({ ReaddirpStream, version }, dir) {
   for (const test of TESTS) {
     suite.add(test.name, function (fn) {
       return new Promise(function (resolve, reject) {
-        const stream = new ReaddirpStream(dir, test.options);
+        const stream = new readdirp.ReaddirpStream(dir, test.options);
         stream.on('data', function () {
           fn();
         });
