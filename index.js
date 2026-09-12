@@ -10,10 +10,10 @@ var DEFAULT_STAT = 'lstat';
 function Iterator(root, options) {
   options = options || {};
   this.options = {
+    depth: options.depth === undefined ? Infinity : options.depth,
     filter: options.filter,
     async: options.async,
     fs: options.fs || fs,
-    depth: options.depth === undefined ? Infinity : options.depth,
   };
 
   this.options.stat = this.options.fs[options.stat || DEFAULT_STAT];
