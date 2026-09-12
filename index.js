@@ -54,14 +54,15 @@ function Iterator(root, options) {
   this.queued = new Fifo();
   this.processing = new Fifo();
   this.waiters = new Fifo();
+  this.processMore = next(this);
 }
 inherits(Iterator, EventEmitter);
 
 Iterator.prototype.next = function (callback) {
   if (typeof callback === 'function') {
     if (!this.options) return callback(null, null);
-    this.queued.push(callback);
-    next(this);
+    this.queued.unshift(callback);
+    this.processMore();
   } else {
     var self = this;
     return new Promise(function (resolve, reject) {
