@@ -95,17 +95,18 @@ class ReaddirpStream extends Readable {
     this._statsProp = this._isDirent ? 'dirent' : 'stats';
 
     this.highWaterMark = options.highWaterMark || 4096;
+    this.filter = async (entry) => {
+      entry[this._statsProp] = entry.stats;
+      entry.entryType = await this._getEntryType(entry);
+      if (entry.entryType === 'directory') return this._directoryFilter(entry);
+      if (entry.entryType === 'file' || this._includeAsFile(entry)) return this._fileFilter(entry);
+      return true;
+    };
     this.iterator = new Iterator(root, {
       stat: opts.lstat ? 'lstat' : 'stat',
       alwaysStat: opts.alwaysStat,
       depth: opts.depth,
-      filter: async (entry) => {
-        entry[this._statsProp] = entry.stats;
-        entry.entryType = await this._getEntryType(entry);
-        if (entry.entryType === 'directory') return this._directoryFilter(entry);
-        if (entry.entryType === 'file' || this._includeAsFile(entry)) return this._fileFilter(entry);
-        return true;
-      },
+      filter: this.filter.bind(this),
       error: this._onError.bind(this),
     });
   }
@@ -123,7 +124,7 @@ class ReaddirpStream extends Readable {
       const done = await this.iterator.forEach(
         async (entry) => {
           if (this.destroyed) return;
-          if (!entry.entryType && !(await this.iterator.options.filter(entry))) return;
+          if (!entry.entryType && !(await this.filter(entry))) return;
           if (entry.entryType === 'directory' && (!entry.basename || !this._wantsDir)) return;
           if ((entry.entryType === 'file' || this._includeAsFile(entry)) && !this._wantsFile) return;
           this.push(entry);
